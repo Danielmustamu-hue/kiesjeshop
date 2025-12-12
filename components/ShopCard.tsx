@@ -8,7 +8,8 @@ interface ShopCardProps {
 }
 
 export const ShopCard: React.FC<ShopCardProps> = ({ shop }) => {
-  return (
+ return (
+  <a href={shop.ctalink} target="_blank" rel="noopener noreferrer"> 
     <div className="bg-white rounded-2xl shadow-lg overflow-hidden border border-slate-100 hover:shadow-xl transition-shadow duration-300 flex flex-col h-full">
       {/* Header / Logo Area */}
       <div className={`h-24 flex items-center justify-center p-4 ${shop.id === 'coolblue' ? 'bg-blue-600' : 'bg-slate-50'}`}>
@@ -96,5 +97,6 @@ export const ShopCard: React.FC<ShopCardProps> = ({ shop }) => {
         </a>
       </div>
     </div>
-  );
+  </a> 
+); // Dit is de allerlaatste regel code
 };
