@@ -25,7 +25,7 @@ export const SHOPS: ShopData[] = [
     serviceScore: 5,
     delivery: 'VandaagNog®, eigen bezorgdienst',
     usp: 'Alles voor een glimlach (Top Service)',
-    // Standaard link (nog geen affiliate link opgegeven)
+    // Standaard link
     ctaLink: 'https://www.coolblue.nl/', 
     pros: ['Beste klantenservice', 'Eigen installatiedienst', 'Fysieke winkels'],
   },
