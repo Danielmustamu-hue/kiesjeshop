@@ -12,11 +12,6 @@ export const ShopCard: React.FC<ShopCardProps> = ({ shop }) => {
     <div className="bg-white rounded-2xl shadow-lg overflow-hidden border border-slate-100 hover:shadow-xl transition-shadow duration-300 flex flex-col h-full">
       {/* Header / Logo Area */}
       <div className={`h-24 flex items-center justify-center p-4 ${shop.id === 'coolblue' ? 'bg-blue-600' : 'bg-slate-50'}`}>
-         {/* 
-            LOGICA VOOR LOGO WEERGAVE:
-            Als 'logoUrl' is ingesteld in de data (constants.tsx), wordt de afbeelding getoond.
-            Anders wordt de CSS-fallback gebruikt. Dit maakt het vervangen van logo's eenvoudig.
-         */}
          {shop.logoUrl ? (
            <img 
              src={shop.logoUrl} 
@@ -92,7 +87,7 @@ export const ShopCard: React.FC<ShopCardProps> = ({ shop }) => {
             'bg-yellow-500 hover:bg-yellow-600 text-slate-900'
           }`}
         >
-          Bezoek {shop.name}
+          Ga naar {shop.name}
         </a>
       </div>
     </div>
