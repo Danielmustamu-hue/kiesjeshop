@@ -81,12 +81,10 @@ export const ShopCard: React.FC<ShopCardProps> = ({ shop }) => {
            </ul>
         </div>
       </div>
-
       <div className="p-6 pt-0 mt-auto">
-   // Regel 86
 <a href={shop.ctalink}
   target="_blank" rel="noopener noreferrer"
-  className={`block w-full text-center py-3 rounded-xl font-bold text-white transition-transform active:scale-[.95] ${
+className={`block w-full text-center py-3 rounded-xl font-bold text-white transition-transform active:scale-[.95] ${
     shop.id === 'bol' ? 'bg-blue-800 hover:bg-blue-900' :
     shop.id === 'coolblue' ? 'bg-orange-500 hover:bg-orange-600' :
     'bg-yellow-500 hover:bg-yellow-800 text-slate-900'
@@ -94,8 +92,5 @@ export const ShopCard: React.FC<ShopCardProps> = ({ shop }) => {
 >
   Bezoek {shop.name}
 </a>
-      </div>
-    </div>
-  </a> 
-); // Dit is de allerlaatste regel code
+); 
 };
