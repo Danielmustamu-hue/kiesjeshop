@@ -1,7 +1,7 @@
 import React from 'react';
 import { ShopData } from '../types';
 import { StarRating } from './StarRating';
-import { Truck, CheckCircle, Package, HeartHandshake } from 'lucide-react';
+import { Truck, CheckCircle, Package, HeartHandshake, ExternalLink } from 'lucide-react';
 
 interface ShopCardProps {
   shop: ShopData;
@@ -81,13 +81,14 @@ export const ShopCard: React.FC<ShopCardProps> = ({ shop }) => {
           href={shop.ctaLink} 
           target="_blank"
           rel="nofollow noopener noreferrer"
-          className={`block w-full text-center py-3 rounded-xl font-bold text-white transition-transform active:scale-95 ${
+          className={`group flex items-center justify-center gap-2 w-full text-center py-3 rounded-xl font-bold text-white transition-all active:scale-95 shadow-md hover:shadow-lg ${
             shop.id === 'bol' ? 'bg-blue-800 hover:bg-blue-900' :
             shop.id === 'coolblue' ? 'bg-orange-500 hover:bg-orange-600' :
             'bg-yellow-500 hover:bg-yellow-600 text-slate-900'
           }`}
         >
           Ga naar {shop.name}
+          <ExternalLink className="w-4 h-4 opacity-70 group-hover:translate-x-1 transition-transform" />
         </a>
       </div>
     </div>
