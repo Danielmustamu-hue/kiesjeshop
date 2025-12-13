@@ -1,9 +1,8 @@
 import React, { useState } from 'react';
 import { GoogleGenAI } from '@google/genai';
-import { Sparkles, Send, Loader2, Info } from 'lucide-react';
+import { Sparkles, Send, Loader2, Info, AlertTriangle } from 'lucide-react';
 
-// Dit vertelt TypeScript dat process.env bestaat, zodat de build niet crasht.
-// Vite vervangt dit tijdens het bouwen door de echte waarde.
+// Dit vertelt TypeScript dat process.env bestaat.
 declare const process: {
   env: {
     API_KEY: string;
@@ -25,12 +24,12 @@ export const AiAdvisor: React.FC = () => {
     setAdvice(null);
 
     try {
-      // Veilig toegang tot de API key (deze wordt door Vite ingevuld)
-      // We gebruiken hier een fallback om crashes te voorkomen tijdens development
+      // Veilig toegang tot de API key
       const apiKey = process.env.API_KEY;
       
-      if (!apiKey) {
-        throw new Error("API Key is niet geconfigureerd. Controleer je Vercel/Netlify instellingen.");
+      // Check of de key aanwezig is (niet leeg)
+      if (!apiKey || apiKey.trim() === '') {
+        throw new Error("API Key ontbreekt. Voeg de variabele 'API_KEY' toe aan je omgevingsvariabelen (.env).");
       }
 
       const ai = new GoogleGenAI({ apiKey });
@@ -52,11 +51,20 @@ export const AiAdvisor: React.FC = () => {
         contents: prompt,
       });
 
-      setAdvice(response.text || "Sorry, ik kon geen advies genereren.");
+      if (response.text) {
+        setAdvice(response.text);
+      } else {
+        throw new Error("Geen antwoord ontvangen van AI.");
+      }
 
     } catch (err: any) {
       console.error("AI Error:", err);
-      setError("AI Hulp is momenteel niet beschikbaar. Probeer het later opnieuw.");
+      // Toon een specifieke foutmelding als het aan de configuratie ligt
+      if (err.message && (err.message.includes("API Key") || err.message.includes("API_KEY"))) {
+        setError(err.message);
+      } else {
+        setError("Er ging iets mis. Controleer je internetverbinding of probeer het later opnieuw.");
+      }
     } finally {
       setLoading(false);
     }
@@ -93,13 +101,14 @@ export const AiAdvisor: React.FC = () => {
         </form>
 
         {error && (
-            <div className="mt-4 text-sm text-red-300 bg-red-900/20 py-2 px-4 rounded-lg inline-block">
-                {error}
+            <div className="mt-4 flex items-center justify-center gap-2 text-sm text-red-200 bg-red-900/40 border border-red-500/30 py-2 px-4 rounded-lg animate-in fade-in slide-in-from-top-2">
+                <AlertTriangle className="w-4 h-4 shrink-0" />
+                <span>{error}</span>
             </div>
         )}
 
         {advice && (
-          <div className="mt-8 bg-white/10 border border-white/20 rounded-xl p-6 text-left animate-fade-in">
+          <div className="mt-8 bg-white/10 border border-white/20 rounded-xl p-6 text-left animate-in fade-in slide-in-from-bottom-4 duration-500">
              <div className="flex items-start gap-3">
                 <Info className="w-6 h-6 text-indigo-300 shrink-0 mt-1" />
                 <div>

@@ -8,8 +8,8 @@ export default defineConfig(({ mode }) => {
   return {
     plugins: [react()],
     define: {
-      // Dit zorgt ervoor dat 'process.env.API_KEY' in de code wordt vervangen door de echte sleutel
-      'process.env.API_KEY': JSON.stringify(env.API_KEY),
+      // Dit zorgt ervoor dat 'process.env.API_KEY' in de code wordt vervangen door de echte sleutel of een lege string
+      'process.env.API_KEY': JSON.stringify(env.API_KEY || ''),
     },
   };
 });
