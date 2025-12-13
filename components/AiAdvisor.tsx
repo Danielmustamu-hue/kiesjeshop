@@ -2,6 +2,14 @@ import React, { useState } from 'react';
 import { GoogleGenAI } from '@google/genai';
 import { Sparkles, Send, Loader2, Info } from 'lucide-react';
 
+// Dit vertelt TypeScript dat process.env bestaat, zodat de build niet crasht.
+// Vite vervangt dit tijdens het bouwen door de echte waarde.
+declare const process: {
+  env: {
+    API_KEY: string;
+  }
+};
+
 export const AiAdvisor: React.FC = () => {
   const [query, setQuery] = useState('');
   const [advice, setAdvice] = useState<string | null>(null);
@@ -17,11 +25,12 @@ export const AiAdvisor: React.FC = () => {
     setAdvice(null);
 
     try {
-      // Securely access API key from environment variables
+      // Veilig toegang tot de API key (deze wordt door Vite ingevuld)
+      // We gebruiken hier een fallback om crashes te voorkomen tijdens development
       const apiKey = process.env.API_KEY;
       
       if (!apiKey) {
-        throw new Error("API Key configuration missing. Please ensure process.env.API_KEY is set.");
+        throw new Error("API Key is niet geconfigureerd. Controleer je Vercel/Netlify instellingen.");
       }
 
       const ai = new GoogleGenAI({ apiKey });
@@ -46,7 +55,7 @@ export const AiAdvisor: React.FC = () => {
       setAdvice(response.text || "Sorry, ik kon geen advies genereren.");
 
     } catch (err: any) {
-      console.error(err);
+      console.error("AI Error:", err);
       setError("AI Hulp is momenteel niet beschikbaar. Probeer het later opnieuw.");
     } finally {
       setLoading(false);
