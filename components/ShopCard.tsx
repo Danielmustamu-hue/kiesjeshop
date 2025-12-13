@@ -8,8 +8,7 @@ interface ShopCardProps {
 }
 
 export const ShopCard: React.FC<ShopCardProps> = ({ shop }) => {
- return (
-   <a href={shop.ctalink} target="_blank" rel="nofollow sponsored noopener">
+  return (
     <div className="bg-white rounded-2xl shadow-lg overflow-hidden border border-slate-100 hover:shadow-xl transition-shadow duration-300 flex flex-col h-full">
       {/* Header / Logo Area */}
       <div className={`h-24 flex items-center justify-center p-4 ${shop.id === 'coolblue' ? 'bg-blue-600' : 'bg-slate-50'}`}>
@@ -81,16 +80,21 @@ export const ShopCard: React.FC<ShopCardProps> = ({ shop }) => {
            </ul>
         </div>
       </div>
+
       <div className="p-6 pt-0 mt-auto">
-<a href={shop.shopData.ctalink}
-  target="_blank" rel="noopener noreferrer"
-className={`block w-full text-center py-3 rounded-xl font-bold text-white transition-transform active:scale-[.95] ${
-    shop.id === 'bol' ? 'bg-blue-800 hover:bg-blue-900' :
-    shop.id === 'coolblue' ? 'bg-orange-500 hover:bg-orange-600' :
-    'bg-yellow-500 hover:bg-yellow-800 text-slate-900'
-  }`}
->
-  Bezoek {shop.name}
-</a>
-); 
+        <a 
+          href={shop.ctaLink} 
+          target="_blank"
+          rel="nofollow noopener noreferrer"
+          className={`block w-full text-center py-3 rounded-xl font-bold text-white transition-transform active:scale-95 ${
+            shop.id === 'bol' ? 'bg-blue-800 hover:bg-blue-900' :
+            shop.id === 'coolblue' ? 'bg-orange-500 hover:bg-orange-600' :
+            'bg-yellow-500 hover:bg-yellow-600 text-slate-900'
+          }`}
+        >
+          Bezoek {shop.name}
+        </a>
+      </div>
+    </div>
+  );
 };
