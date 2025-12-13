@@ -146,7 +146,7 @@ const App: React.FC = () => {
                  De eerlijke startplek voor al je online aankopen. Vergelijk, kies en shop slim.
                </p>
                <p className="text-xs text-slate-600">
-                  © {new Date().getFullYear()} Kiesjeshop.nl Alle rechten voorbehouden. <span className="text-green-500 font-bold ml-1">v3.1 FINAL FIX</span>
+                  © {new Date().getFullYear()} Kiesjeshop.nl Alle rechten voorbehouden. <span className="text-green-500 font-bold ml-1">v4.0 CLEAN RESTART</span>
                </p>
             </div>
 
