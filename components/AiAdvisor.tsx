@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { GoogleGenAI } from '@google/genai';
 import { Sparkles, Send, Loader2, Info, AlertTriangle } from 'lucide-react';
 
-// Dit vertelt TypeScript dat process.env bestaat.
+// Dit vertelt TypeScript dat process.env bestaat en door Vite wordt ingevuld.
 declare const process: {
   env: {
     API_KEY: string;
@@ -24,12 +24,12 @@ export const AiAdvisor: React.FC = () => {
     setAdvice(null);
 
     try {
-      // Veilig toegang tot de API key
+      // De API key wordt via vite.config.ts geïnjecteerd
       const apiKey = process.env.API_KEY;
       
-      // Check of de key aanwezig is (niet leeg)
+      // Strenge check: als de key leeg is (bijv. lege string in .env), gooi direct een duidelijke fout.
       if (!apiKey || apiKey.trim() === '') {
-        throw new Error("API Key ontbreekt. Voeg de variabele 'API_KEY' toe aan je omgevingsvariabelen (.env).");
+        throw new Error("API_KEY ontbreekt. Configureer je .env bestand.");
       }
 
       const ai = new GoogleGenAI({ apiKey });
@@ -54,17 +54,32 @@ export const AiAdvisor: React.FC = () => {
       if (response.text) {
         setAdvice(response.text);
       } else {
-        throw new Error("Geen antwoord ontvangen van AI.");
+        throw new Error("Geen tekst ontvangen van het AI model.");
       }
 
     } catch (err: any) {
       console.error("AI Error:", err);
-      // Toon een specifieke foutmelding als het aan de configuratie ligt
-      if (err.message && (err.message.includes("API Key") || err.message.includes("API_KEY"))) {
-        setError(err.message);
-      } else {
-        setError("Er ging iets mis. Controleer je internetverbinding of probeer het later opnieuw.");
+      
+      // Bepaal de meest nuttige foutmelding voor de gebruiker
+      let errorMessage = "Er ging iets mis. Probeer het later opnieuw.";
+      
+      if (err.message) {
+        const msg = err.message.toLowerCase();
+        if (msg.includes("api key") || msg.includes("api_key") || msg.includes("403")) {
+           errorMessage = "API Key ontbreekt of is ongeldig. Controleer je .env bestand.";
+        } else if (msg.includes("404") || msg.includes("not found")) {
+           errorMessage = "AI Model niet gevonden (404).";
+        } else if (msg.includes("429") || msg.includes("quota")) {
+           errorMessage = "Te veel verzoeken. De AI is even druk.";
+        } else if (msg.includes("fetch") || msg.includes("network")) {
+           errorMessage = "Netwerkfout. Controleer je internetverbinding.";
+        } else {
+           // Toon de technische fout als fallback, zodat de gebruiker weet wat er mis is
+           errorMessage = `Fout: ${err.message}`;
+        }
       }
+      
+      setError(errorMessage);
     } finally {
       setLoading(false);
     }
