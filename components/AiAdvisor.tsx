@@ -24,10 +24,8 @@ export const AiAdvisor: React.FC = () => {
     setAdvice(null);
 
     try {
-      // De API key wordt via vite.config.ts geïnjecteerd
       const apiKey = process.env.API_KEY;
       
-      // Strenge check: als de key leeg is (bijv. lege string in .env), gooi direct een duidelijke fout.
       if (!apiKey || apiKey.trim() === '') {
         throw new Error("API_KEY ontbreekt. Configureer je .env bestand.");
       }
@@ -46,22 +44,46 @@ export const AiAdvisor: React.FC = () => {
         - Amazon.nl: Beste voor prijsvechten, niche producten, kabels, gadgets.
       `;
 
-      // We gebruiken gemini-1.5-flash omdat dit het meest stabiele model is dat geen 404 errors geeft
-      const response = await ai.models.generateContent({
-        model: 'gemini-1.5-flash',
-        contents: prompt,
-      });
+      // We proberen een lijst met modellen. Als de eerste een 404 geeft (niet gevonden), proberen we de volgende.
+      // Dit maakt de app robuuster tegen model-wijzigingen van Google.
+      const modelsToTry = ['gemini-2.5-flash', 'gemini-2.0-flash-exp'];
+      
+      let lastError: any = null;
+      let success = false;
 
-      if (response.text) {
-        setAdvice(response.text);
-      } else {
-        throw new Error("Geen tekst ontvangen van het AI model.");
+      for (const modelName of modelsToTry) {
+        try {
+          console.log(`Proberen met model: ${modelName}...`);
+          const response = await ai.models.generateContent({
+            model: modelName,
+            contents: prompt,
+          });
+          
+          if (response.text) {
+            setAdvice(response.text);
+            success = true;
+            break; // Stop de loop, we hebben antwoord!
+          }
+        } catch (err: any) {
+          lastError = err;
+          // Als het een 404 is (model niet gevonden), proberen we de volgende in de lijst.
+          // Bij andere errors (bijv. quota, internet) stoppen we direct.
+          const is404 = err.message && (err.message.includes('404') || err.message.includes('not found'));
+          if (!is404) {
+             throw err; 
+          }
+          console.warn(`Model ${modelName} faalde met 404, overschakelen naar backup...`);
+        }
+      }
+
+      // Als na alle pogingen nog geen succes is, gooi de laatste error
+      if (!success) {
+        throw lastError || new Error("Geen antwoord ontvangen van AI.");
       }
 
     } catch (err: any) {
       console.error("AI Error:", err);
       
-      // Bepaal de meest nuttige foutmelding voor de gebruiker
       let errorMessage = "Er ging iets mis. Probeer het later opnieuw.";
       
       if (err.message) {
@@ -69,13 +91,12 @@ export const AiAdvisor: React.FC = () => {
         if (msg.includes("api key") || msg.includes("api_key") || msg.includes("403")) {
            errorMessage = "API Key ontbreekt of is ongeldig. Controleer je .env bestand.";
         } else if (msg.includes("404") || msg.includes("not found")) {
-           errorMessage = "AI Model niet gevonden (404). Check je model instellingen.";
+           errorMessage = "AI Modellen zijn momenteel niet bereikbaar (404).";
         } else if (msg.includes("429") || msg.includes("quota")) {
            errorMessage = "Te veel verzoeken. De AI is even druk.";
         } else if (msg.includes("fetch") || msg.includes("network")) {
            errorMessage = "Netwerkfout. Controleer je internetverbinding.";
         } else {
-           // Toon de technische fout als fallback, zodat de gebruiker weet wat er mis is
            errorMessage = `Fout: ${err.message}`;
         }
       }
