@@ -9,7 +9,7 @@ export interface ShopData {
   serviceScore: number;
   delivery: string;
   usp: string;
-  ctaLink: string;
+  ctaLink: string; // This is the crucial field for your affiliate links!
   pros: string[];
 }
 
