@@ -11,7 +11,8 @@ export const SHOPS: ShopData[] = [
     serviceScore: 4.5,
     delivery: 'Select: Veelal morgen in huis',
     usp: 'Vertrouwd Nederlands, focus op partners',
-    ctalink: 'https://partner.bol.com/click/click?p=2&t=url&s=1491898&f=TXL&url=https%3A%2F%2Fwww.bol.com%2Fnl%2Fnl%2F&name=De%20winkel%20van%20ons%20allemaal&subid=Algemeen-AI-Hulp/',
+    // Affiliate link voor Bol.com
+    ctaLink: 'https://partner.bol.com/click/click?p=2&t=url&s=1491898&f=TXL&url=https%3A%2F%2Fwww.bol.com%2Fnl%2Fnl%2F&name=De%20winkel%20van%20ons%20allemaal&subid=Algemeen-AI-Hulp',
     pros: ['Enorm assortiment', 'Makkelijk retourneren', 'Select voordeel'],
   },
   {
@@ -24,7 +25,8 @@ export const SHOPS: ShopData[] = [
     serviceScore: 5,
     delivery: 'VandaagNog®, eigen bezorgdienst',
     usp: 'Alles voor een glimlach (Top Service)',
-    ctalink: 'https://www.google.com/',
+    // Standaard link (nog geen affiliate link opgegeven)
+    ctaLink: 'https://www.coolblue.nl/', 
     pros: ['Beste klantenservice', 'Eigen installatiedienst', 'Fysieke winkels'],
   },
   {
@@ -37,7 +39,8 @@ export const SHOPS: ShopData[] = [
     serviceScore: 4,
     delivery: 'Prime: Snelle, gratis levering',
     usp: 'Scherpe prijzen & Prime Video',
-    ctalink: 'https://amzn.to/4oOzyrm/',
+    // Affiliate link voor Amazon
+    ctaLink: 'https://amzn.to/4oOzyrm',
     pros: ['Vaak de goedkoopste', 'Prime voordelen', 'Internationaal aanbod'],
   },
 ];
