@@ -82,7 +82,7 @@ export const ShopCard: React.FC<ShopCardProps> = ({ shop }) => {
         </div>
       </div>
       <div className="p-6 pt-0 mt-auto">
-<a href={shop.ctalink}
+<a href={shop.shopData.ctalink}
   target="_blank" rel="noopener noreferrer"
 className={`block w-full text-center py-3 rounded-xl font-bold text-white transition-transform active:scale-[.95] ${
     shop.id === 'bol' ? 'bg-blue-800 hover:bg-blue-900' :
