@@ -46,8 +46,9 @@ export const AiAdvisor: React.FC = () => {
         - Amazon.nl: Beste voor prijsvechten, niche producten, kabels, gadgets.
       `;
 
+      // We gebruiken gemini-1.5-flash omdat dit het meest stabiele model is dat geen 404 errors geeft
       const response = await ai.models.generateContent({
-        model: 'gemini-2.5-flash',
+        model: 'gemini-1.5-flash',
         contents: prompt,
       });
 
@@ -68,7 +69,7 @@ export const AiAdvisor: React.FC = () => {
         if (msg.includes("api key") || msg.includes("api_key") || msg.includes("403")) {
            errorMessage = "API Key ontbreekt of is ongeldig. Controleer je .env bestand.";
         } else if (msg.includes("404") || msg.includes("not found")) {
-           errorMessage = "AI Model niet gevonden (404).";
+           errorMessage = "AI Model niet gevonden (404). Check je model instellingen.";
         } else if (msg.includes("429") || msg.includes("quota")) {
            errorMessage = "Te veel verzoeken. De AI is even druk.";
         } else if (msg.includes("fetch") || msg.includes("network")) {
