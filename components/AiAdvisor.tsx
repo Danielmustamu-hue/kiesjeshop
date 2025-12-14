@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { GoogleGenAI } from '@google/genai';
-import { Sparkles, Send, Loader2, Info, AlertTriangle, ShieldAlert } from 'lucide-react';
+import { Sparkles, Send, Loader2, Info, AlertTriangle, ShieldAlert, Cpu } from 'lucide-react';
 
 export const AiAdvisor: React.FC = () => {
   const [query, setQuery] = useState('');
@@ -20,9 +20,10 @@ export const AiAdvisor: React.FC = () => {
 
     try {
       // 1. API Key Check
+      // Zorg ervoor dat de API_KEY in je Vercel Environment Variables staat
       const apiKey = process.env.API_KEY;
       if (!apiKey || apiKey.length < 5) {
-        throw new Error("API Key ontbreekt. Configureer de .env file.");
+        throw new Error("Systeem configuratie fout (API Key).");
       }
 
       // 2. Initialisatie
@@ -35,11 +36,10 @@ export const AiAdvisor: React.FC = () => {
         Geef advies in max 3 zinnen.
       `;
 
-      // 3. Model Strategie: Gebruik de nieuwste stabiele modellen
-      // Oude modellen zoals 1.5-flash kunnen 404 geven als ze niet meer ondersteund worden in deze SDK versie.
+      // 3. Model Strategie
+      // Gebruik 'gemini-2.5-flash'. Dit is het snelste en meest geschikte model.
       const modelsToTry = [
-        'gemini-2.5-flash',      // Primary Recommended Model
-        'gemini-2.5-flash-latest' // Fallback
+        'gemini-2.5-flash'
       ];
       
       let success = false;
@@ -47,9 +47,10 @@ export const AiAdvisor: React.FC = () => {
 
       for (const modelName of modelsToTry) {
         try {
+          // Gebruik expliciete content structuur
           const response = await ai.models.generateContent({
             model: modelName,
-            contents: promptText, 
+            contents: { parts: [{ text: promptText }] }, 
           });
           
           if (response.text) {
@@ -59,22 +60,26 @@ export const AiAdvisor: React.FC = () => {
           }
         } catch (err: any) {
           const msg = err?.message || String(err);
-          // console.warn(`Model ${modelName} faalde:`, msg); 
+          // "Script error." is een browser security melding (vaak AdBlock / CORS)
+          if (msg.includes("Script error") || msg.includes("Failed to fetch")) {
+             console.error(`Network block on ${modelName}`);
+             lastErrorMsg = "Script error"; 
+             break; 
+          }
           lastErrorMsg = msg;
         }
       }
 
       if (!success) {
-        // Specifieke afhandeling voor foutmeldingen
-        if (lastErrorMsg.includes("Script error")) {
+        if (lastErrorMsg.includes("Script error") || lastErrorMsg.includes("Failed to fetch")) {
             setIsBlockingError(true);
-            throw new Error("Verbinding geblokkeerd.");
+            throw new Error("Verbinding geblokkeerd door Browser of AdBlocker.");
         } else if (lastErrorMsg.includes("404")) {
-            throw new Error("AI Model niet gevonden (404). Update de modelnaam.");
+            throw new Error("AI Service momenteel niet bereikbaar.");
         } else if (lastErrorMsg.includes("429")) {
             throw new Error("Te druk. Probeer het later.");
         } else {
-            throw new Error(lastErrorMsg || "Geen antwoord ontvangen.");
+            throw new Error("Geen antwoord ontvangen.");
         }
       }
 
@@ -84,7 +89,7 @@ export const AiAdvisor: React.FC = () => {
       let displayMsg = err.message || "Er ging iets mis.";
       
       if (isBlockingError || displayMsg.includes("Script error") || displayMsg.includes("Failed to fetch")) {
-          displayMsg = "Verbinding geblokkeerd door browser.";
+          displayMsg = "Verbinding geblokkeerd. Check je AdBlocker.";
           setIsBlockingError(true);
       }
       
@@ -124,6 +129,12 @@ export const AiAdvisor: React.FC = () => {
           </button>
         </form>
 
+        {/* Credits / Herkomst */}
+        <div className="mt-3 flex items-center justify-center gap-1.5 opacity-50 hover:opacity-80 transition-opacity">
+            <Cpu className="w-3 h-3" />
+            <span className="text-[10px] uppercase tracking-widest font-semibold">Powered by Google Gemini</span>
+        </div>
+
         {error && (
             <div className="mt-4 flex flex-col items-center justify-center gap-2 text-sm text-red-100 bg-red-900/50 border border-red-500/30 py-4 px-6 rounded-xl animate-in fade-in slide-in-from-top-2">
                 <div className="flex items-center gap-2 font-bold">
@@ -132,8 +143,8 @@ export const AiAdvisor: React.FC = () => {
                 </div>
                 {isBlockingError && (
                     <div className="text-xs text-red-200/80 text-center max-w-sm">
-                        <p>Dit komt vaak door een <strong>AdBlocker</strong> (bv. uBlock) of <strong>Cookie-instellingen</strong>.</p>
-                        <p className="mt-1">Schakel je AdBlocker uit voor deze site of accepteer cookies om de AI te gebruiken.</p>
+                        <p>De verbinding met de AI wordt geblokkeerd.</p>
+                        <p className="mt-1">Probeer je <strong>AdBlocker</strong> (bv. uBlock) tijdelijk uit te zetten voor deze site.</p>
                     </div>
                 )}
             </div>
