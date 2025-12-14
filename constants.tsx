@@ -45,32 +45,5 @@ export const SHOPS: ShopData[] = [
   },
 ];
 
-export const MOCK_REVIEWS: Review[] = [
-  {
-    id: '1',
-    shopId: 'coolblue',
-    author: 'Mark de J.',
-    date: '2 dagen geleden',
-    rating: 5,
-    text: 'Voor mijn nieuwe wasmachine toch voor Coolblue gekozen vanwege de installatieservice. De bezorgers waren ontzettend vriendelijk en namen de oude machine direct mee. Top!',
-    verified: true,
-  },
-  {
-    id: '2',
-    shopId: 'bol',
-    author: 'Sarah V.',
-    date: '1 week geleden',
-    rating: 4.5,
-    text: 'Ik bestel bijna alles bij Bol. Vooral Select is handig, geen verzendkosten meer. Soms is de levering via externe partners wel wat trager, maar klantenservice lost het altijd op.',
-    verified: true,
-  },
-  {
-    id: '3',
-    shopId: 'amazon',
-    author: 'Timo B.',
-    date: '3 dagen geleden',
-    rating: 4,
-    text: 'Voor kabels en kleine elektronica kijk ik altijd eerst op Amazon. Scheelt vaak echt veel geld vergeleken met de rest. De site is wel wat rommelig, maar Prime levering is razendsnel.',
-    verified: true,
-  },
-];
+// MOCK_REVIEWS verwijderd i.v.m. eerlijkheid/SEO
+export const MOCK_REVIEWS: Review[] = [];

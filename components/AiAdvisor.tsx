@@ -17,8 +17,7 @@ export const AiAdvisor: React.FC = () => {
     setAdvice(null);
 
     try {
-      // Directe initialisatie met de environment variable.
-      // De check op null/length is verwijderd zoals gevraagd.
+      // Initialiseer Gemini direct met de environment variable
       const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
       
       const promptText = `
@@ -45,15 +44,13 @@ export const AiAdvisor: React.FC = () => {
       let msg = "Er ging iets mis. Probeer het later opnieuw.";
       const errorString = String(err);
       
-      // Foutmeldingen iets vereenvoudigd omdat we de specifieke "API_KEY_MISSING" error niet meer zelf gooien
+      // Vereenvoudigde error handling
       if (err.message && (err.message.includes("API Key") || err.message.includes("403"))) {
-         msg = "Toegang geweigerd (403). De API Key is ongeldig. Controleer de key in Vercel Settings.";
+         msg = "Configuratiefout: API Key ongeldig of ontbreekt.";
       } else if (errorString.includes("404")) {
-         msg = "Model niet gevonden (404). Zorg dat je 'gemini-2.5-flash' gebruikt en dat je Google AI Studio project actief is.";
-      } else if (errorString.includes("429") || errorString.toLowerCase().includes("quota")) {
-         msg = "Te druk: De AI-credits zijn tijdelijk op. Probeer het morgen weer.";
-      } else if (errorString.includes("Script error") || errorString.includes("Failed to fetch")) {
-         msg = "Verbinding geblokkeerd. Controleer je internetverbinding of AdBlocker.";
+         msg = "Service niet beschikbaar (404).";
+      } else if (errorString.includes("429")) {
+         msg = "Te druk. Probeer het morgen weer.";
       }
       
       setError(msg);
@@ -92,7 +89,6 @@ export const AiAdvisor: React.FC = () => {
           </button>
         </form>
 
-        {/* Credits / Herkomst - Verplicht voor Gemini implementaties */}
         <div className="mt-3 flex items-center justify-center gap-1.5 opacity-50 hover:opacity-80 transition-opacity">
             <Cpu className="w-3 h-3" />
             <span className="text-[10px] uppercase tracking-widest font-semibold">Powered by Google Gemini</span>
