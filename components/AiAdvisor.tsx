@@ -18,9 +18,12 @@ export const AiAdvisor: React.FC = () => {
 
     try {
       // 1. API Key Check
+      // Vercel vervangt process.env.API_KEY tijdens de 'Build' fase.
       const apiKey = process.env.API_KEY;
+      
       if (!apiKey || apiKey.length < 5) {
-        throw new Error("API Key ontbreekt. Controleer of de environment variable API_KEY is ingesteld in Vercel.");
+        // Dit betekent dat tijdens de laatste Vercel build de key nog niet ingesteld was.
+        throw new Error("API_KEY_MISSING");
       }
 
       // 2. Initialisatie
@@ -47,15 +50,15 @@ export const AiAdvisor: React.FC = () => {
 
     } catch (err: any) {
       console.error("AI Error:", err);
-      // Gebruiksvriendelijke foutmelding
       let msg = "Er ging iets mis. Probeer het later opnieuw.";
       const errorString = String(err);
       
-      if (err.message && (err.message.includes("API Key") || err.message.includes("403"))) {
-         msg = "Configuratiefout: API Key ongeldig of niet ingesteld in Vercel. Controleer je instellingen.";
+      if (errorString.includes("API_KEY_MISSING")) {
+         msg = "Configuratiefout: API Key ontbreekt in deze build. Actie vereist: Ga naar Vercel -> Deployments en klik op 'Redeploy' om de nieuwe key te activeren.";
+      } else if (err.message && (err.message.includes("API Key") || err.message.includes("403"))) {
+         msg = "Toegang geweigerd (403). De API Key is ongeldig. Controleer de key in Vercel Settings.";
       } else if (errorString.includes("404")) {
-         // Specifieke hint voor Vercel gebruikers die net hun key hebben geupdate
-         msg = "Model niet gevonden (404). Tip: Heb je de API Key op Vercel aangepast? Voer dan een 'Redeploy' uit om de nieuwe key op de live site te activeren.";
+         msg = "Model niet gevonden (404). Zorg dat je 'gemini-2.5-flash' gebruikt en dat je Google AI Studio project actief is.";
       } else if (errorString.includes("429") || errorString.toLowerCase().includes("quota")) {
          msg = "Te druk: De AI-credits zijn tijdelijk op. Probeer het morgen weer.";
       } else if (errorString.includes("Script error") || errorString.includes("Failed to fetch")) {
