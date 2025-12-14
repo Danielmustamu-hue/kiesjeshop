@@ -17,17 +17,9 @@ export const AiAdvisor: React.FC = () => {
     setAdvice(null);
 
     try {
-      // 1. API Key Check
-      // Vercel vervangt process.env.API_KEY tijdens de 'Build' fase.
-      const apiKey = process.env.API_KEY;
-      
-      if (!apiKey || apiKey.length < 5) {
-        // Dit betekent dat tijdens de laatste Vercel build de key nog niet ingesteld was.
-        throw new Error("API_KEY_MISSING");
-      }
-
-      // 2. Initialisatie
-      const ai = new GoogleGenAI({ apiKey });
+      // Directe initialisatie met de environment variable.
+      // De check op null/length is verwijderd zoals gevraagd.
+      const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
       
       const promptText = `
         Je bent een shopping expert in Nederland. Adviseer de gebruiker.
@@ -36,7 +28,7 @@ export const AiAdvisor: React.FC = () => {
         Geef advies in max 3 zinnen.
       `;
 
-      // 3. Model Strategie
+      // Model aanroep
       const response = await ai.models.generateContent({
         model: 'gemini-2.5-flash',
         contents: { parts: [{ text: promptText }] }, 
@@ -53,9 +45,8 @@ export const AiAdvisor: React.FC = () => {
       let msg = "Er ging iets mis. Probeer het later opnieuw.";
       const errorString = String(err);
       
-      if (errorString.includes("API_KEY_MISSING")) {
-         msg = "Configuratiefout: API Key ontbreekt in deze build. Actie vereist: Ga naar Vercel -> Deployments en klik op 'Redeploy' om de nieuwe key te activeren.";
-      } else if (err.message && (err.message.includes("API Key") || err.message.includes("403"))) {
+      // Foutmeldingen iets vereenvoudigd omdat we de specifieke "API_KEY_MISSING" error niet meer zelf gooien
+      if (err.message && (err.message.includes("API Key") || err.message.includes("403"))) {
          msg = "Toegang geweigerd (403). De API Key is ongeldig. Controleer de key in Vercel Settings.";
       } else if (errorString.includes("404")) {
          msg = "Model niet gevonden (404). Zorg dat je 'gemini-2.5-flash' gebruikt en dat je Google AI Studio project actief is.";
