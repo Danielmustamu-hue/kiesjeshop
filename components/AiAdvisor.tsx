@@ -1,19 +1,13 @@
 import React, { useState } from 'react';
 import { GoogleGenAI } from '@google/genai';
-import { Sparkles, Send, Loader2, Info, AlertTriangle } from 'lucide-react';
-
-// Dit vertelt TypeScript dat process.env bestaat en door Vite wordt ingevuld.
-declare const process: {
-  env: {
-    API_KEY: string;
-  }
-};
+import { Sparkles, Send, Loader2, Info, AlertTriangle, ShieldAlert } from 'lucide-react';
 
 export const AiAdvisor: React.FC = () => {
   const [query, setQuery] = useState('');
   const [advice, setAdvice] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [isBlockingError, setIsBlockingError] = useState(false);
 
   const handleAskAi = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -22,93 +16,85 @@ export const AiAdvisor: React.FC = () => {
     setLoading(true);
     setError(null);
     setAdvice(null);
+    setIsBlockingError(false);
 
     try {
+      // 1. API Key Check
       const apiKey = process.env.API_KEY;
-      
-      if (!apiKey || apiKey.trim() === '') {
-        throw new Error("API_KEY ontbreekt. Configureer je .env bestand.");
+      if (!apiKey || apiKey.length < 5) {
+        throw new Error("API Key ontbreekt. Configureer de .env file.");
       }
 
+      // 2. Initialisatie
       const ai = new GoogleGenAI({ apiKey });
       
-      const prompt = `
-        Je bent een shopping expert in Nederland. Een gebruiker wil iets kopen en twijfelt tussen Bol.com, Coolblue en Amazon.nl.
-        
-        Vraag van de gebruiker: "${query}"
-        
-        Geef een kort en bondig advies (maximaal 3 zinnen) over welke winkel het beste is voor DIT specifieke doel en waarom.
-        Wees objectief.
-        - Coolblue: Beste voor advies, elektronica, witgoed, service.
-        - Bol.com: Beste voor algemene spullen, boeken, dagelijkse dingen, Nederlandstalig.
-        - Amazon.nl: Beste voor prijsvechten, niche producten, kabels, gadgets.
+      const promptText = `
+        Je bent een shopping expert in Nederland. Adviseer de gebruiker.
+        Vraag: "${query}"
+        Opties: Bol.com (algemeen), Coolblue (service/elektronica), Amazon.nl (prijs).
+        Geef advies in max 3 zinnen.
       `;
 
-      // We breiden de lijst uit. De 'preview' en 'exp' modellen zijn soms instabiel of niet beschikbaar voor alle keys.
-      // 'gemini-1.5-flash' is het meest stabiele productiemodel en werkt vrijwel altijd als backup.
+      // 3. Model Strategie: Stabiliteit eerst
       const modelsToTry = [
-        'gemini-2.5-flash', 
-        'gemini-2.0-flash-exp', 
-        'gemini-1.5-flash'
+        'gemini-1.5-flash',      // Production Stable
+        'gemini-2.0-flash-exp',  // Experimental (soms sneller/beter)
+        'gemini-1.5-pro'         // High Intelligence Fallback
       ];
       
-      let lastError: any = null;
       let success = false;
+      let lastErrorMsg = '';
 
       for (const modelName of modelsToTry) {
         try {
-          // console.log(`Proberen met model: ${modelName}...`); 
-          // (Console logs weggehaald voor schonere productie code, tenzij fout)
-          
+          // Vereenvoudigde aanroep volgens @google/genai documentatie
+          // We sturen 'contents' als string om complexiteitsfouten te vermijden
           const response = await ai.models.generateContent({
             model: modelName,
-            contents: prompt,
+            contents: promptText, 
           });
           
           if (response.text) {
             setAdvice(response.text);
             success = true;
-            break; // Stop de loop, we hebben antwoord!
+            break; 
           }
         } catch (err: any) {
-          lastError = err;
-          // Als het een 404 is (model niet gevonden) OF een 503 (service unavailable), proberen we de volgende.
-          const msg = err.message ? err.message.toLowerCase() : '';
-          const isRecoverable = msg.includes('404') || msg.includes('not found') || msg.includes('503') || msg.includes('overloaded');
+          const msg = err?.message || String(err);
+          // console.warn(`Model ${modelName} faalde:`, msg); // (Optioneel voor dev)
+          lastErrorMsg = msg;
           
-          if (!isRecoverable) {
-             throw err; // Bij auth errors (403) of andere fatale fouten stoppen we direct.
-          }
-          console.warn(`Model ${modelName} niet beschikbaar (${msg}), overschakelen naar backup...`);
+          // Script error = Browser blokkade (CORS/AdBlock). 
+          // Dit is meestal fataal voor alle modellen, dus we kunnen hier stoppen of doorgaan.
+          // We proberen door te gaan voor de zekerheid.
         }
       }
 
-      // Als na alle pogingen nog geen succes is, gooi de laatste error
       if (!success) {
-        throw lastError || new Error("Geen antwoord ontvangen van AI.");
+        // Specifieke afhandeling voor de "Script error"
+        if (lastErrorMsg.includes("Script error")) {
+            setIsBlockingError(true);
+            throw new Error("Verbinding geblokkeerd.");
+        } else if (lastErrorMsg.includes("404")) {
+            throw new Error("AI Service niet gevonden (404).");
+        } else if (lastErrorMsg.includes("429")) {
+            throw new Error("Te druk. Probeer het later.");
+        } else {
+            throw new Error("Geen antwoord ontvangen.");
+        }
       }
 
     } catch (err: any) {
       console.error("AI Error:", err);
       
-      let errorMessage = "Er ging iets mis. Probeer het later opnieuw.";
+      let displayMsg = err.message || "Er ging iets mis.";
       
-      if (err.message) {
-        const msg = err.message.toLowerCase();
-        if (msg.includes("api key") || msg.includes("api_key") || msg.includes("403")) {
-           errorMessage = "API Key error. Controleer je instellingen.";
-        } else if (msg.includes("404") || msg.includes("not found")) {
-           errorMessage = "AI Service momenteel niet bereikbaar (404).";
-        } else if (msg.includes("429") || msg.includes("quota")) {
-           errorMessage = "Te veel verzoeken. De AI is even druk.";
-        } else if (msg.includes("fetch") || msg.includes("network") || msg.includes("failed to fetch")) {
-           errorMessage = "Netwerkfout. Controleer je internetverbinding.";
-        } else {
-           errorMessage = `Fout: ${err.message}`;
-        }
+      if (isBlockingError || displayMsg.includes("Script error") || displayMsg.includes("Failed to fetch")) {
+          displayMsg = "Verbinding geblokkeerd door browser.";
+          setIsBlockingError(true);
       }
       
-      setError(errorMessage);
+      setError(displayMsg);
     } finally {
       setLoading(false);
     }
@@ -145,9 +131,17 @@ export const AiAdvisor: React.FC = () => {
         </form>
 
         {error && (
-            <div className="mt-4 flex items-center justify-center gap-2 text-sm text-red-200 bg-red-900/40 border border-red-500/30 py-2 px-4 rounded-lg animate-in fade-in slide-in-from-top-2">
-                <AlertTriangle className="w-4 h-4 shrink-0" />
-                <span>{error}</span>
+            <div className="mt-4 flex flex-col items-center justify-center gap-2 text-sm text-red-100 bg-red-900/50 border border-red-500/30 py-4 px-6 rounded-xl animate-in fade-in slide-in-from-top-2">
+                <div className="flex items-center gap-2 font-bold">
+                  {isBlockingError ? <ShieldAlert className="w-5 h-5" /> : <AlertTriangle className="w-5 h-5" />}
+                  <span>{error}</span>
+                </div>
+                {isBlockingError && (
+                    <div className="text-xs text-red-200/80 text-center max-w-sm">
+                        <p>Dit komt vaak door een <strong>AdBlocker</strong> (bv. uBlock) of <strong>Cookie-instellingen</strong>.</p>
+                        <p className="mt-1">Schakel je AdBlocker uit voor deze site of accepteer cookies om de AI te gebruiken.</p>
+                    </div>
+                )}
             </div>
         )}
 
