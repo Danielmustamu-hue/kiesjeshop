@@ -1,13 +1,12 @@
 import React, { useState } from 'react';
 import { GoogleGenAI } from '@google/genai';
-import { Sparkles, Send, Loader2, Info, AlertTriangle, ShieldAlert, Cpu } from 'lucide-react';
+import { Sparkles, Send, Loader2, Info, AlertTriangle, Cpu } from 'lucide-react';
 
 export const AiAdvisor: React.FC = () => {
   const [query, setQuery] = useState('');
   const [advice, setAdvice] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [isBlockingError, setIsBlockingError] = useState(false);
 
   const handleAskAi = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -16,14 +15,12 @@ export const AiAdvisor: React.FC = () => {
     setLoading(true);
     setError(null);
     setAdvice(null);
-    setIsBlockingError(false);
 
     try {
       // 1. API Key Check
-      // Zorg ervoor dat de API_KEY in je Vercel Environment Variables staat
       const apiKey = process.env.API_KEY;
       if (!apiKey || apiKey.length < 5) {
-        throw new Error("Systeem configuratie fout (API Key).");
+        throw new Error("API Key ontbreekt. Controleer of de environment variable API_KEY is ingesteld in Vercel.");
       }
 
       // 2. Initialisatie
@@ -37,63 +34,34 @@ export const AiAdvisor: React.FC = () => {
       `;
 
       // 3. Model Strategie
-      // Gebruik 'gemini-2.5-flash'. Dit is het snelste en meest geschikte model.
-      const modelsToTry = [
-        'gemini-2.5-flash'
-      ];
+      const response = await ai.models.generateContent({
+        model: 'gemini-2.5-flash',
+        contents: { parts: [{ text: promptText }] }, 
+      });
       
-      let success = false;
-      let lastErrorMsg = '';
-
-      for (const modelName of modelsToTry) {
-        try {
-          // Gebruik expliciete content structuur
-          const response = await ai.models.generateContent({
-            model: modelName,
-            contents: { parts: [{ text: promptText }] }, 
-          });
-          
-          if (response.text) {
-            setAdvice(response.text);
-            success = true;
-            break; 
-          }
-        } catch (err: any) {
-          const msg = err?.message || String(err);
-          // "Script error." is een browser security melding (vaak AdBlock / CORS)
-          if (msg.includes("Script error") || msg.includes("Failed to fetch")) {
-             console.error(`Network block on ${modelName}`);
-             lastErrorMsg = "Script error"; 
-             break; 
-          }
-          lastErrorMsg = msg;
-        }
-      }
-
-      if (!success) {
-        if (lastErrorMsg.includes("Script error") || lastErrorMsg.includes("Failed to fetch")) {
-            setIsBlockingError(true);
-            throw new Error("Verbinding geblokkeerd door Browser of AdBlocker.");
-        } else if (lastErrorMsg.includes("404")) {
-            throw new Error("AI Service momenteel niet bereikbaar.");
-        } else if (lastErrorMsg.includes("429")) {
-            throw new Error("Te druk. Probeer het later.");
-        } else {
-            throw new Error("Geen antwoord ontvangen.");
-        }
+      if (response.text) {
+        setAdvice(response.text);
+      } else {
+        throw new Error("Geen antwoord ontvangen van de assistent.");
       }
 
     } catch (err: any) {
       console.error("AI Error:", err);
+      // Gebruiksvriendelijke foutmelding
+      let msg = "Er ging iets mis. Probeer het later opnieuw.";
+      const errorString = String(err);
       
-      let displayMsg = err.message || "Er ging iets mis.";
-      
-      if (isBlockingError || displayMsg.includes("Script error") || displayMsg.includes("Failed to fetch")) {
-          displayMsg = "Verbinding geblokkeerd. Check je AdBlocker.";
-          setIsBlockingError(true);
+      if (err.message && (err.message.includes("API Key") || err.message.includes("403"))) {
+         msg = "Configuratiefout: API Key ongeldig of niet ingesteld in Vercel. Controleer je instellingen.";
+      } else if (errorString.includes("404")) {
+         msg = "Model niet beschikbaar (404). Controleer of de API Key toegang heeft tot 'gemini-2.5-flash'.";
+      } else if (errorString.includes("429") || errorString.toLowerCase().includes("quota")) {
+         msg = "Te druk: De AI-credits zijn tijdelijk op. Probeer het morgen weer.";
+      } else if (errorString.includes("Script error") || errorString.includes("Failed to fetch")) {
+         msg = "Verbinding geblokkeerd. Controleer je internetverbinding of AdBlocker.";
       }
       
-      setError(displayMsg);
+      setError(msg);
     } finally {
       setLoading(false);
     }
@@ -129,24 +97,16 @@ export const AiAdvisor: React.FC = () => {
           </button>
         </form>
 
-        {/* Credits / Herkomst */}
+        {/* Credits / Herkomst - Verplicht voor Gemini implementaties */}
         <div className="mt-3 flex items-center justify-center gap-1.5 opacity-50 hover:opacity-80 transition-opacity">
             <Cpu className="w-3 h-3" />
             <span className="text-[10px] uppercase tracking-widest font-semibold">Powered by Google Gemini</span>
         </div>
 
         {error && (
-            <div className="mt-4 flex flex-col items-center justify-center gap-2 text-sm text-red-100 bg-red-900/50 border border-red-500/30 py-4 px-6 rounded-xl animate-in fade-in slide-in-from-top-2">
-                <div className="flex items-center gap-2 font-bold">
-                  {isBlockingError ? <ShieldAlert className="w-5 h-5" /> : <AlertTriangle className="w-5 h-5" />}
-                  <span>{error}</span>
-                </div>
-                {isBlockingError && (
-                    <div className="text-xs text-red-200/80 text-center max-w-sm">
-                        <p>De verbinding met de AI wordt geblokkeerd.</p>
-                        <p className="mt-1">Probeer je <strong>AdBlocker</strong> (bv. uBlock) tijdelijk uit te zetten voor deze site.</p>
-                    </div>
-                )}
+            <div className="mt-4 flex items-center justify-center gap-2 text-sm text-red-200 bg-red-900/50 py-2 px-4 rounded-lg animate-in fade-in border border-red-500/30">
+                <AlertTriangle className="w-4 h-4" />
+                <span>{error}</span>
             </div>
         )}
 
