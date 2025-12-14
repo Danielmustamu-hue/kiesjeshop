@@ -2,14 +2,15 @@ import { defineConfig, loadEnv } from 'vite';
 import react from '@vitejs/plugin-react';
 
 export default defineConfig(({ mode }) => {
-  // Laad de omgevingsvariabelen (zoals API_KEY van Netlify/Vercel)
+  // We laden de omgevingsvariabelen veilig in
   const env = loadEnv(mode, (process as any).cwd(), '');
   
   return {
     plugins: [react()],
     define: {
-      // Dit zorgt ervoor dat 'process.env.API_KEY' in de code wordt vervangen door de echte sleutel of een lege string
-      'process.env.API_KEY': JSON.stringify(env.API_KEY || ''),
+      // Hier koppelen we de beveiligde variabele aan de code
+      // 'process.env.API_KEY' wordt vervangen door de waarde in Vercel tijdens de build
+      'process.env.API_KEY': JSON.stringify(env.API_KEY || process.env.API_KEY || ''),
     },
   };
 });
