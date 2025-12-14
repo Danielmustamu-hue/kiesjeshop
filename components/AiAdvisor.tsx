@@ -54,7 +54,8 @@ export const AiAdvisor: React.FC = () => {
       if (err.message && (err.message.includes("API Key") || err.message.includes("403"))) {
          msg = "Configuratiefout: API Key ongeldig of niet ingesteld in Vercel. Controleer je instellingen.";
       } else if (errorString.includes("404")) {
-         msg = "Model niet beschikbaar (404). Controleer of de API Key toegang heeft tot 'gemini-2.5-flash'.";
+         // Specifieke hint voor Vercel gebruikers die net hun key hebben geupdate
+         msg = "Model niet gevonden (404). Tip: Heb je de API Key op Vercel aangepast? Voer dan een 'Redeploy' uit om de nieuwe key op de live site te activeren.";
       } else if (errorString.includes("429") || errorString.toLowerCase().includes("quota")) {
          msg = "Te druk: De AI-credits zijn tijdelijk op. Probeer het morgen weer.";
       } else if (errorString.includes("Script error") || errorString.includes("Failed to fetch")) {
