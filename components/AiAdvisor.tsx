@@ -35,11 +35,11 @@ export const AiAdvisor: React.FC = () => {
         Geef advies in max 3 zinnen.
       `;
 
-      // 3. Model Strategie: Stabiliteit eerst
+      // 3. Model Strategie: Gebruik de nieuwste stabiele modellen
+      // Oude modellen zoals 1.5-flash kunnen 404 geven als ze niet meer ondersteund worden in deze SDK versie.
       const modelsToTry = [
-        'gemini-1.5-flash',      // Production Stable
-        'gemini-2.0-flash-exp',  // Experimental (soms sneller/beter)
-        'gemini-1.5-pro'         // High Intelligence Fallback
+        'gemini-2.5-flash',      // Primary Recommended Model
+        'gemini-2.5-flash-latest' // Fallback
       ];
       
       let success = false;
@@ -47,8 +47,6 @@ export const AiAdvisor: React.FC = () => {
 
       for (const modelName of modelsToTry) {
         try {
-          // Vereenvoudigde aanroep volgens @google/genai documentatie
-          // We sturen 'contents' als string om complexiteitsfouten te vermijden
           const response = await ai.models.generateContent({
             model: modelName,
             contents: promptText, 
@@ -61,26 +59,22 @@ export const AiAdvisor: React.FC = () => {
           }
         } catch (err: any) {
           const msg = err?.message || String(err);
-          // console.warn(`Model ${modelName} faalde:`, msg); // (Optioneel voor dev)
+          // console.warn(`Model ${modelName} faalde:`, msg); 
           lastErrorMsg = msg;
-          
-          // Script error = Browser blokkade (CORS/AdBlock). 
-          // Dit is meestal fataal voor alle modellen, dus we kunnen hier stoppen of doorgaan.
-          // We proberen door te gaan voor de zekerheid.
         }
       }
 
       if (!success) {
-        // Specifieke afhandeling voor de "Script error"
+        // Specifieke afhandeling voor foutmeldingen
         if (lastErrorMsg.includes("Script error")) {
             setIsBlockingError(true);
             throw new Error("Verbinding geblokkeerd.");
         } else if (lastErrorMsg.includes("404")) {
-            throw new Error("AI Service niet gevonden (404).");
+            throw new Error("AI Model niet gevonden (404). Update de modelnaam.");
         } else if (lastErrorMsg.includes("429")) {
             throw new Error("Te druk. Probeer het later.");
         } else {
-            throw new Error("Geen antwoord ontvangen.");
+            throw new Error(lastErrorMsg || "Geen antwoord ontvangen.");
         }
       }
 
