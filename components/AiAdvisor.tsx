@@ -17,8 +17,14 @@ export const AiAdvisor: React.FC = () => {
     setAdvice(null);
 
     try {
-      // Initialiseer Gemini direct met de environment variable
-      const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
+      // Check of de API key wel aanwezig is (belangrijk voor Vercel debugging)
+      const apiKey = process.env.API_KEY;
+      if (!apiKey || apiKey === '') {
+        throw new Error("API Key ontbreekt. Voeg 'API_KEY' toe aan Vercel Environment Variables.");
+      }
+
+      // Initialiseer Gemini
+      const ai = new GoogleGenAI({ apiKey: apiKey });
       
       const promptText = `
         Je bent een shopping expert in Nederland. Adviseer de gebruiker.
@@ -44,8 +50,10 @@ export const AiAdvisor: React.FC = () => {
       let msg = "Er ging iets mis. Probeer het later opnieuw.";
       const errorString = String(err);
       
-      // Vereenvoudigde error handling
-      if (err.message && (err.message.includes("API Key") || err.message.includes("403"))) {
+      // Specifieke error handling voor ontbrekende key
+      if (err.message && err.message.includes("Vercel")) {
+         msg = err.message;
+      } else if (err.message && (err.message.includes("API Key") || err.message.includes("403"))) {
          msg = "Configuratiefout: API Key ongeldig of ontbreekt.";
       } else if (errorString.includes("404")) {
          msg = "Service niet beschikbaar (404).";
