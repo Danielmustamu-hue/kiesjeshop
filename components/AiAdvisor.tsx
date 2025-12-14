@@ -44,16 +44,22 @@ export const AiAdvisor: React.FC = () => {
         - Amazon.nl: Beste voor prijsvechten, niche producten, kabels, gadgets.
       `;
 
-      // We proberen een lijst met modellen. Als de eerste een 404 geeft (niet gevonden), proberen we de volgende.
-      // Dit maakt de app robuuster tegen model-wijzigingen van Google.
-      const modelsToTry = ['gemini-2.5-flash', 'gemini-2.0-flash-exp'];
+      // We breiden de lijst uit. De 'preview' en 'exp' modellen zijn soms instabiel of niet beschikbaar voor alle keys.
+      // 'gemini-1.5-flash' is het meest stabiele productiemodel en werkt vrijwel altijd als backup.
+      const modelsToTry = [
+        'gemini-2.5-flash', 
+        'gemini-2.0-flash-exp', 
+        'gemini-1.5-flash'
+      ];
       
       let lastError: any = null;
       let success = false;
 
       for (const modelName of modelsToTry) {
         try {
-          console.log(`Proberen met model: ${modelName}...`);
+          // console.log(`Proberen met model: ${modelName}...`); 
+          // (Console logs weggehaald voor schonere productie code, tenzij fout)
+          
           const response = await ai.models.generateContent({
             model: modelName,
             contents: prompt,
@@ -66,13 +72,14 @@ export const AiAdvisor: React.FC = () => {
           }
         } catch (err: any) {
           lastError = err;
-          // Als het een 404 is (model niet gevonden), proberen we de volgende in de lijst.
-          // Bij andere errors (bijv. quota, internet) stoppen we direct.
-          const is404 = err.message && (err.message.includes('404') || err.message.includes('not found'));
-          if (!is404) {
-             throw err; 
+          // Als het een 404 is (model niet gevonden) OF een 503 (service unavailable), proberen we de volgende.
+          const msg = err.message ? err.message.toLowerCase() : '';
+          const isRecoverable = msg.includes('404') || msg.includes('not found') || msg.includes('503') || msg.includes('overloaded');
+          
+          if (!isRecoverable) {
+             throw err; // Bij auth errors (403) of andere fatale fouten stoppen we direct.
           }
-          console.warn(`Model ${modelName} faalde met 404, overschakelen naar backup...`);
+          console.warn(`Model ${modelName} niet beschikbaar (${msg}), overschakelen naar backup...`);
         }
       }
 
@@ -89,12 +96,12 @@ export const AiAdvisor: React.FC = () => {
       if (err.message) {
         const msg = err.message.toLowerCase();
         if (msg.includes("api key") || msg.includes("api_key") || msg.includes("403")) {
-           errorMessage = "API Key ontbreekt of is ongeldig. Controleer je .env bestand.";
+           errorMessage = "API Key error. Controleer je instellingen.";
         } else if (msg.includes("404") || msg.includes("not found")) {
-           errorMessage = "AI Modellen zijn momenteel niet bereikbaar (404).";
+           errorMessage = "AI Service momenteel niet bereikbaar (404).";
         } else if (msg.includes("429") || msg.includes("quota")) {
            errorMessage = "Te veel verzoeken. De AI is even druk.";
-        } else if (msg.includes("fetch") || msg.includes("network")) {
+        } else if (msg.includes("fetch") || msg.includes("network") || msg.includes("failed to fetch")) {
            errorMessage = "Netwerkfout. Controleer je internetverbinding.";
         } else {
            errorMessage = `Fout: ${err.message}`;
