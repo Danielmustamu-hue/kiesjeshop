@@ -26,7 +26,7 @@ export const SHOPS: ShopData[] = [
     delivery: 'VandaagNog®, eigen bezorgdienst',
     usp: 'Alles voor een glimlach (Top Service)',
     // Standaard link
-    ctaLink: 'https://www.coolblue.nl/', 
+    ctaLink: 'https://www.awin1.com/cread.php?awinmid=85161&awinaffid=2694054&ued=https%3A%2F%2Fwww.coolblue.nl%2F', 
     pros: ['Beste klantenservice', 'Eigen installatiedienst', 'Fysieke winkels'],
   },
   {

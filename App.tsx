@@ -3,6 +3,8 @@ import { SHOPS } from './constants';
 import { ShopCard } from './components/ShopCard';
 import { AiAdvisor } from './components/AiAdvisor';
 import { ReviewSection } from './components/ReviewSection';
+import { ComparisonTable } from './components/ComparisonTable';
+import { FaqSection } from './components/FaqSection';
 import { TermsModal } from './components/TermsModal';
 import { PrivacyModal } from './components/PrivacyModal';
 import { ShoppingBag, ArrowDown } from 'lucide-react';
@@ -109,8 +111,14 @@ const App: React.FC = () => {
             <AiAdvisor />
         </section>
 
+        {/* Comparison Table */}
+        <ComparisonTable />
+
         {/* Reviews Section */}
         <ReviewSection />
+
+        {/* FAQ Section */}
+        <FaqSection />
 
         {/* Info Text */}
         <section className="prose prose-slate max-w-3xl mx-auto text-center mb-16">
