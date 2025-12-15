@@ -16,7 +16,7 @@ export const ShopCard: React.FC<ShopCardProps> = ({ shop }) => {
         href={shop.ctaLink}
         target="_blank"
         rel="nofollow noopener noreferrer"
-        className={`h-24 flex items-center justify-center p-4 block cursor-pointer transition-opacity hover:opacity-90 ${shop.id === 'coolblue' ? 'bg-blue-600' : 'bg-slate-50'}`}
+        className={`h-28 flex items-center justify-center p-6 block cursor-pointer transition-opacity hover:opacity-90 ${shop.logoBg}`}
         aria-label={`Ga naar ${shop.name}`}
       >
          {shop.logoUrl ? (
@@ -28,13 +28,17 @@ export const ShopCard: React.FC<ShopCardProps> = ({ shop }) => {
          ) : (
            <>
              {shop.id === 'bol' && (
-                 <div className="text-3xl font-extrabold text-blue-900 tracking-tighter">bol<span className="text-blue-400">.com</span></div>
+                 <div className="text-4xl font-extrabold text-[#0000FA] tracking-tighter">bol<span className="text-[#0000FA]/60">.com</span></div>
              )}
              {shop.id === 'amazon' && (
-                 <div className="text-3xl font-bold text-slate-900 flex items-center gap-1">amazon<span className="text-yellow-500 text-xs self-start mt-2">.nl</span></div>
+                 <div className="flex flex-col items-start leading-none">
+                    <div className="text-3xl font-bold text-white tracking-wide">amazon</div>
+                    <div className="w-full h-1 bg-gradient-to-r from-transparent via-[#FF9900] to-transparent rounded-full mt-1"></div>
+                    <div className="text-xs text-[#FF9900] font-bold self-end -mt-2 bg-[#232F3E] px-1">.nl</div>
+                 </div>
              )}
              {shop.id === 'coolblue' && (
-                 <div className="text-2xl font-bold text-white">Coolblue</div>
+                 <div className="text-3xl font-bold text-white tracking-tight">Coolblue</div>
              )}
            </>
          )}
@@ -88,11 +92,7 @@ export const ShopCard: React.FC<ShopCardProps> = ({ shop }) => {
           href={shop.ctaLink} 
           target="_blank"
           rel="nofollow noopener noreferrer"
-          className={`block w-full text-center py-3 rounded-xl font-bold text-white transition-all active:scale-95 shadow-md hover:shadow-lg no-underline ${
-            shop.id === 'bol' ? 'bg-blue-800 hover:bg-blue-900' :
-            shop.id === 'coolblue' ? 'bg-orange-500 hover:bg-orange-600' :
-            'bg-yellow-500 hover:bg-yellow-600 text-slate-900'
-          }`}
+          className={`block w-full text-center py-3 rounded-xl font-bold transition-all active:scale-95 shadow-md hover:shadow-lg no-underline ${shop.buttonColor}`}
         >
           Ga naar {shop.name}
         </a>

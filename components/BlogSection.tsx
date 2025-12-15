@@ -1,10 +1,18 @@
 import React, { useState } from 'react';
-import { BookOpen, ArrowRight } from 'lucide-react';
+import { BookOpen, ArrowRight, ChevronDown } from 'lucide-react';
 import { ARTICLES, Article } from '../data/articles';
 import { ArticleModal } from './ArticleModal';
 
 export const BlogSection: React.FC = () => {
   const [selectedArticle, setSelectedArticle] = useState<Article | null>(null);
+  const [visibleCount, setVisibleCount] = useState(3);
+
+  const handleLoadMore = () => {
+    setVisibleCount((prev) => Math.min(prev + 3, ARTICLES.length));
+  };
+
+  const visibleArticles = ARTICLES.slice(0, visibleCount);
+  const allLoaded = visibleCount >= ARTICLES.length;
 
   return (
     <>
@@ -17,42 +25,58 @@ export const BlogSection: React.FC = () => {
             </div>
             <h2 className="text-3xl font-bold text-slate-900">Nieuwste Koopgidsen</h2>
           </div>
-          <button className="hidden sm:flex items-center gap-2 text-indigo-600 font-semibold hover:text-indigo-800 transition-colors">
-            Bekijk alle artikelen <ArrowRight className="w-4 h-4" />
-          </button>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-          {ARTICLES.map((article) => (
+          {visibleArticles.map((article) => (
             <article 
               key={article.id} 
               onClick={() => setSelectedArticle(article)}
-              className="bg-white rounded-2xl p-6 shadow-lg border border-slate-100 hover:shadow-xl transition-all hover:-translate-y-1 cursor-pointer group flex flex-col h-full"
+              className="bg-white rounded-2xl shadow-lg border border-slate-100 hover:shadow-xl transition-all hover:-translate-y-1 cursor-pointer group flex flex-col h-full overflow-hidden"
             >
-              <div className="flex items-center gap-2 text-xs font-semibold text-slate-500 mb-4 uppercase tracking-wider">
-                {article.icon}
-                <span>{article.category}</span>
+              {/* Image Header */}
+              <div className="h-48 overflow-hidden relative">
+                <div className="absolute inset-0 bg-slate-900/10 group-hover:bg-transparent transition-colors z-10" />
+                <img 
+                    src={article.image} 
+                    alt={article.title}
+                    className="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-700 ease-out"
+                />
+                <div className="absolute top-4 left-4 z-20 bg-white/90 backdrop-blur-sm px-3 py-1 rounded-full text-xs font-bold text-slate-800 border border-white/20 shadow-sm flex items-center gap-2">
+                    {article.icon}
+                    {article.category}
+                </div>
               </div>
-              
-              <h3 className="text-xl font-bold text-slate-900 mb-3 group-hover:text-indigo-600 transition-colors">
-                {article.title}
-              </h3>
-              
-              <p className="text-slate-600 mb-6 text-sm leading-relaxed flex-grow">
-                {article.excerpt}
-              </p>
 
-              <div className="flex items-center justify-between pt-4 border-t border-slate-100 text-xs text-slate-400 mt-auto">
-                <span>{article.date}</span>
-                <span>{article.readTime}</span>
+              {/* Content */}
+              <div className="p-6 flex flex-col flex-grow">
+                <h3 className="text-xl font-bold text-slate-900 mb-3 group-hover:text-indigo-600 transition-colors leading-tight">
+                    {article.title}
+                </h3>
+                
+                <p className="text-slate-600 mb-6 text-sm leading-relaxed flex-grow line-clamp-3">
+                    {article.excerpt}
+                </p>
+
+                <div className="flex items-center justify-between pt-4 border-t border-slate-100 text-xs text-slate-400 mt-auto">
+                    <span>{article.date}</span>
+                    <span>{article.readTime}</span>
+                </div>
               </div>
             </article>
           ))}
         </div>
         
-        <button className="w-full mt-6 sm:hidden flex items-center justify-center gap-2 px-6 py-3 bg-white border border-slate-200 rounded-xl text-slate-700 font-semibold shadow-sm">
-            Bekijk alle artikelen <ArrowRight className="w-4 h-4" />
-        </button>
+        {!allLoaded && (
+          <div className="mt-12 text-center">
+            <button 
+                onClick={handleLoadMore}
+                className="inline-flex items-center gap-2 px-8 py-3 bg-white border border-slate-200 text-slate-700 font-bold rounded-xl hover:bg-slate-50 hover:border-slate-300 transition-all shadow-sm active:scale-95"
+            >
+                Laad meer artikelen <ChevronDown className="w-4 h-4" />
+            </button>
+          </div>
+        )}
       </div>
 
       <ArticleModal 

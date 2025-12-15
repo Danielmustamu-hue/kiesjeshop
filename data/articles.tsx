@@ -1,5 +1,5 @@
 import React from 'react';
-import { Laptop, Gift, Home, CheckCircle, XCircle } from 'lucide-react';
+import { Laptop, Gift, Home, CheckCircle, XCircle, Tag, AlertTriangle, Briefcase } from 'lucide-react';
 
 export interface Article {
   id: number;
@@ -22,7 +22,7 @@ export const ARTICLES: Article[] = [
     excerpt: "Zoek je een nieuwe laptop? Wij vergelijken de garantievoorwaarden, pixel-garantie en klantenservice van beide giganten.",
     date: "10 dec 2025",
     readTime: "4 min leestijd",
-    image: "https://images.unsplash.com/photo-1593642632823-8f7853670f40?q=80&w=1000&auto=format&fit=crop",
+    image: "https://images.unsplash.com/photo-1496181133206-80ce9b88a853?q=80&w=1000&auto=format&fit=crop",
     content: (
       <>
         <p>Een nieuwe laptop is een flinke investering. Je wilt niet alleen de beste prijs, maar ook de zekerheid dat je geholpen wordt als er iets mis is. In Nederland domineren twee spelers de markt: <strong>Bol.com</strong> en <strong>Coolblue</strong>. Maar wie biedt nu écht de beste waarde?</p>
@@ -112,6 +112,91 @@ export const ARTICLES: Article[] = [
 
         <h3>Het risico van partners</h3>
         <p>Let op bij Bol.com en Amazon: kijk of het product door de webshop zélf wordt verstuurd of door een externe partner. Externe partners hebben vaak langere levertijden (2-3 dagen). Filter op "Levering morgen" om teleurstelling te voorkomen.</p>
+      </>
+    )
+  },
+  {
+    id: 4,
+    category: "Besparen",
+    icon: <Tag className="w-5 h-5 text-green-600" />,
+    title: "Retourdeals: Slim besparen of kat in de zak?",
+    excerpt: "Bol Retourkansjes, Coolblue Tweedekans en Amazon Warehouse. Wat zijn de verschillen en waar is de korting het hoogst?",
+    date: "1 dec 2025",
+    readTime: "4 min leestijd",
+    image: "https://images.unsplash.com/photo-1556740758-90de374c12ad?q=80&w=1000&auto=format&fit=crop",
+    content: (
+      <>
+        <p>Waarom de volle mep betalen als het product alleen maar uit de doos is geweest? Retourdeals worden steeds populairder. Maar de voorwaarden verschillen enorm.</p>
+        
+        <img 
+            src="https://images.unsplash.com/photo-1586864387967-d02ef85d93e8?q=80&w=800&auto=format&fit=crop" 
+            alt="Stapel kartonnen dozen" 
+            className="w-full h-64 object-cover rounded-xl shadow-md my-6"
+        />
+
+        <h3>Coolblue Tweedekans</h3>
+        <p>Hier krijg je de meeste zekerheid. Coolblue controleert het product handmatig en maakt er eigen foto's van als er schade is. Je krijgt gewoon <strong>2 jaar garantie</strong> en mag het binnen 30 dagen retourneren. De korting is vaak bescheiden (5-15%).</p>
+
+        <h3>Bol.com Retourkansjes</h3>
+        <p>Het aanbod is enorm. De status wordt aangegeven (bijv. "Als nieuw" of "Lichte gebruikerssporen"). De korting kan flink oplopen, maar let op: de garantievoorwaarden zijn soms anders dan bij een nieuw product als het via een externe partner gaat.</p>
+
+        <h3>Amazon Warehouse</h3>
+        <p>Hier vind je vaak de <strong>hoogste kortingen</strong> (soms wel 30-50%). De omschrijving is echter vaak summier ("Acceptabel - krasje op achterkant"). Het is meer een gok, maar dankzij het soepele retourbeleid van Amazon kun je het risico vaak wel nemen.</p>
+      </>
+    )
+  },
+  {
+    id: 5,
+    category: "Veiligheid",
+    icon: <AlertTriangle className="w-5 h-5 text-red-500" />,
+    title: "Pas op voor nepreviews: Zo herken je ze",
+    excerpt: "Lijkt dat goedkope product te mooi om waar te zijn? Wij leggen uit hoe je fake reviews spot op Amazon en Bol.",
+    date: "28 nov 2025",
+    readTime: "3 min leestijd",
+    image: "https://images.unsplash.com/photo-1633613286991-611fe299c4be?q=80&w=1000&auto=format&fit=crop",
+    content: (
+      <>
+        <p>Je ziet een onbekend merk oordopjes voor €20 met 5000 vijf-sterren reviews. Trap er niet in. Veel marketplaces kampen met nepreviews.</p>
+        
+        <img 
+            src="https://images.unsplash.com/photo-1516321497487-e288fb19713f?q=80&w=800&auto=format&fit=crop" 
+            alt="Iemand checkt reviews op smartphone" 
+            className="w-full h-64 object-cover rounded-xl shadow-md my-6"
+        />
+
+        <h3>De Rode Vlaggen</h3>
+        <ul className="list-disc pl-5 space-y-2">
+            <li><strong>Gebroken Nederlands:</strong> "Dit product is zeer goed gemaakt en ik hou van de kleur." (Vertaald met Google Translate).</li>
+            <li><strong>Alleen maar 5 sterren:</strong> Geen enkel product is perfect. Zoek altijd naar de 2, 3 of 4 sterren reviews voor een eerlijk beeld.</li>
+            <li><strong>Recente explosie:</strong> Heeft het product in 2 dagen tijd 100 reviews gekregen? Verdacht.</li>
+        </ul>
+
+        <h3>Het verschil per platform</h3>
+        <p><strong>Amazon</strong> heeft internationaal veel last van review-manipulatie, maar hun algoritmes worden steeds strenger. <strong>Bol.com</strong> labelt reviews met "Geverifieerde koper", wat iets meer zekerheid geeft. <strong>Coolblue</strong> heeft hier het minste last van, omdat zij producten zelf cureren en minder met vage externe partijen werken.</p>
+      </>
+    )
+  },
+  {
+    id: 6,
+    category: "Zakelijk",
+    icon: <Briefcase className="w-5 h-5 text-slate-500" />,
+    title: "Zakelijk bestellen: Welke shop heeft de beste factuur?",
+    excerpt: "ZZP'er of MKB? Een correcte BTW-factuur is essentieel. Waar gaat dit automatisch en waar is het een drama?",
+    date: "20 nov 2025",
+    readTime: "3 min leestijd",
+    image: "https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?q=80&w=1000&auto=format&fit=crop",
+    content: (
+      <>
+        <p>Niets is frustrerender dan aan het eind van het kwartaal achter facturen aan moeten bellen. Voor zakelijke aankopen werkt niet elke consumentenshop even lekker.</p>
+        
+        <h3>Amazon Business</h3>
+        <p>Amazon heeft een specifiek zakelijk account (Amazon Business). Als je dit instelt, krijg je automatisch facturen met BTW-uitsplitsing. Let op bij externe verkopers: soms sturen zij geen BTW-factuur als ze in het buitenland zitten (intracommunautaire prestaties).</p>
+
+        <h3>Coolblue Zakelijk</h3>
+        <p>Coolblue levert altijd een kraakheldere Nederlandse BTW-factuur direct in je mail en account. Voor grotere offertes kun je zelfs bellen met een accountmanager. Voor de Nederlandse ZZP'er vaak de makkelijkste optie.</p>
+
+        <h3>Bol.com Zakelijk</h3>
+        <p>Ook Bol heeft een zakelijk account. Het voordeel is dat je achteraf kunt betalen. De facturatie is over het algemeen goed geregeld, tenzij je bij een kleine externe partner koopt die zijn administratie niet op orde heeft.</p>
       </>
     )
   }

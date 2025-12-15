@@ -5,6 +5,7 @@ export interface ShopData {
   logoText: string;
   logoBg: string;
   logoUrl?: string; // Optional field for actual logo image URL
+  buttonColor: string; // New field for button styling
   offerings: string;
   serviceScore: number;
   delivery: string;

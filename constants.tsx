@@ -4,9 +4,10 @@ export const SHOPS: ShopData[] = [
   {
     id: 'bol',
     name: 'Bol.com',
-    color: 'text-blue-600',
+    color: 'text-blue-700',
     logoText: 'bol',
-    logoBg: 'bg-blue-100',
+    logoBg: 'bg-[#F5F9FF]', // Zacht blauw, herkenbaar voor Bol
+    buttonColor: 'bg-blue-800 hover:bg-blue-900 text-white',
     offerings: 'Extreem breed (De winkel van ons allemaal)',
     serviceScore: 4.5,
     delivery: 'Select: Veelal morgen in huis',
@@ -20,7 +21,8 @@ export const SHOPS: ShopData[] = [
     name: 'Coolblue',
     color: 'text-orange-500',
     logoText: 'Coolblue',
-    logoBg: 'bg-blue-600 text-white',
+    logoBg: 'bg-[#0090E3]', // De echte Coolblue blauw
+    buttonColor: 'bg-orange-500 hover:bg-orange-600 text-white',
     offerings: 'Specialisatie in Elektronica & Witgoed',
     serviceScore: 5,
     delivery: 'VandaagNog®, eigen bezorgdienst',
@@ -34,7 +36,8 @@ export const SHOPS: ShopData[] = [
     name: 'Amazon.nl',
     color: 'text-yellow-600',
     logoText: 'amazon',
-    logoBg: 'bg-slate-800 text-white',
+    logoBg: 'bg-[#232F3E]', // Amazon Dark Blue
+    buttonColor: 'bg-[#FF9900] hover:bg-[#FFAD33] text-slate-900', // Amazon Yellow
     offerings: 'Wereldwijd gigantisch aanbod',
     serviceScore: 4,
     delivery: 'Prime: Snelle, gratis levering',

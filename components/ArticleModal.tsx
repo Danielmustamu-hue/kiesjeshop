@@ -18,6 +18,24 @@ export const ArticleModal: React.FC<ArticleModalProps> = ({ article, onClose }) 
     };
   }, []);
 
+  const handleToShops = () => {
+    onClose();
+    // Kleine timeout om modal sluit animatie niet te storen
+    setTimeout(() => {
+        const element = document.getElementById('shop-grid');
+        if (element) {
+            const headerOffset = 80;
+            const elementPosition = element.getBoundingClientRect().top;
+            const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
+        
+            window.scrollTo({
+                top: offsetPosition,
+                behavior: "smooth"
+            });
+        }
+    }, 100);
+  };
+
   return (
     <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 sm:p-6" role="dialog" aria-modal="true">
       {/* Backdrop */}
@@ -84,7 +102,7 @@ export const ArticleModal: React.FC<ArticleModalProps> = ({ article, onClose }) 
                 Overtuigd? Vergelijk direct de prijzen.
              </p>
              <button 
-                onClick={onClose}
+                onClick={handleToShops}
                 className="w-full sm:w-auto px-6 py-2.5 bg-slate-900 text-white rounded-xl hover:bg-slate-800 transition-colors font-bold shadow-sm"
              >
                 Naar de shops

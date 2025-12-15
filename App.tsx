@@ -8,36 +8,112 @@ import { FaqSection } from './components/FaqSection';
 import { BlogSection } from './components/BlogSection';
 import { TermsModal } from './components/TermsModal';
 import { PrivacyModal } from './components/PrivacyModal';
-import { ShoppingBag, ArrowDown } from 'lucide-react';
+import { AboutModal } from './components/AboutModal';
+import { ShoppingBag, ArrowDown, Menu, X } from 'lucide-react';
 
 const App: React.FC = () => {
   const [isTermsOpen, setIsTermsOpen] = useState(false);
   const [isPrivacyOpen, setIsPrivacyOpen] = useState(false);
+  const [isAboutOpen, setIsAboutOpen] = useState(false);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
-  const scrollToShops = () => {
-    const element = document.getElementById('shop-grid');
+  const scrollToSection = (id: string) => {
+    setIsMobileMenuOpen(false); // Sluit mobiel menu na klik
+    const element = document.getElementById(id);
     if (element) {
-      element.scrollIntoView({ behavior: 'smooth' });
+      // Offset voor de fixed header (ongeveer 80px)
+      const headerOffset = 80;
+      const elementPosition = element.getBoundingClientRect().top;
+      const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
+  
+      window.scrollTo({
+        top: offsetPosition,
+        behavior: "smooth"
+      });
     }
   };
+
+  const navLinks = [
+    { name: 'Vergelijker', id: 'shop-grid' },
+    { name: 'Koopgidsen', id: 'koopgidsen' },
+    { name: 'AI Advies', id: 'advies' },
+    { name: 'FAQ', id: 'faq' },
+  ];
 
   return (
     <div className="min-h-screen flex flex-col bg-[#FFF3E0]">
       {/* Navbar */}
-      <nav className="bg-white border-b border-slate-200 sticky top-0 z-50">
+      <nav className="bg-white border-b border-slate-200 sticky top-0 z-50 shadow-sm">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between h-16 items-center">
-            <div className="flex items-center gap-2">
+            
+            {/* Logo */}
+            <div 
+              className="flex items-center gap-2 cursor-pointer" 
+              onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+            >
               <div className="bg-slate-900 p-2 rounded-lg">
                 <ShoppingBag className="w-6 h-6 text-white" />
               </div>
               <span className="font-bold text-xl tracking-tight text-slate-900">Kiesjeshop.nl</span>
             </div>
-            <div className="text-sm font-medium text-slate-500 hidden sm:block">
-              De eerlijke vergelijker
+
+            {/* Desktop Navigation */}
+            <div className="hidden md:flex items-center space-x-8">
+              {navLinks.map((link) => (
+                <button
+                  key={link.name}
+                  onClick={() => scrollToSection(link.id)}
+                  className="text-sm font-medium text-slate-600 hover:text-indigo-600 transition-colors"
+                >
+                  {link.name}
+                </button>
+              ))}
+              <button 
+                onClick={() => scrollToSection('shop-grid')}
+                className="bg-slate-900 text-white px-4 py-2 rounded-lg text-sm font-bold hover:bg-slate-800 transition-colors"
+              >
+                Start Vergelijken
+              </button>
+            </div>
+
+            {/* Mobile Menu Button */}
+            <div className="md:hidden flex items-center">
+              <button
+                onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+                className="p-2 text-slate-600 hover:text-slate-900"
+                aria-label="Menu openen"
+              >
+                {isMobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+              </button>
             </div>
           </div>
         </div>
+
+        {/* Mobile Menu Dropdown */}
+        {isMobileMenuOpen && (
+          <div className="md:hidden absolute top-16 left-0 w-full bg-white border-b border-slate-200 shadow-xl animate-in slide-in-from-top-5 duration-200">
+            <div className="px-4 py-4 space-y-2">
+              {navLinks.map((link) => (
+                <button
+                  key={link.name}
+                  onClick={() => scrollToSection(link.id)}
+                  className="block w-full text-left px-4 py-3 text-base font-medium text-slate-600 hover:text-indigo-600 hover:bg-slate-50 rounded-lg transition-colors"
+                >
+                  {link.name}
+                </button>
+              ))}
+              <div className="pt-4 border-t border-slate-100 mt-2">
+                <button 
+                  onClick={() => scrollToSection('shop-grid')}
+                  className="w-full bg-slate-900 text-white px-4 py-3 rounded-xl text-base font-bold hover:bg-slate-800 transition-colors flex items-center justify-center gap-2"
+                >
+                  Start Vergelijken <ArrowDown className="w-4 h-4" />
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
       </nav>
 
       {/* Hero Section */}
@@ -58,7 +134,7 @@ const App: React.FC = () => {
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center md:justify-start">
               <button 
-                onClick={scrollToShops}
+                onClick={() => scrollToSection('shop-grid')}
                 className="px-8 py-4 bg-slate-900 text-white font-bold rounded-xl hover:bg-slate-800 transition-all shadow-lg hover:shadow-xl active:scale-95 flex items-center justify-center gap-2"
               >
                 Start met vergelijken
@@ -97,9 +173,11 @@ const App: React.FC = () => {
         </div>
       </header>
 
-      {/* Comparison Grid */}
-      <main className="flex-grow max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full pb-20">
-        <div id="shop-grid" className="scroll-mt-24 grid grid-cols-1 md:grid-cols-3 gap-8 mb-20">
+      {/* Main Content Area */}
+      <main className="flex-grow max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full pb-20 space-y-24">
+        
+        {/* Comparison Grid */}
+        <div id="shop-grid" className="scroll-mt-28 grid grid-cols-1 md:grid-cols-3 gap-8">
           {SHOPS.map((shop) => (
             <div key={shop.id} className="h-full">
               <ShopCard shop={shop} />
@@ -107,25 +185,33 @@ const App: React.FC = () => {
           ))}
         </div>
 
-        {/* Blog / Content Section - NIEUW: Cruciaal voor goedkeuring */}
-        <BlogSection />
+        {/* Blog / Content Section */}
+        <section id="koopgidsen" className="scroll-mt-28">
+            <BlogSection />
+        </section>
 
         {/* Comparison Table */}
-        <ComparisonTable />
+        <section>
+             <ComparisonTable />
+        </section>
 
         {/* AI Advisor Section */}
-        <section className="mb-20">
+        <section id="advies" className="scroll-mt-28">
             <AiAdvisor />
         </section>
 
         {/* Reviews Section */}
-        <ReviewSection />
+        <section>
+            <ReviewSection />
+        </section>
 
         {/* FAQ Section */}
-        <FaqSection />
+        <section id="faq" className="scroll-mt-28">
+            <FaqSection />
+        </section>
 
         {/* Info Text */}
-        <section className="prose prose-slate max-w-3xl mx-auto text-center mb-16">
+        <section className="prose prose-slate max-w-3xl mx-auto text-center">
             <h3 className="text-2xl font-bold text-slate-800">Waarom vergelijken?</h3>
             <p className="text-slate-600">
                 Niet elke winkel is gelijk. Waar <strong>Coolblue</strong> uitblinkt in advies en installatie, wint <strong>Bol.com</strong> vaak op het gebied van algemeen assortiment en Nederlandse boeken. <strong>Amazon</strong> is daarentegen vaak de prijsvechter voor internationale gadgets. Kies slim!
@@ -166,6 +252,9 @@ const App: React.FC = () => {
                 <h4 className="text-slate-100 font-semibold mb-4 text-sm uppercase tracking-wider">Informatie</h4>
                 <ul className="space-y-3 text-sm">
                     <li>
+                        <button onClick={() => setIsAboutOpen(true)} className="hover:text-indigo-400 transition-colors">Over Kiesjeshop</button>
+                    </li>
+                    <li>
                         <button onClick={() => setIsTermsOpen(true)} className="hover:text-indigo-400 transition-colors">Algemene Voorwaarden</button>
                     </li>
                     <li>
@@ -192,6 +281,7 @@ const App: React.FC = () => {
 
       <TermsModal isOpen={isTermsOpen} onClose={() => setIsTermsOpen(false)} />
       <PrivacyModal isOpen={isPrivacyOpen} onClose={() => setIsPrivacyOpen(false)} />
+      <AboutModal isOpen={isAboutOpen} onClose={() => setIsAboutOpen(false)} />
     </div>
   );
 };
