@@ -11,6 +11,7 @@ export const ComparisonTable: React.FC = () => {
 
       <div className="overflow-x-auto bg-white rounded-2xl shadow-lg border border-slate-100">
         <table className="w-full text-sm text-left text-slate-600">
+          <caption className="sr-only">Vergelijking tussen Bol.com, Coolblue en Amazon</caption>
           <thead className="text-xs text-slate-700 uppercase bg-slate-50 border-b border-slate-200">
             <tr>
               <th scope="col" className="px-6 py-4 font-extrabold">Functie</th>
@@ -21,37 +22,37 @@ export const ComparisonTable: React.FC = () => {
           </thead>
           <tbody>
             <tr className="border-b border-slate-100 hover:bg-slate-50/50">
-              <td className="px-6 py-4 font-medium text-slate-900">Retourtermijn</td>
+              <th scope="row" className="px-6 py-4 font-medium text-slate-900 whitespace-nowrap">Retourtermijn</th>
               <td className="px-6 py-4">30 dagen</td>
               <td className="px-6 py-4 font-semibold text-green-600">30 dagen</td>
               <td className="px-6 py-4">30 dagen</td>
             </tr>
             <tr className="border-b border-slate-100 hover:bg-slate-50/50">
-              <td className="px-6 py-4 font-medium text-slate-900">Gratis verzending vanaf</td>
+              <th scope="row" className="px-6 py-4 font-medium text-slate-900 whitespace-nowrap">Gratis verzending vanaf</th>
               <td className="px-6 py-4">€20,-</td>
               <td className="px-6 py-4 font-semibold text-green-600">Gratis (meeste producten)</td>
               <td className="px-6 py-4">€20,- (of Prime)</td>
             </tr>
             <tr className="border-b border-slate-100 hover:bg-slate-50/50">
-              <td className="px-6 py-4 font-medium text-slate-900">Abonnement</td>
+              <th scope="row" className="px-6 py-4 font-medium text-slate-900 whitespace-nowrap">Abonnement</th>
               <td className="px-6 py-4">Select (ca. €12/jaar)</td>
               <td className="px-6 py-4"><Minus className="w-4 h-4 text-slate-400" /></td>
               <td className="px-6 py-4 font-semibold text-green-600">Prime (ca. €4,99/mnd + Video)</td>
             </tr>
             <tr className="border-b border-slate-100 hover:bg-slate-50/50">
-              <td className="px-6 py-4 font-medium text-slate-900">Klantenservice</td>
+              <th scope="row" className="px-6 py-4 font-medium text-slate-900 whitespace-nowrap">Klantenservice</th>
               <td className="px-6 py-4">Goed (Chatbot + Mens)</td>
               <td className="px-6 py-4 font-semibold text-green-600">Uitstekend (Winnaar)</td>
               <td className="px-6 py-4">Redelijk (Automated)</td>
             </tr>
             <tr className="border-b border-slate-100 hover:bg-slate-50/50">
-              <td className="px-6 py-4 font-medium text-slate-900">Eigen bezorgdienst</td>
+              <th scope="row" className="px-6 py-4 font-medium text-slate-900 whitespace-nowrap">Eigen bezorgdienst</th>
               <td className="px-6 py-4"><X className="w-4 h-4 text-red-400" /> (PostNL/DHL)</td>
               <td className="px-6 py-4"><Check className="w-4 h-4 text-green-500" /> (CoolblueFietst/Bus)</td>
               <td className="px-6 py-4"><X className="w-4 h-4 text-red-400" /> (DHL/Partners)</td>
             </tr>
              <tr className="hover:bg-slate-50/50">
-              <td className="px-6 py-4 font-medium text-slate-900">Fysieke winkels</td>
+              <th scope="row" className="px-6 py-4 font-medium text-slate-900 whitespace-nowrap">Fysieke winkels</th>
               <td className="px-6 py-4"><X className="w-4 h-4 text-red-400" /></td>
               <td className="px-6 py-4"><Check className="w-4 h-4 text-green-500" /> (Ja, meerdere)</td>
               <td className="px-6 py-4"><X className="w-4 h-4 text-red-400" /></td>

@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { GoogleGenAI } from '@google/genai';
-import { Sparkles, Send, Loader2, Info, AlertTriangle, Cpu } from 'lucide-react';
+import { Sparkles, Send, Loader2, Info, AlertTriangle, Cpu, ExternalLink } from 'lucide-react';
+import { SHOPS } from '../constants';
 
 export const AiAdvisor: React.FC = () => {
   const [query, setQuery] = useState('');
@@ -20,10 +21,16 @@ export const AiAdvisor: React.FC = () => {
       const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
       
       const promptText = `
-        Je bent een shopping expert in Nederland. Adviseer de gebruiker.
-        Vraag: "${query}"
-        Opties: Bol.com (algemeen), Coolblue (service/elektronica), Amazon.nl (prijs).
-        Geef advies in max 3 zinnen.
+        Je bent een shopping expert voor Kiesjeshop.nl.
+        Vraag van gebruiker: "${query}"
+        
+        Vergelijk deze opties:
+        1. Bol.com (Algemeen assortiment, snelle levering)
+        2. Coolblue (Beste service, elektronica specialist, installatie)
+        3. Amazon (Vaak goedkoopste, Prime voordelen)
+
+        Geef een kort, eerlijk advies (max 3 zinnen).
+        Zorg dat je de namen 'Bol.com', 'Coolblue' of 'Amazon' expliciet en correct schrijft in je antwoord, zodat ik ze kan linken.
       `;
 
       const response = await ai.models.generateContent({
@@ -54,6 +61,39 @@ export const AiAdvisor: React.FC = () => {
     } finally {
       setLoading(false);
     }
+  };
+
+  // Functie om tekst om te zetten naar klikbare links
+  const renderAdviceWithLinks = (text: string) => {
+    // Regex zoekt naar Bol(.com), Coolblue, Amazon(.nl) - hoofdletterongevoelig
+    const regex = /(Bol(?:\.com)?|Coolblue|Amazon(?:\.nl)?)/gi;
+    const parts = text.split(regex);
+
+    return parts.map((part, index) => {
+      const lowerPart = part.toLowerCase();
+      let shop = null;
+
+      if (lowerPart.includes('bol')) shop = SHOPS.find(s => s.id === 'bol');
+      else if (lowerPart.includes('cool')) shop = SHOPS.find(s => s.id === 'coolblue');
+      else if (lowerPart.includes('amazon')) shop = SHOPS.find(s => s.id === 'amazon');
+
+      if (shop) {
+        return (
+          <a 
+            key={index}
+            href={shop.ctaLink}
+            target="_blank"
+            rel="nofollow noopener noreferrer"
+            className={`font-bold hover:underline underline-offset-2 inline-flex items-center gap-0.5 ${shop.color}`}
+            title={`Ga direct naar ${shop.name}`}
+          >
+            {part}
+            <ExternalLink className="w-3 h-3 opacity-50" />
+          </a>
+        );
+      }
+      return <span key={index}>{part}</span>;
+    });
   };
 
   return (
@@ -99,12 +139,14 @@ export const AiAdvisor: React.FC = () => {
         )}
 
         {advice && (
-          <div className="mt-8 bg-white/10 border border-white/20 rounded-xl p-6 text-left animate-in fade-in slide-in-from-bottom-4 duration-500">
+          <div className="mt-8 bg-white/10 border border-white/20 rounded-xl p-6 text-left animate-in fade-in slide-in-from-bottom-4 duration-500 shadow-lg">
              <div className="flex items-start gap-3">
                 <Info className="w-6 h-6 text-indigo-300 shrink-0 mt-1" />
-                <div>
-                    <h3 className="font-bold text-lg mb-1">Advies op maat:</h3>
-                    <p className="text-indigo-100 leading-relaxed">{advice}</p>
+                <div className="w-full">
+                    <h3 className="font-bold text-lg mb-2 text-white">Advies op maat:</h3>
+                    <p className="text-indigo-50 leading-relaxed text-lg">
+                      {renderAdviceWithLinks(advice)}
+                    </p>
                 </div>
              </div>
           </div>

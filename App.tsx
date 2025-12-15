@@ -5,6 +5,7 @@ import { AiAdvisor } from './components/AiAdvisor';
 import { ReviewSection } from './components/ReviewSection';
 import { ComparisonTable } from './components/ComparisonTable';
 import { FaqSection } from './components/FaqSection';
+import { BlogSection } from './components/BlogSection';
 import { TermsModal } from './components/TermsModal';
 import { PrivacyModal } from './components/PrivacyModal';
 import { ShoppingBag, ArrowDown } from 'lucide-react';
@@ -106,13 +107,16 @@ const App: React.FC = () => {
           ))}
         </div>
 
+        {/* Blog / Content Section - NIEUW: Cruciaal voor goedkeuring */}
+        <BlogSection />
+
+        {/* Comparison Table */}
+        <ComparisonTable />
+
         {/* AI Advisor Section */}
         <section className="mb-20">
             <AiAdvisor />
         </section>
-
-        {/* Comparison Table */}
-        <ComparisonTable />
 
         {/* Reviews Section */}
         <ReviewSection />
