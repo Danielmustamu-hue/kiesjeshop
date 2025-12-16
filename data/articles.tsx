@@ -1,5 +1,5 @@
 import React from 'react';
-import { Laptop, Gift, Home, Tag, Book, Lightbulb, Bot, Headphones, Wind, MousePointer2, Zap, ChefHat, Dumbbell, Dog, Cable, ArrowRight, ExternalLink, ShoppingCart } from 'lucide-react';
+import { Laptop, Gift, Home, Tag, Book, Lightbulb, Bot, Headphones, Wind, MousePointer2, Zap, ChefHat, Dumbbell, Dog, Cable, ArrowRight, ExternalLink, ShoppingCart, Keyboard, Wifi } from 'lucide-react';
 
 // Helper functie voor affiliate links (deze stond eerst alleen in NicheGuides)
 const getSearchLink = (type: 'bol' | 'coolblue' | 'amazon', query: string) => {
@@ -365,6 +365,97 @@ export const ARTICLES: Article[] = [
               </a>
               <a href={getSearchLink('bol', 'Bowflex SelectTech')} target="_blank" rel="nofollow noreferrer" className="bg-blue-600 text-white px-4 py-2 rounded-lg font-bold hover:bg-blue-700 transition-colors flex items-center justify-center gap-2">
                  Voorraad bij Bol.com
+              </a>
+           </div>
+        </div>
+      </>
+    )
+  },
+  {
+    id: 9,
+    category: "Gaming",
+    icon: <Keyboard className="w-4 h-4 text-purple-600" />,
+    title: "Mechanische Toetsenborden: Rood, Blauw of Bruin?",
+    excerpt: "Typt je toetsenbord als een spons? Tijd voor een upgrade. Wij leggen het verschil uit tussen switches en waarom gamers zweren bij mechanisch.",
+    date: "10 jan 2026",
+    readTime: "6 min leestijd",
+    image: "https://images.unsplash.com/photo-1595225476474-87563907a212?auto=format&fit=crop&q=80&w=800",
+    content: (
+      <>
+        <p>
+          Als je nog steeds op het standaard toetsenbord typt dat bij je PC zat, mis je iets. Mechanische toetsenborden gebruiken fysieke schakelaars (switches) onder elke toets. Dit geeft feedback die je sneller en nauwkeuriger maakt.
+        </p>
+        
+        <h3 className="text-xl font-bold text-slate-900 mt-4">Welke switch moet ik hebben?</h3>
+        <ul className="list-disc pl-5 space-y-2 mt-2">
+            <li><strong>Rood (Lineair):</strong> Geen klik, geen weerstand. Super licht en snel. De standaard voor gamers.</li>
+            <li><strong>Blauw (Clicky):</strong> Maakt een hard 'klik' geluid (zoals een typemachine). Heerlijk voor typen, vreselijk voor je huisgenoten.</li>
+            <li><strong>Bruin (Tactile):</strong> De gulden middenweg. Je voelt een bobbeltje als je drukt, maar zonder de harde klik.</li>
+        </ul>
+
+        <h3 className="text-xl font-bold text-slate-900 mt-4">Onze aanraders</h3>
+        <p>
+          Voor de beste prijs/kwaliteit verhouding raden wij <TextLink to="amazon" query="Keychron K2">Keychron</TextLink> aan. Ze werken perfect met Mac en Windows en zien er strak uit. Wil je echt gamen met RGB verlichting? Kijk dan naar <TextLink to="coolblue" query="Corsair K70">Corsair</TextLink>.
+        </p>
+        
+        <div className="mt-8 p-6 bg-purple-50 rounded-2xl border border-purple-100 text-center">
+           <h4 className="font-bold text-purple-900 text-lg mb-2">🎮 Upgrade je setup</h4>
+           <p className="text-slate-700 mb-4">
+              Keychron is vaak goedkoper via Amazon, Corsair scoor je bij Coolblue.
+           </p>
+           <div className="flex flex-col sm:flex-row gap-3 justify-center">
+              <a href={getSearchLink('amazon', 'Keychron Keyboard')} target="_blank" rel="nofollow noreferrer" className="bg-yellow-400 text-slate-900 px-4 py-2 rounded-lg font-bold hover:bg-yellow-500 transition-colors flex items-center justify-center gap-2">
+                 Keychron bij Amazon
+              </a>
+              <a href={getSearchLink('coolblue', 'Corsair K70')} target="_blank" rel="nofollow noreferrer" className="bg-orange-500 text-white px-4 py-2 rounded-lg font-bold hover:bg-orange-600 transition-colors flex items-center justify-center gap-2">
+                 Corsair bij Coolblue
+              </a>
+           </div>
+        </div>
+      </>
+    )
+  },
+  {
+    id: 10,
+    category: "Wonen",
+    icon: <Lightbulb className="w-4 h-4 text-amber-500" />,
+    title: "Philips Hue vs. Wiz: Is goedkoop duurkoop?",
+    excerpt: "Slimme verlichting maakt je huis sfeervol en veilig. Maar moet je echt €50 per lamp betalen voor Hue, of is het goedkopere Wiz net zo goed?",
+    date: "5 jan 2026",
+    readTime: "5 min leestijd",
+    // Vervangen door een stabiele foto van gekleurde sfeerverlichting
+    image: "https://images.unsplash.com/photo-1565814329452-e1efa11c5b89?auto=format&fit=crop&q=80&w=800",
+    content: (
+      <>
+        <p>
+          Philips Hue is de koning van slimme verlichting. Maar het prijskaartje is fors. WiZ (ook van Signify, het moederbedrijf van Philips) is vaak de helft goedkoper. Waar zit het verschil?
+        </p>
+        
+        <h3 className="text-xl font-bold text-slate-900 mt-4">Zigbee vs. WiFi</h3>
+        <p>
+          Dit is het belangrijkste technische verschil.
+          <br/>
+          <strong>Philips Hue</strong> gebruikt <TextLink to="coolblue" query="Philips Hue Bridge">Zigbee</TextLink>. De lampen praten met een 'Bridge' (kastje in je meterkast) en niet direct met je WiFi. Voordeel: Super stabiel, reageert direct, en werkt ook als je internet eruit ligt.
+          <br/>
+          <strong>WiZ</strong> werkt via WiFi. Elke lamp maakt verbinding met je router. Heb je 30 lampen? Dan kan je router traag worden.
+        </p>
+
+        <h3 className="text-xl font-bold text-slate-900 mt-4">Conclusie</h3>
+        <p>
+          Wil je je hele huis automatiseren met sensoren en switches? Kies <TextLink to="coolblue" query="Philips Hue Starterpack">Hue</TextLink>. Wil je gewoon één leuke lamp in de slaapkamer die je met je telefoon kan bedienen? Koop dan lekker een <TextLink to="bol" query="WiZ lamp">WiZ</TextLink> of <TextLink to="amazon" query="Innr Lighting">Innr</TextLink>.
+        </p>
+        
+        <div className="mt-8 p-6 bg-amber-50 rounded-2xl border border-amber-100 text-center">
+           <h4 className="font-bold text-amber-900 text-lg mb-2">💡 Sfeer in huis halen</h4>
+           <p className="text-slate-700 mb-4">
+              Beginnen met Hue is prijzig, maar vaak in de aanbieding als 'Starterpack'.
+           </p>
+           <div className="flex flex-col sm:flex-row gap-3 justify-center">
+              <a href={getSearchLink('coolblue', 'Philips Hue Starterpack')} target="_blank" rel="nofollow noreferrer" className="bg-orange-500 text-white px-4 py-2 rounded-lg font-bold hover:bg-orange-600 transition-colors flex items-center justify-center gap-2">
+                 Hue Deals (Coolblue)
+              </a>
+              <a href={getSearchLink('bol', 'WiZ Lampen')} target="_blank" rel="nofollow noreferrer" className="bg-blue-600 text-white px-4 py-2 rounded-lg font-bold hover:bg-blue-700 transition-colors flex items-center justify-center gap-2">
+                 WiZ Deals (Bol.com)
               </a>
            </div>
         </div>
