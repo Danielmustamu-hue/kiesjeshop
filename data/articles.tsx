@@ -1,5 +1,5 @@
 import React from 'react';
-import { Laptop, Gift, Home, Tag, Book, Lightbulb } from 'lucide-react';
+import { Laptop, Gift, Home, Tag, Book, Lightbulb, Bot, Headphones, ExternalLink } from 'lucide-react';
 
 export interface Article {
   id: number;
@@ -14,6 +14,208 @@ export interface Article {
 }
 
 export const ARTICLES: Article[] = [
+  {
+    id: 8,
+    category: "Audio",
+    icon: <Headphones className="w-5 h-5 text-pink-600" />,
+    title: "Sony XM5 vs Bose QC Ultra vs AirPods Pro 2: De Ultieme Prijsvergelijking",
+    excerpt: "De strijd der titanen. Waar scoor je de beste deal voor premium noise-canceling? Wij vergelijken de prijzen en service van Bol, Coolblue en Amazon in één groot overzicht.",
+    date: "20 jan 2026",
+    readTime: "8 min leestijd",
+    image: "https://images.unsplash.com/photo-1546435770-a3e426bf472b?auto=format&fit=crop&q=80&w=800",
+    content: (
+      <>
+        <p className="font-semibold text-lg text-slate-700 mb-4">
+          Stilte is goud waard, maar u wilt er niet de hoofdprijs voor betalen.
+        </p>
+        <p>
+          De markt voor premium Noise-Cancelling (ANC) wordt gedomineerd door drie giganten: de <strong>Sony WH-1000XM5</strong>, de <strong>Bose QuietComfort Ultra</strong> en de <strong>Apple AirPods Pro (2e generatie)</strong>. Hoewel de adviesprijzen vastliggen, zien we in de praktijk dat <strong>Amazon</strong>, <strong>Bol.com</strong> en <strong>Coolblue</strong> in een constante prijsoorlog verwikkeld zijn. Dit maakt vergelijken noodzakelijk. In dit artikel zetten we de feiten, de prijzen en de unieke servicevoorwaarden naast elkaar.
+        </p>
+
+        <h3 className="text-2xl font-bold text-slate-900 mt-8 mb-4">Analyse per Product</h3>
+
+        <h4 className="font-bold text-lg text-slate-800 mt-4">1. Sony WH-1000XM5</h4>
+        <p>
+          De onbetwiste koning van de ANC. De <strong>Sony WH-1000XM5</strong> filtert omgevingsgeluid als geen ander en heeft een toonaangevende batterijduur van 30 uur. De gemiddelde prijsklasse ligt tussen de <strong>€300 en €350</strong>.
+        </p>
+        <p className="italic text-slate-600 mt-2">
+          <strong>Wie biedt de beste deal?</strong> Amazon duikt vaak als eerste onder de €300 grens, terwijl Coolblue vaak wint op bundelvoordeel met accessoires.
+        </p>
+
+        <h4 className="font-bold text-lg text-slate-800 mt-6">2. Bose QuietComfort Ultra</h4>
+        <p>
+          Bose richt zich met de Ultra op ultiem draagcomfort en 'Immersive Audio' (ruimtelijk geluid). Perfect voor lange intercontinentale vluchten. De prijsklasse is vaak iets hoger: <strong>€350 - €420</strong>.
+        </p>
+        <p className="italic text-slate-600 mt-2">
+          <strong>Wie biedt de beste deal?</strong> Bol.com heeft vaak scherpe dagdeals voor Bose, specifiek tijdens hun 'Bol 7-daagse'.
+        </p>
+
+        <h4 className="font-bold text-lg text-slate-800 mt-6">3. Apple AirPods Pro 2</h4>
+        <p>
+          De keuze voor iedereen met een iPhone. De transparantiemodus is ongeëvenaard natuurlijk. Ze zijn compacter, maar de ANC doet niet onder voor grote koptelefoons. Prijsklasse: <strong>€230 - €270</strong>.
+        </p>
+        <p className="italic text-slate-600 mt-2">
+          <strong>Wie biedt de beste deal?</strong> Amazon is hier structureel de goedkoopste aanbieder, soms wel €30 goedkoper dan de adviesprijs.
+        </p>
+
+        <h3 className="text-2xl font-bold text-slate-900 mt-10 mb-6">De Grote Prijzenslag: Service vs. Prijs</h3>
+        <p className="mb-4 text-sm text-slate-500">Klik op de knop om de actuele dagprijs direct bij de webshop te bekijken.</p>
+        
+        <div className="overflow-x-auto -mx-4 sm:mx-0">
+          <table className="w-full text-left border-collapse text-sm">
+            <thead>
+              <tr className="bg-slate-100 text-slate-800">
+                <th className="p-3 font-bold border-b border-slate-200">Product</th>
+                <th className="p-3 font-bold border-b border-slate-200">Winkel</th>
+                <th className="p-3 font-bold border-b border-slate-200">Unieke Service</th>
+                <th className="p-3 font-bold border-b border-slate-200 min-w-[140px]">Actuele Prijs</th>
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-slate-100">
+              {/* SONY ROWS */}
+              <tr className="bg-white">
+                <td className="p-3 font-semibold text-slate-900">Sony XM5</td>
+                <td className="p-3 font-bold text-blue-700">Bol.com</td>
+                <td className="p-3 text-slate-600">Select: Zondag levering</td>
+                <td className="p-3">
+                    <a href="https://partner.bol.com/click/click?p=2&t=url&s=1491898&f=TXL&url=https%3A%2F%2Fwww.bol.com%2Fnl%2Fnl%2Fs%2Fsony%2Bwh-1000xm5%2F&name=SonyXM5" target="_blank" rel="nofollow" className="inline-block bg-blue-600 text-white text-xs font-bold px-3 py-2 rounded hover:bg-blue-700 transition">
+                        BEKIJK PRIJS & BESTEL 
+                    </a>
+                </td>
+              </tr>
+              <tr className="bg-white">
+                <td className="p-3 font-semibold text-slate-900">Sony XM5</td>
+                <td className="p-3 font-bold text-orange-500">Coolblue</td>
+                <td className="p-3 text-slate-600">VandaagNog® + Gratis retour</td>
+                <td className="p-3">
+                    <a href="https://www.coolblue.nl/koptelefoons/sony" target="_blank" rel="nofollow" className="inline-block bg-orange-500 text-white text-xs font-bold px-3 py-2 rounded hover:bg-orange-600 transition">
+                        BEKIJK PRIJS & BESTEL
+                    </a>
+                </td>
+              </tr>
+              <tr className="bg-slate-50/50">
+                <td className="p-3 font-semibold text-slate-900">Sony XM5</td>
+                <td className="p-3 font-bold text-slate-800">Amazon</td>
+                <td className="p-3 text-slate-600">Gratis Prime levering</td>
+                <td className="p-3">
+                    <a href="https://amzn.to/4oOzyrm" target="_blank" rel="nofollow" className="inline-block bg-yellow-500 text-slate-900 text-xs font-bold px-3 py-2 rounded hover:bg-yellow-400 transition">
+                        BEKIJK PRIJS & BESTEL
+                    </a>
+                </td>
+              </tr>
+
+              {/* BOSE ROWS */}
+              <tr className="bg-white border-t-2 border-slate-100">
+                <td className="p-3 font-semibold text-slate-900">Bose QC Ultra</td>
+                <td className="p-3 font-bold text-blue-700">Bol.com</td>
+                <td className="p-3 text-slate-600">30 dagen bedenktijd</td>
+                <td className="p-3">
+                    <a href="https://partner.bol.com/click/click?p=2&t=url&s=1491898&f=TXL&url=https%3A%2F%2Fwww.bol.com%2Fnl%2Fnl%2Fs%2Fbose%2Bquietcomfort%2Bultra%2F&name=BoseUltra" target="_blank" rel="nofollow" className="inline-block bg-blue-600 text-white text-xs font-bold px-3 py-2 rounded hover:bg-blue-700 transition">
+                        BEKIJK PRIJS & BESTEL
+                    </a>
+                </td>
+              </tr>
+              <tr className="bg-white">
+                <td className="p-3 font-semibold text-slate-900">Bose QC Ultra</td>
+                <td className="p-3 font-bold text-orange-500">Coolblue</td>
+                <td className="p-3 text-slate-600">Fysieke winkels (testen)</td>
+                <td className="p-3">
+                    <a href="https://www.coolblue.nl/koptelefoons/bose" target="_blank" rel="nofollow" className="inline-block bg-orange-500 text-white text-xs font-bold px-3 py-2 rounded hover:bg-orange-600 transition">
+                        BEKIJK PRIJS & BESTEL
+                    </a>
+                </td>
+              </tr>
+              <tr className="bg-slate-50/50">
+                <td className="p-3 font-semibold text-slate-900">Bose QC Ultra</td>
+                <td className="p-3 font-bold text-slate-800">Amazon</td>
+                <td className="p-3 text-slate-600">Vaak laagste prijs</td>
+                <td className="p-3">
+                    <a href="https://amzn.to/4oOzyrm" target="_blank" rel="nofollow" className="inline-block bg-yellow-500 text-slate-900 text-xs font-bold px-3 py-2 rounded hover:bg-yellow-400 transition">
+                        BEKIJK PRIJS & BESTEL
+                    </a>
+                </td>
+              </tr>
+
+              {/* AIRPODS ROWS */}
+              <tr className="bg-white border-t-2 border-slate-100">
+                <td className="p-3 font-semibold text-slate-900">AirPods Pro 2</td>
+                <td className="p-3 font-bold text-blue-700">Bol.com</td>
+                <td className="p-3 text-slate-600">Veel accessoires beschikbaar</td>
+                <td className="p-3">
+                    <a href="https://partner.bol.com/click/click?p=2&t=url&s=1491898&f=TXL&url=https%3A%2F%2Fwww.bol.com%2Fnl%2Fnl%2Fs%2Fairpods%2Bpro%2B2%2F&name=Airpods" target="_blank" rel="nofollow" className="inline-block bg-blue-600 text-white text-xs font-bold px-3 py-2 rounded hover:bg-blue-700 transition">
+                        BEKIJK PRIJS & BESTEL
+                    </a>
+                </td>
+              </tr>
+              <tr className="bg-white">
+                <td className="p-3 font-semibold text-slate-900">AirPods Pro 2</td>
+                <td className="p-3 font-bold text-orange-500">Coolblue</td>
+                <td className="p-3 text-slate-600">Snelste levering (VandaagNog)</td>
+                <td className="p-3">
+                    <a href="https://www.coolblue.nl/apple/airpods" target="_blank" rel="nofollow" className="inline-block bg-orange-500 text-white text-xs font-bold px-3 py-2 rounded hover:bg-orange-600 transition">
+                        BEKIJK PRIJS & BESTEL
+                    </a>
+                </td>
+              </tr>
+              <tr className="bg-slate-50/50">
+                <td className="p-3 font-semibold text-slate-900">AirPods Pro 2</td>
+                <td className="p-3 font-bold text-slate-800">Amazon</td>
+                <td className="p-3 text-slate-600">Scherpste prijs (Bulk)</td>
+                <td className="p-3">
+                    <a href="https://amzn.to/4oOzyrm" target="_blank" rel="nofollow" className="inline-block bg-yellow-500 text-slate-900 text-xs font-bold px-3 py-2 rounded hover:bg-yellow-400 transition">
+                        BEKIJK PRIJS & BESTEL
+                    </a>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h3 className="text-2xl font-bold text-slate-900 mt-10 mb-4">Conclusie</h3>
+        <p>
+          De "beste deal" hangt volledig af van wat u zoekt. Gaat u voor de absolute <strong>bodemprijs</strong>? Dan wint <strong>Amazon</strong> in 80% van de gevallen de slag, zeker bij de AirPods en Sony modellen.
+        </p>
+        <p className="mt-4">
+          Hecht u echter waarde aan zekerheid, wilt u de koptelefoon misschien eerst even passen in een winkel, of wilt u hem vanavond nog in huis hebben? Dan is de meerprijs bij <strong>Coolblue</strong> (vaak slechts €10-€20) de investering in service meer dan waard.
+        </p>
+
+        <div className="bg-indigo-50 border-l-4 border-indigo-500 p-4 mt-8 rounded-r-lg">
+          <strong>Onze aanbeveling:</strong> Check altijd eerst Amazon voor de prijsbenchmark, en beslis dan of de service van Coolblue of het gemak van Bol.com het prijsverschil waard is.
+        </div>
+      </>
+    )
+  },
+  {
+    id: 7, 
+    category: "Huishouden",
+    icon: <Bot className="w-5 h-5 text-cyan-500" />,
+    title: "Robotstofzuigers: iRobot (Coolblue) of Roborock (Bol)?",
+    excerpt: "Huisdieren en een druk leven? Wij vergelijken de beste robotstofzuigers. Ga je voor de service van Coolblue of de Chinese krachtpatser via Bol?",
+    date: "14 jan 2026",
+    readTime: "6 min leestijd",
+    image: "https://images.unsplash.com/photo-1518640467707-6811f4a6ab73?auto=format&fit=crop&q=80&w=800",
+    content: (
+      <>
+        <p>De robotstofzuiger is niet meer weg te denken. Maar de markt is verdeeld. Aan de ene kant heb je de gevestigde orde (iRobot Roomba), en aan de andere kant de technisch superieure 'uitdagers' (Roborock, Dreame).</p>
+
+        <img 
+            src="https://images.unsplash.com/photo-1589820296156-2454bb8a6d54?auto=format&fit=crop&q=80&w=800" 
+            alt="Robotstofzuiger op houten vloer" 
+            className="w-full h-64 object-cover rounded-xl shadow-md my-6"
+            loading="lazy"
+        />
+
+        <h3>Coolblue & iRobot / Bluebot</h3>
+        <p>Coolblue zet zwaar in op merken als <strong>iRobot (Roomba)</strong> en hun eigen favoriet <strong>Bluebot</strong>. Het voordeel van kopen bij Coolblue is hier enorm: robotstofzuigers zijn gevoelig voor storingen (vastlopende wieltjes, accuproblemen). De garantie van Coolblue is hier goud waard. Is hij stuk? Vaak heb je binnen een paar dagen een oplossing.</p>
+
+        <h3>Bol.com & Roborock / Xiaomi</h3>
+        <p>Wil je de <strong>beste technologie</strong> (LiDAR lasers, dweilen met vibratie, camera's)? Dan kom je uit bij merken als Roborock of Xiaomi. Deze zijn bij Coolblue vaak niet of beperkt verkrijgbaar, maar bij <strong>Bol.com</strong> (via partners) volop. Je krijgt hier 'meer waar voor je geld', maar let goed op de garantievoorwaarden van de externe verkoper.</p>
+
+        <h3>Conclusie</h3>
+        <p>Wil je een "set-and-forget" machine en nul gedoe als hij stuk gaat? Koop een <strong>iRobot bij Coolblue</strong>. Ben je een techneut die de slimste navigatie wil voor de laagste prijs? Koop een <strong>Roborock via Bol.com of Amazon</strong>.</p>
+      </>
+    )
+  },
   {
     id: 1,
     category: "Elektronica",

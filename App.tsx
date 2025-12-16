@@ -6,6 +6,7 @@ import { ReviewSection } from './components/ReviewSection';
 import { ComparisonTable } from './components/ComparisonTable';
 import { FaqSection } from './components/FaqSection';
 import { BlogSection } from './components/BlogSection';
+import { ProductShowcase } from './components/ProductShowcase'; // Geïmporteerd
 import { TermsModal } from './components/TermsModal';
 import { PrivacyModal } from './components/PrivacyModal';
 import { AboutModal } from './components/AboutModal';
@@ -35,6 +36,7 @@ const App: React.FC = () => {
 
   const navLinks = [
     { name: 'Vergelijker', id: 'shop-grid' },
+    { name: 'Deals', id: 'deals' }, // Nieuwe link
     { name: 'Koopgidsen', id: 'koopgidsen' },
     { name: 'AI Advies', id: 'advies' },
     { name: 'FAQ', id: 'faq' },
@@ -184,6 +186,11 @@ const App: React.FC = () => {
             </div>
           ))}
         </div>
+
+        {/* Product Showcase (Deals) */}
+        <section id="deals" className="scroll-mt-28">
+          <ProductShowcase />
+        </section>
 
         {/* Blog / Content Section */}
         <section id="koopgidsen" className="scroll-mt-28">
