@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { X, Heart, Target, Users } from 'lucide-react';
 
 interface AboutModalProps {
@@ -7,6 +7,18 @@ interface AboutModalProps {
 }
 
 export const AboutModal: React.FC<AboutModalProps> = ({ isOpen, onClose }) => {
+  
+  useEffect(() => {
+    if (isOpen) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = '';
+    }
+    return () => {
+      document.body.style.overflow = '';
+    };
+  }, [isOpen]);
+
   if (!isOpen) return null;
 
   return (

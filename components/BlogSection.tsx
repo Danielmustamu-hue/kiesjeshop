@@ -37,9 +37,11 @@ export const BlogSection: React.FC = () => {
               {/* Image Header */}
               <div className="h-48 overflow-hidden relative">
                 <div className="absolute inset-0 bg-slate-900/10 group-hover:bg-transparent transition-colors z-10" />
+                {/* Geen .replace() meer, we gebruiken de directe URL uit de data */}
                 <img 
                     src={article.image} 
                     alt={article.title}
+                    loading="lazy"
                     className="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-700 ease-out"
                 />
                 <div className="absolute top-4 left-4 z-20 bg-white/90 backdrop-blur-sm px-3 py-1 rounded-full text-xs font-bold text-slate-800 border border-white/20 shadow-sm flex items-center gap-2">
@@ -79,10 +81,13 @@ export const BlogSection: React.FC = () => {
         )}
       </div>
 
-      <ArticleModal 
-        article={selectedArticle} 
-        onClose={() => setSelectedArticle(null)} 
-      />
+      {/* Conditional rendering: Modal wordt pas aangemaakt als er een artikel is */}
+      {selectedArticle && (
+        <ArticleModal 
+            article={selectedArticle} 
+            onClose={() => setSelectedArticle(null)} 
+        />
+      )}
     </>
   );
 };

@@ -1,3 +1,16 @@
+<script type="importmap">
+{
+  "imports": {
+    "react-dom/": "https://esm.sh/react-dom@^19.2.3/",
+    "@vitejs/plugin-react": "https://esm.sh/@vitejs/plugin-react@^5.1.2",
+    "@google/genai": "https://esm.sh/@google/genai@^1.33.0",
+    "lucide-react": "https://esm.sh/lucide-react@^0.561.0",
+    "react/": "https://esm.sh/react@^19.2.3/",
+    "react": "https://esm.sh/react@^19.2.3",
+    "vite": "https://esm.sh/vite@^7.3.0"
+  }
+}
+</script>
 <!DOCTYPE html>
 <html lang="nl">
   <head>
@@ -25,66 +38,37 @@
     <meta http-equiv="Expires" content="0" />
 
     <!-- Favicon -->
-    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23F97316'%3E%3Cpath d='M19 6h-2c0-2.76-2.24-5-5-5S7 3.24 7 6H5c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2zm-7-3c1.66 0 3 1.34 3 3H9c0-1.66 1.34-3 3-3zm7 17H5V8h14v12zm-7-8c-1.66 0-3-1.34-3-3H9c0 1.66 1.34 3 3 3s3-1.34 3-3h-2c0 1.66-1.34 3-3 3z'/%3E%3C/svg%3E">
-    
-    <title>Kiesjeshop.nl | Bol.com, Coolblue of Amazon? Vergelijk & Kies</title>
-    <meta name="description" content="Niet zeker waar je moet bestellen? Wij vergelijken de service, levertijd en prijzen van Bol.com, Coolblue en Amazon. Check direct het advies." />
-    <meta name="keywords" content="webshop vergelijken, bol.com, coolblue, amazon, online winkelen, beste webshop, consumentenadvies" />
-    
-    <!-- Open Graph / Facebook -->
-    <meta property="og:type" content="website" />
-    <meta property="og:url" content="https://www.kiesjeshop.nl/" />
-    <meta property="og:title" content="Kiesjeshop.nl - De Grote Webshop Vergelijker" />
-    <meta property="og:description" content="Kies slim tussen Bol, Coolblue en Amazon. Wij helpen je de beste keuze te maken." />
-    <meta property="og:image" content="https://images.unsplash.com/photo-1607082348824-0a96f2a4b9da?q=80&w=1200&auto=format&fit=crop" />
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23F97316'%3E%3Cpath d='M19 6h-2c0-2.76-2.24-5-5-5S7 3.24 7 6H5c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2zm-7-3c1.66 0 3 1.34 3 3H9c0-1.66 1.34-3 3-3zm7 17H5V8h14v12zm-7-8c-1.66 0-3-1.34-3-3H9c0 1.66 1.34 3 3 3s3-1.34 3-3h-2c0 1.66-1.34 3'/%3E%3C/svg%3E" />
 
-    <!-- Twitter -->
-    <meta property="twitter:card" content="summary_large_image" />
-    <meta property="twitter:title" content="Kiesjeshop.nl - Vergelijk & Kies" />
-    <meta property="twitter:description" content="Vergelijk Bol.com, Coolblue en Amazon.nl. Ontdek welke webshop het beste bij jouw aankoop past." />
-
-    <!-- Structured Data (JSON-LD) for SEO -->
-    <script type="application/ld+json">
-    {
-      "@context": "https://schema.org",
-      "@type": "WebSite",
-      "name": "Kiesjeshop.nl",
-      "url": "https://www.kiesjeshop.nl/",
-      "description": "Vergelijkingsplatform voor Bol.com, Coolblue en Amazon.nl",
-      "potentialAction": {
-        "@type": "SearchAction",
-        "target": "https://www.kiesjeshop.nl/?q={search_term_string}",
-        "query-input": "required name=search_term_string"
-      }
-    }
-    </script>
-
-    <!-- Tailwind CSS -->
+    <!-- Tailwind CSS CDN (Safety fallback) -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
-    <style>
-      html {
-        scroll-behavior: smooth;
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              slate: { 50: '#f8fafc', 100: '#f1f5f9', 200: '#e2e8f0', 300: '#cbd5e1', 400: '#94a3b8', 500: '#64748b', 600: '#475569', 700: '#334155', 800: '#1e293b', 900: '#0f172a', 950: '#020617' },
+              indigo: { 50: '#eef2ff', 100: '#e0e7ff', 200: '#c7d2fe', 300: '#a5b4fc', 400: '#818cf8', 500: '#6366f1', 600: '#4f46e5', 700: '#4338ca', 800: '#3730a3', 900: '#312e81', 950: '#1e1b4b' },
+              orange: { 50: '#fff7ed', 100: '#ffedd5', 200: '#fed7aa', 300: '#fdba74', 400: '#fb923c', 500: '#f97316', 600: '#ea580c', 700: '#c2410c', 800: '#9a3412', 900: '#7c2d12', 950: '#431407' },
+            }
+          }
+        }
       }
+    </script>
+    
+    <style>
       body {
-        font-family: 'Inter', sans-serif;
+        margin: 0;
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+          'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+          sans-serif;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+        background-color: #FFF3E0;
       }
     </style>
-  <script type="importmap">
-{
-  "imports": {
-    "react": "https://esm.sh/react@^19.2.3",
-    "react-dom/": "https://esm.sh/react-dom@^19.2.3/",
-    "react/": "https://esm.sh/react@^19.2.3/",
-    "lucide-react": "https://esm.sh/lucide-react@^0.561.0",
-    "@google/genai": "https://esm.sh/@google/genai@^1.33.0",
-    "vite": "https://esm.sh/vite@^7.3.0",
-    "@vitejs/plugin-react": "https://esm.sh/@vitejs/plugin-react@^5.1.2"
-  }
-}
-</script>
-</head>
-  <body class="bg-[#FFF3E0] text-slate-900">
+  </head>
+  <body>
     <div id="root"></div>
     <script type="module" src="/index.tsx"></script>
   </body>

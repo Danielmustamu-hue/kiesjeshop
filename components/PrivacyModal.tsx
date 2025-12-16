@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { X } from 'lucide-react';
 
 interface PrivacyModalProps {
@@ -7,6 +7,18 @@ interface PrivacyModalProps {
 }
 
 export const PrivacyModal: React.FC<PrivacyModalProps> = ({ isOpen, onClose }) => {
+  
+  useEffect(() => {
+    if (isOpen) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = '';
+    }
+    return () => {
+      document.body.style.overflow = '';
+    };
+  }, [isOpen]);
+
   if (!isOpen) return null;
 
   return (
@@ -49,7 +61,7 @@ export const PrivacyModal: React.FC<PrivacyModalProps> = ({ isOpen, onClose }) =
             </p>
             <ul className="list-disc pl-5 space-y-1">
               <li><strong>Technische Gegevens:</strong> IP-adres, browserinformatie en surfgedrag (via Google Analytics).</li>
-              <li><strong>Tracking Gegevens (Affiliate Cookies):</strong> Een unieke identifier voor het registreren van de doorverwijzing naar Coolblue, Bol.com of Amazon.</li>
+              <li><strong>Tracking Gegevens (Affiliate Cookies):</strong> Een unieke identifier voor het registreren van de doorverwijzing naar Coolblue, Bol.com en Amazon.</li>
             </ul>
 
             <h3 className="text-slate-900 font-bold mt-6 text-base">3. Doeleinden</h3>

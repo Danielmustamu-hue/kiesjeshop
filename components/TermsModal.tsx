@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { X } from 'lucide-react';
 
 interface TermsModalProps {
@@ -7,6 +7,18 @@ interface TermsModalProps {
 }
 
 export const TermsModal: React.FC<TermsModalProps> = ({ isOpen, onClose }) => {
+  
+  useEffect(() => {
+    if (isOpen) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = '';
+    }
+    return () => {
+      document.body.style.overflow = '';
+    };
+  }, [isOpen]);
+
   if (!isOpen) return null;
 
   return (

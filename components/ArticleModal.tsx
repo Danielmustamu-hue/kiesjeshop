@@ -8,15 +8,21 @@ interface ArticleModalProps {
 }
 
 export const ArticleModal: React.FC<ArticleModalProps> = ({ article, onClose }) => {
-  if (!article) return null;
-
-  // Prevent background scrolling when modal is open
+  
+  // CRUCIAAL: Deze useEffect moet ALTIJD draaien, dus voor de 'if (!article)' check.
+  // Dit zorgt ervoor dat de scrollblokkade netjes wordt opgeruimd.
   useEffect(() => {
-    document.body.style.overflow = 'hidden';
+    if (article) {
+      document.body.style.overflow = 'hidden';
+    }
+    
+    // Cleanup functie: draait altijd als het artikel verandert of component sluit
     return () => {
-      document.body.style.overflow = 'unset';
+      document.body.style.overflow = '';
     };
-  }, []);
+  }, [article]);
+
+  if (!article) return null;
 
   const handleToShops = () => {
     onClose();
@@ -85,7 +91,7 @@ export const ArticleModal: React.FC<ArticleModalProps> = ({ article, onClose }) 
         </div>
 
         {/* Scrollable Content */}
-        <div className="p-6 sm:p-8 overflow-y-auto">
+        <div className="p-6 sm:p-8 overflow-y-auto overscroll-contain">
           <div className="prose prose-slate prose-lg max-w-none 
             prose-headings:font-bold prose-headings:text-slate-900 
             prose-p:text-slate-600 prose-p:leading-relaxed
