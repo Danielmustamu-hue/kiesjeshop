@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { SHOPS } from './constants';
 import { ShopCard } from './components/ShopCard';
 import { AiAdvisor } from './components/AiAdvisor';
@@ -7,10 +7,11 @@ import { ComparisonTable } from './components/ComparisonTable';
 import { FaqSection } from './components/FaqSection';
 import { BlogSection } from './components/BlogSection';
 import { ProductShowcase } from './components/ProductShowcase';
-import { NicheGuides } from './components/NicheGuides'; // Nieuw import
+import { NicheGuides } from './components/NicheGuides';
 import { TermsModal } from './components/TermsModal';
 import { PrivacyModal } from './components/PrivacyModal';
 import { AboutModal } from './components/AboutModal';
+import { FloatingAiButton } from './components/FloatingAiButton';
 import { ShoppingBag, ArrowDown, Menu, X } from 'lucide-react';
 
 const App: React.FC = () => {
@@ -18,6 +19,24 @@ const App: React.FC = () => {
   const [isPrivacyOpen, setIsPrivacyOpen] = useState(false);
   const [isAboutOpen, setIsAboutOpen] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [showFloatingButton, setShowFloatingButton] = useState(false);
+
+  // Logic to show floating button only after scrolling past the main AI section
+  useEffect(() => {
+    const handleScroll = () => {
+      const aiSection = document.getElementById('advies');
+      if (aiSection) {
+        const rect = aiSection.getBoundingClientRect();
+        // Show button if AI section is scrolled out of view (top is negative and larger than height)
+        // OR if we haven't reached it yet? No, mainly if we scroll PAST it or if it's not in view.
+        // Let's keep it simple: Show button if we scroll down a bit (> 600px) so it's always available
+        setShowFloatingButton(window.scrollY > 600);
+      }
+    };
+
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
 
   const scrollToSection = (id: string) => {
     setIsMobileMenuOpen(false); // Sluit mobiel menu na klik
@@ -37,10 +56,10 @@ const App: React.FC = () => {
 
   const navLinks = [
     { name: 'Vergelijker', id: 'shop-grid' },
+    { name: 'AI Advies', id: 'advies' }, // Naar boven verplaatst in menu
     { name: 'Deals', id: 'deals' },
-    { name: 'Niches', id: 'niches' }, // Nieuwe link
+    { name: 'Niches', id: 'niches' },
     { name: 'Koopgidsen', id: 'koopgidsen' },
-    { name: 'AI Advies', id: 'advies' },
     { name: 'FAQ', id: 'faq' },
   ];
 
@@ -144,6 +163,12 @@ const App: React.FC = () => {
                 Start met vergelijken
                 <ArrowDown className="w-4 h-4" />
               </button>
+              <button 
+                onClick={() => scrollToSection('advies')}
+                className="px-8 py-4 bg-white text-indigo-600 border border-indigo-200 font-bold rounded-xl hover:bg-indigo-50 transition-all shadow-sm active:scale-95"
+              >
+                Vraag AI advies
+              </button>
             </div>
           </div>
 
@@ -180,7 +205,7 @@ const App: React.FC = () => {
       {/* Main Content Area */}
       <main className="flex-grow max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full pb-20 space-y-24">
         
-        {/* Comparison Grid */}
+        {/* 1. Comparison Grid (The Core) */}
         <div id="shop-grid" className="scroll-mt-28 grid grid-cols-1 md:grid-cols-3 gap-8">
           {SHOPS.map((shop) => (
             <div key={shop.id} className="h-full">
@@ -189,37 +214,37 @@ const App: React.FC = () => {
           ))}
         </div>
 
-        {/* Product Showcase (Deals) */}
-        <section id="deals" className="scroll-mt-28">
-          <ProductShowcase />
-        </section>
-
-        {/* Niche Guides (Nieuw) */}
-        <section id="niches" className="scroll-mt-28">
-          <NicheGuides />
-        </section>
-
-        {/* Blog / Content Section */}
-        <section id="koopgidsen" className="scroll-mt-28">
-            <BlogSection />
-        </section>
-
-        {/* Comparison Table */}
-        <section>
-             <ComparisonTable />
-        </section>
-
-        {/* AI Advisor Section */}
+        {/* 2. AI Advisor (Promoted to High Priority!) */}
         <section id="advies" className="scroll-mt-28">
             <AiAdvisor />
         </section>
 
-        {/* Reviews Section */}
+        {/* 3. Product Showcase (Deals) */}
+        <section id="deals" className="scroll-mt-28">
+          <ProductShowcase />
+        </section>
+
+        {/* 4. Comparison Table (Fact Check) */}
+        <section>
+             <ComparisonTable />
+        </section>
+
+        {/* 5. Niche Guides */}
+        <section id="niches" className="scroll-mt-28">
+          <NicheGuides />
+        </section>
+
+        {/* 6. Blog / Content Section */}
+        <section id="koopgidsen" className="scroll-mt-28">
+            <BlogSection />
+        </section>
+
+        {/* 7. Reviews Section */}
         <section>
             <ReviewSection />
         </section>
 
-        {/* FAQ Section */}
+        {/* 8. FAQ Section */}
         <section id="faq" className="scroll-mt-28">
             <FaqSection />
         </section>
@@ -232,6 +257,12 @@ const App: React.FC = () => {
             </p>
         </section>
       </main>
+
+      {/* Floating Action Button for AI */}
+      <FloatingAiButton 
+        visible={showFloatingButton} 
+        onClick={() => scrollToSection('advies')} 
+      />
 
       {/* Footer */}
       <footer className="bg-slate-950 text-slate-400 pt-16 pb-8 border-t border-slate-900">
@@ -258,7 +289,7 @@ const App: React.FC = () => {
                  De eerlijke startplek voor al je online aankopen. Vergelijk, kies en shop slim.
                </p>
                <p className="text-xs text-slate-600">
-                  © {new Date().getFullYear()} Kiesjeshop.nl Alle rechten voorbehouden. <span className="text-green-500 font-bold ml-1">v1.0 LIVE</span>
+                  © {new Date().getFullYear()} Kiesjeshop.nl Alle rechten voorbehouden. <span className="text-green-500 font-bold ml-1">v1.1 LIVE</span>
                </p>
             </div>
 

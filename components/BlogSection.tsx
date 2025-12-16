@@ -72,12 +72,13 @@ export const BlogSection: React.FC = () => {
         {heroArticle && (
             <div 
                 onClick={() => setSelectedArticle(heroArticle)}
-                className="group relative rounded-3xl overflow-hidden shadow-xl border border-slate-200 cursor-pointer mb-8 h-[400px] md:h-[500px]"
+                className="group relative rounded-3xl overflow-hidden shadow-xl border border-slate-200 cursor-pointer mb-8 h-[400px] md:h-[500px] bg-slate-800"
             >
                 <img 
                     src={heroArticle.image} 
                     alt={heroArticle.title}
                     className="absolute inset-0 w-full h-full object-cover transition-transform duration-1000 group-hover:scale-105"
+                    onError={(e) => { (e.target as HTMLImageElement).style.display = 'none'; }}
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-slate-900 via-slate-900/40 to-transparent opacity-90 group-hover:opacity-80 transition-opacity"></div>
                 
@@ -112,13 +113,14 @@ export const BlogSection: React.FC = () => {
                 onClick={() => setSelectedArticle(article)}
                 className="bg-white rounded-2xl shadow-sm border border-slate-100 hover:shadow-xl transition-all hover:-translate-y-1 cursor-pointer group flex flex-col h-full overflow-hidden"
               >
-                <div className="h-48 overflow-hidden relative">
+                <div className="h-48 overflow-hidden relative bg-slate-100">
                   <div className="absolute inset-0 bg-slate-900/0 group-hover:bg-slate-900/10 transition-colors z-10" />
                   <img 
                       src={article.image} 
                       alt={article.title}
                       loading="lazy"
                       className="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-700 ease-out"
+                      onError={(e) => { (e.target as HTMLImageElement).style.display = 'none'; }}
                   />
                   <div className="absolute top-3 left-3 z-20 bg-white/95 backdrop-blur-sm px-2.5 py-1 rounded-lg text-[10px] font-bold text-slate-800 border border-white/20 shadow-sm flex items-center gap-1.5 uppercase tracking-wide">
                       {article.icon}

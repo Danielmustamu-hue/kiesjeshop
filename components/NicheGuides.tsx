@@ -30,7 +30,7 @@ export const NicheGuides: React.FC = () => {
   const guides: NicheCategory[] = [
     {
       title: "1. Gezond Binnenklimaat & CO₂",
-      image: "https://images.unsplash.com/photo-1631558556874-88f50444391e?auto=format&fit=crop&q=80&w=800",
+      image: "https://images.unsplash.com/photo-1598257006458-087169a1f08d?auto=format&fit=crop&q=80&w=800",
       seoText: "Een goede luchtkwaliteit verbetert concentratie en gezondheid. Vergelijk de beste CO2-meters.",
       products: [
         {

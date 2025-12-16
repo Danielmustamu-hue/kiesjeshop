@@ -21,16 +21,17 @@ export const AiAdvisor: React.FC = () => {
       const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
       
       const promptText = `
-        Je bent een shopping expert voor Kiesjeshop.nl.
-        Vraag van gebruiker: "${query}"
+        Jij bent de shopping expert van Kiesjeshop.nl.
+        Een bezoeker stelt de volgende vraag: "${query}"
         
-        Vergelijk deze opties:
-        1. Bol.com (Algemeen assortiment, snelle levering)
-        2. Coolblue (Beste service, elektronica specialist, installatie)
-        3. Amazon (Vaak goedkoopste, Prime voordelen)
-
-        Geef een kort, eerlijk advies (max 3 zinnen).
-        Zorg dat je de namen 'Bol.com', 'Coolblue' of 'Amazon' expliciet en correct schrijft in je antwoord, zodat ik ze kan linken.
+        Geef een zeer concreet advies welke webshop (Bol.com, Coolblue, of Amazon) het beste past bij deze specifieke vraag.
+        
+        Richtlijnen:
+        - Als het gaat om service, installatie of witgoed: Adviseer Coolblue.
+        - Als het gaat om prijs, kabels, of internationale gadgets: Adviseer Amazon.
+        - Als het gaat om boeken, algemeen assortiment of snelle verzending zonder gedoe: Adviseer Bol.com.
+        - Antwoord in maximaal 3 zinnen.
+        - Gebruik de namen 'Bol.com', 'Coolblue' of 'Amazon' exact zo, zodat ik er automatisch linkjes van kan maken.
       `;
 
       const response = await ai.models.generateContent({
@@ -103,18 +104,18 @@ export const AiAdvisor: React.FC = () => {
       <div className="relative z-10 max-w-2xl mx-auto text-center">
         <div className="inline-flex items-center gap-2 bg-indigo-800/50 px-4 py-1.5 rounded-full text-sm font-medium text-indigo-200 mb-4 border border-indigo-700">
           <Sparkles className="w-4 h-4" />
-          <span>AI Shopping Hulp</span>
+          <span>Persoonlijk AI Advies</span>
         </div>
         
         <h2 className="text-2xl md:text-3xl font-bold mb-4">Twijfel je nog? Vraag het de expert.</h2>
-        <p className="text-indigo-200 mb-8">Vertel ons wat je wilt kopen, en wij vertellen je direct welke webshop de beste keuze is.</p>
+        <p className="text-indigo-200 mb-8">Vertel ons wat je zoekt (bijv. "goedkope laptop" of "wasmachine met installatie"), en wij vertellen je direct waar je moet zijn.</p>
 
         <form onSubmit={handleAskAi} className="relative max-w-lg mx-auto">
           <input 
             type="text" 
             value={query}
             onChange={(e) => setQuery(e.target.value)}
-            placeholder="Bijv: Ik zoek een nieuwe wasmachine..." 
+            placeholder="Type hier je vraag..." 
             className="w-full pl-6 pr-14 py-4 rounded-full bg-white/10 border border-white/20 text-white placeholder-indigo-300 focus:outline-none focus:ring-2 focus:ring-indigo-400 focus:bg-white/20 backdrop-blur-sm transition-all"
           />
           <button 

@@ -52,7 +52,8 @@ export const ARTICLES: Article[] = [
     excerpt: "Moe, hoofdpijn of concentratieverlies rond 14:00 uur? Grote kans dat het CO2-gehalte in je werkkamer te hoog is. Wij testen de Aranet4 en Netatmo.",
     date: "25 feb 2026",
     readTime: "6 min leestijd",
-    image: "https://images.unsplash.com/photo-1631558556874-88f50444391e?auto=format&fit=crop&q=80&w=1200",
+    // Nieuwe, stabiele afbeelding van een frisse werkplek met planten
+    image: "https://images.unsplash.com/photo-1598257006458-087169a1f08d?auto=format&fit=crop&q=80&w=1200",
     content: (
       <>
         <p className="font-semibold text-lg text-slate-700 mb-4">
