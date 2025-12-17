@@ -61,7 +61,7 @@ export const PrivacyModal: React.FC<PrivacyModalProps> = ({ isOpen, onClose }) =
             </p>
             <ul className="list-disc pl-5 space-y-1">
               <li><strong>Technische Gegevens:</strong> IP-adres, browserinformatie en surfgedrag (via Google Analytics).</li>
-              <li><strong>Tracking Gegevens (Affiliate Cookies):</strong> Een unieke identifier voor het registreren van de doorverwijzing naar Coolblue, Bol.com en Amazon.</li>
+              <li><strong>Tracking Gegevens (Affiliate Cookies):</strong> Een unieke identifier voor het registreren van de doorverwijzing naar Coolblue, bol en Amazon.</li>
             </ul>
 
             <h3 className="text-slate-900 font-bold mt-6 text-base">3. Doeleinden</h3>
@@ -79,7 +79,7 @@ export const PrivacyModal: React.FC<PrivacyModalProps> = ({ isOpen, onClose }) =
 
             <h3 className="text-slate-900 font-bold mt-6 text-base">5. Delen met Derden</h3>
             <p>
-              De tracking-ID wordt gedeeld met de systemen van Coolblue, Bol.com en Amazon om de doorverwijzing te registreren. 
+              De tracking-ID wordt gedeeld met de systemen van Coolblue, bol en Amazon om de doorverwijzing te registreren. 
               Deze webshops ontvangen geen persoonlijke identificerende gegevens van u. Wij delen daarnaast gegevens met Google Analytics voor statistische doeleinden.
             </p>
 

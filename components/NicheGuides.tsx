@@ -280,9 +280,9 @@ export const NicheGuides: React.FC = () => {
                                 target="_blank"
                                 rel="nofollow noopener noreferrer"
                                 className="flex flex-col items-center justify-center p-2 rounded-lg bg-blue-50 text-blue-700 hover:bg-blue-600 hover:text-white transition-colors group/btn"
-                                aria-label={`Zoek ${product.name} bij Bol.com`}
+                                aria-label={`Zoek ${product.name} bij bol`}
                             >
-                                <span className="text-xs font-bold">Bol</span>
+                                <span className="text-xs font-bold">bol</span>
                                 <ExternalLink className="w-3 h-3 opacity-50 group-hover/btn:opacity-100 mt-0.5" />
                             </a>
                             <a 

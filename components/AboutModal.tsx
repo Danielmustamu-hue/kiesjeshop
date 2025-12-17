@@ -70,13 +70,13 @@ export const AboutModal: React.FC<AboutModalProps> = ({ isOpen, onClose }) => {
 
             <h3 className="text-slate-900 font-bold">Wie zijn wij?</h3>
             <p>
-              Kiesjeshop.nl is opgericht in 2025 vanuit een frustratie: waarom is het zo moeilijk om te zien of Amazon Prime sneller levert dan Bol Select? 
+              Kiesjeshop.nl is opgericht in 2025 vanuit een frustratie: waarom is het zo moeilijk om te zien of Amazon Prime sneller levert dan bol Select? 
               Ons kleine team van e-commerce enthousiastelingen test dagelijks de levertijden, klantenservice en retourvoorwaarden van de grote spelers.
             </p>
 
             <h3 className="text-slate-900 font-bold mt-6">Hoe wij geld verdienen</h3>
             <p>
-              Eerlijkheid duurt het langst. Wij ontvangen een kleine commissie als u via onze links iets koopt bij Bol.com, Coolblue of Amazon. 
+              Eerlijkheid duurt het langst. Wij ontvangen een kleine commissie als u via onze links iets koopt bij bol, Coolblue of Amazon. 
               Dit beïnvloedt de prijs voor u niet. Het stelt ons in staat om de hosting te betalen en deze site reclamevrij (geen banners!) te houden.
             </p>
 

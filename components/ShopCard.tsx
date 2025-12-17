@@ -28,7 +28,7 @@ export const ShopCard: React.FC<ShopCardProps> = ({ shop }) => {
          ) : (
            <>
              {shop.id === 'bol' && (
-                 <div className="text-4xl font-extrabold text-[#0000FA] tracking-tighter">bol<span className="text-[#0000FA]/60">.com</span></div>
+                 <div className="text-4xl font-extrabold text-[#0000FA] tracking-tighter">bol</div>
              )}
              {shop.id === 'amazon' && (
                  <div className="flex flex-col items-start leading-none">

@@ -11,11 +11,11 @@ export const ComparisonTable: React.FC = () => {
 
       <div className="overflow-x-auto bg-white rounded-2xl shadow-lg border border-slate-100">
         <table className="w-full text-sm text-left text-slate-600">
-          <caption className="sr-only">Vergelijking tussen Bol.com, Coolblue en Amazon</caption>
+          <caption className="sr-only">Vergelijking tussen bol, Coolblue en Amazon</caption>
           <thead className="text-xs text-slate-700 uppercase bg-slate-50 border-b border-slate-200">
             <tr>
               <th scope="col" className="px-6 py-4 font-extrabold">Functie</th>
-              <th scope="col" className="px-6 py-4 text-blue-700 font-bold">Bol.com</th>
+              <th scope="col" className="px-6 py-4 text-blue-700 font-bold">bol</th>
               <th scope="col" className="px-6 py-4 text-orange-600 font-bold">Coolblue</th>
               <th scope="col" className="px-6 py-4 text-slate-800 font-bold">Amazon.nl</th>
             </tr>

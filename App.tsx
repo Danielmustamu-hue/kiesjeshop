@@ -153,7 +153,7 @@ const App: React.FC = () => {
               Kies de webshop die bij <span className="text-indigo-600">jou</span> past.
             </h1>
             <p className="text-lg sm:text-xl text-slate-600 mb-8 leading-relaxed max-w-lg mx-auto md:mx-0">
-              Bol.com, Coolblue of Amazon? Wij helpen je beslissen op basis van service, snelheid en de beste prijs voor jouw aankoop.
+              bol, Coolblue of Amazon? Wij helpen je beslissen op basis van service, snelheid en de beste prijs voor jouw aankoop.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center md:justify-start">
               <button 
@@ -253,7 +253,7 @@ const App: React.FC = () => {
         <section className="prose prose-slate max-w-3xl mx-auto text-center">
             <h3 className="text-2xl font-bold text-slate-800">Waarom vergelijken?</h3>
             <p className="text-slate-600">
-                Niet elke winkel is gelijk. Waar <strong>Coolblue</strong> uitblinkt in advies en installatie, wint <strong>Bol.com</strong> vaak op het gebied van algemeen assortiment en Nederlandse boeken. <strong>Amazon</strong> is daarentegen vaak de prijsvechter voor internationale gadgets. Kies slim!
+                Niet elke winkel is gelijk. Waar <strong>Coolblue</strong> uitblinkt in advies en installatie, wint <strong>bol</strong> vaak op het gebied van algemeen assortiment en Nederlandse boeken. <strong>Amazon</strong> is daarentegen vaak de prijsvechter voor internationale gadgets. Kies slim!
             </p>
         </section>
       </main>
@@ -274,7 +274,7 @@ const App: React.FC = () => {
             </p>
             <p className="text-slate-400 text-sm leading-relaxed">
               De links op Kiesjeshop.nl naar webwinkels zijn zogenaamde <strong>affiliate links</strong>. 
-              Dit betekent dat wij een kleine commissie kunnen ontvangen wanneer u via onze site een aankoop doet bij bijvoorbeeld Bol.com, Coolblue of Amazon. 
+              Dit betekent dat wij een kleine commissie kunnen ontvangen wanneer u via onze site een aankoop doet bij bijvoorbeeld bol, Coolblue of Amazon. 
               Dit kost u als gebruiker <strong>niets extra</strong>, maar stelt ons in staat om dit platform gratis en onafhankelijk te houden.
             </p>
           </div>

@@ -50,7 +50,7 @@ export const ARTICLES: Article[] = [
     icon: <Wind className="w-4 h-4 text-cyan-500" />,
     title: "Waarom je hoofdpijn krijgt tijdens het thuiswerken (en hoe CO2 helpt)",
     excerpt: "Moe, hoofdpijn of concentratieverlies rond 14:00 uur? Grote kans dat het CO2-gehalte in je werkkamer te hoog is. Wij testen de Aranet4 en Netatmo.",
-    date: "25 feb 2026",
+    date: "10 dec 2025",
     readTime: "6 min leestijd",
     // Nieuwe, stabiele afbeelding van een frisse werkplek met planten
     image: "https://images.unsplash.com/photo-1598257006458-087169a1f08d?auto=format&fit=crop&q=80&w=1200",
@@ -70,7 +70,7 @@ export const ARTICLES: Article[] = [
         
         <h3 className="text-2xl font-bold text-slate-900 mt-6 mb-4">Netatmo: Voor de Data-nerd</h3>
         <p>
-          Wil je grafiekjes zien op je telefoon? Dan is de <TextLink to="coolblue" query="Netatmo Healthy Home Coach">Netatmo Healthy Home Coach</TextLink> (verkrijgbaar bij <TextLink to="coolblue" query="Netatmo Healthy Home Coach">Coolblue</TextLink> en <TextLink to="bol" query="Netatmo Healthy Home Coach">Bol</TextLink>) de betere keuze. Hij meet ook geluid (handig voor luidruchtige buren) en luchtvochtigheid.
+          Wil je grafiekjes zien op je telefoon? Dan is de <TextLink to="coolblue" query="Netatmo Healthy Home Coach">Netatmo Healthy Home Coach</TextLink> (verkrijgbaar bij <TextLink to="coolblue" query="Netatmo Healthy Home Coach">Coolblue</TextLink> en <TextLink to="bol" query="Netatmo Healthy Home Coach">bol</TextLink>) de betere keuze. Hij meet ook geluid (handig voor luidruchtige buren) en luchtvochtigheid.
         </p>
 
         <div className="mt-8 p-6 bg-cyan-50 rounded-2xl border border-cyan-100 text-center">
@@ -80,7 +80,7 @@ export const ARTICLES: Article[] = [
            </p>
            <div className="flex flex-col sm:flex-row gap-3 justify-center">
               <a href={getSearchLink('bol', 'Aranet4 Home')} target="_blank" rel="nofollow noreferrer" className="bg-blue-600 text-white px-4 py-2 rounded-lg font-bold hover:bg-blue-700 transition-colors flex items-center justify-center gap-2">
-                 <ShoppingCart className="w-4 h-4" /> Bekijk bij Bol.com
+                 <ShoppingCart className="w-4 h-4" /> Bekijk bij bol
               </a>
               <a href={getSearchLink('amazon', 'Aranet4 Home')} target="_blank" rel="nofollow noreferrer" className="bg-yellow-400 text-slate-900 px-4 py-2 rounded-lg font-bold hover:bg-yellow-500 transition-colors flex items-center justify-center gap-2">
                  <ShoppingCart className="w-4 h-4" /> Bekijk bij Amazon
@@ -96,7 +96,7 @@ export const ARTICLES: Article[] = [
     icon: <Headphones className="w-4 h-4 text-pink-600" />,
     title: "Planar Magnetic vs. Dynamisch: Waarom audiofielen zweren bij HiFiMAN",
     excerpt: "Je ziet termen als 'Planar' en 'Open-back' in onze Audio Niche staan. Wat betekent dit en waarom klinkt het zoveel beter dan je AirPods?",
-    date: "20 feb 2026",
+    date: "5 dec 2025",
     readTime: "8 min leestijd",
     image: "https://images.unsplash.com/photo-1546435770-a3e426bf472b?auto=format&fit=crop&q=80&w=800",
     content: (
@@ -140,7 +140,7 @@ export const ARTICLES: Article[] = [
     icon: <Zap className="w-4 h-4 text-yellow-600" />,
     title: "EcoFlow Delta 2 vs Bluetti EB3A: Welke Power Station past bij jou?",
     excerpt: "Of je nu gaat kamperen of bang bent voor stroomuitval: een Power Station is de moderne generator. Wij vergelijken de twee marktleiders.",
-    date: "15 feb 2026",
+    date: "1 dec 2025",
     readTime: "5 min leestijd",
     image: "https://images.unsplash.com/photo-1478131143081-80f7f84ca84d?auto=format&fit=crop&q=80&w=800",
     content: (
@@ -182,7 +182,7 @@ export const ARTICLES: Article[] = [
     icon: <ChefHat className="w-4 h-4 text-orange-500" />,
     title: "Sous-vide voor beginners: Waarom je steak nooit meer mislukt",
     excerpt: "Sterrenchefs gebruiken het al jaren. Met een Anova stick tover je jouw keuken om tot restaurant. Het geheim zit in de constante temperatuur.",
-    date: "10 feb 2026",
+    date: "28 nov 2025",
     readTime: "4 min leestijd",
     // Afbeelding gewijzigd naar een culinaire foto (steak)
     image: "https://images.unsplash.com/photo-1604908176997-125f25cc6f3d?auto=format&fit=crop&q=80&w=800",
@@ -207,7 +207,7 @@ export const ARTICLES: Article[] = [
            </p>
            <div className="flex flex-col sm:flex-row gap-3 justify-center">
               <a href={getSearchLink('bol', 'Anova Sous Vide')} target="_blank" rel="nofollow noreferrer" className="bg-blue-600 text-white px-4 py-2 rounded-lg font-bold hover:bg-blue-700 transition-colors flex items-center justify-center gap-2">
-                 Anova bij Bol.com
+                 Anova bij bol
               </a>
               <a href={getSearchLink('amazon', 'Govee Sous Vide')} target="_blank" rel="nofollow noreferrer" className="bg-yellow-400 text-slate-900 px-4 py-2 rounded-lg font-bold hover:bg-yellow-500 transition-colors flex items-center justify-center gap-2">
                  Govee bij Amazon
@@ -223,7 +223,7 @@ export const ARTICLES: Article[] = [
     icon: <MousePointer2 className="w-4 h-4 text-indigo-500" />,
     title: "RSI voorkomen: Is een verticale muis echt wennen?",
     excerpt: "De Logitech MX Vertical ziet er vreemd uit. Toch zweren fysiotherapeuten erbij. Wij vertellen je of de overstap de moeite waard is.",
-    date: "5 feb 2026",
+    date: "25 nov 2025",
     readTime: "5 min leestijd",
     image: "https://images.unsplash.com/photo-1497215728101-856f4ea42174?auto=format&fit=crop&q=80&w=800",
     content: (
@@ -250,7 +250,7 @@ export const ARTICLES: Article[] = [
                  Bekijk bij Coolblue
               </a>
               <a href={getSearchLink('bol', 'Logitech MX Vertical')} target="_blank" rel="nofollow noreferrer" className="bg-blue-600 text-white px-4 py-2 rounded-lg font-bold hover:bg-blue-700 transition-colors flex items-center justify-center gap-2">
-                 Bekijk bij Bol.com
+                 Bekijk bij bol
               </a>
            </div>
         </div>
@@ -263,7 +263,7 @@ export const ARTICLES: Article[] = [
     icon: <Dog className="w-4 h-4 text-emerald-600" />,
     title: "Tractive GPS vs AirTag: Hoe vind je je kat terug?",
     excerpt: "Je kat is weg. Paniek. Werkt een Apple AirTag van €30 of heb je toch een echt GPS abonnement van Tractive nodig?",
-    date: "1 feb 2026",
+    date: "20 nov 2025",
     readTime: "4 min leestijd",
     image: "https://images.unsplash.com/photo-1543466835-00a7907e9de1?auto=format&fit=crop&q=80&w=800",
     content: (
@@ -284,7 +284,7 @@ export const ARTICLES: Article[] = [
            </p>
            <div className="flex flex-col sm:flex-row gap-3 justify-center">
               <a href={getSearchLink('bol', 'Tractive GPS')} target="_blank" rel="nofollow noreferrer" className="bg-blue-600 text-white px-4 py-2 rounded-lg font-bold hover:bg-blue-700 transition-colors flex items-center justify-center gap-2">
-                 Tractive bij Bol.com
+                 Tractive bij bol
               </a>
               <a href={getSearchLink('amazon', 'Tractive GPS')} target="_blank" rel="nofollow noreferrer" className="bg-yellow-400 text-slate-900 px-4 py-2 rounded-lg font-bold hover:bg-yellow-500 transition-colors flex items-center justify-center gap-2">
                  Tractive bij Amazon
@@ -300,7 +300,7 @@ export const ARTICLES: Article[] = [
     icon: <Cable className="w-4 h-4 text-slate-500" />,
     title: "Kabelmanagement: De €20 upgrade die je kantoor verandert",
     excerpt: "Een rommelig bureau zorgt voor een rommelig hoofd. Met simpele tools van D-Line en Ugreen werk je alles in 10 minuten weg.",
-    date: "28 jan 2026",
+    date: "15 nov 2025",
     readTime: "3 min leestijd",
     image: "https://images.unsplash.com/photo-1497366811353-6870744d04b2?auto=format&fit=crop&q=80&w=800",
     content: (
@@ -322,7 +322,7 @@ export const ARTICLES: Article[] = [
            </p>
            <div className="flex flex-col sm:flex-row gap-3 justify-center">
               <a href={getSearchLink('bol', 'Kabelbox')} target="_blank" rel="nofollow noreferrer" className="bg-blue-600 text-white px-4 py-2 rounded-lg font-bold hover:bg-blue-700 transition-colors flex items-center justify-center gap-2">
-                 Kabelboxen bij Bol
+                 Kabelboxen bij bol
               </a>
               <a href={getSearchLink('amazon', 'Cable Management')} target="_blank" rel="nofollow noreferrer" className="bg-yellow-400 text-slate-900 px-4 py-2 rounded-lg font-bold hover:bg-yellow-500 transition-colors flex items-center justify-center gap-2">
                  Deals bij Amazon
@@ -338,7 +338,7 @@ export const ARTICLES: Article[] = [
     icon: <Dumbbell className="w-4 h-4 text-red-500" />,
     title: "Bowflex SelectTech: Is het die €200+ waard?",
     excerpt: "Thuis sporten is populair, maar gewichten nemen ruimte in. Zijn verstelbare dumbbells de oplossing of een gimmick?",
-    date: "20 jan 2026",
+    date: "10 nov 2025",
     readTime: "5 min leestijd",
     image: "https://images.unsplash.com/photo-1517836357463-d25dfeac3438?auto=format&fit=crop&q=80&w=800",
     content: (
@@ -364,7 +364,7 @@ export const ARTICLES: Article[] = [
                  Voorraad bij Coolblue
               </a>
               <a href={getSearchLink('bol', 'Bowflex SelectTech')} target="_blank" rel="nofollow noreferrer" className="bg-blue-600 text-white px-4 py-2 rounded-lg font-bold hover:bg-blue-700 transition-colors flex items-center justify-center gap-2">
-                 Voorraad bij Bol.com
+                 Voorraad bij bol
               </a>
            </div>
         </div>
@@ -377,7 +377,7 @@ export const ARTICLES: Article[] = [
     icon: <Keyboard className="w-4 h-4 text-purple-600" />,
     title: "Mechanische Toetsenborden: Rood, Blauw of Bruin?",
     excerpt: "Typt je toetsenbord als een spons? Tijd voor een upgrade. Wij leggen het verschil uit tussen switches en waarom gamers zweren bij mechanisch.",
-    date: "10 jan 2026",
+    date: "5 nov 2025",
     readTime: "6 min leestijd",
     image: "https://images.unsplash.com/photo-1595225476474-87563907a212?auto=format&fit=crop&q=80&w=800",
     content: (
@@ -421,7 +421,7 @@ export const ARTICLES: Article[] = [
     icon: <Lightbulb className="w-4 h-4 text-amber-500" />,
     title: "Philips Hue vs. Wiz: Is goedkoop duurkoop?",
     excerpt: "Slimme verlichting maakt je huis sfeervol en veilig. Maar moet je echt €50 per lamp betalen voor Hue, of is het goedkopere Wiz net zo goed?",
-    date: "5 jan 2026",
+    date: "1 nov 2025",
     readTime: "5 min leestijd",
     // Vervangen door een stabiele foto van gekleurde sfeerverlichting
     image: "https://images.unsplash.com/photo-1565814329452-e1efa11c5b89?auto=format&fit=crop&q=80&w=800",
@@ -455,7 +455,7 @@ export const ARTICLES: Article[] = [
                  Hue Deals (Coolblue)
               </a>
               <a href={getSearchLink('bol', 'WiZ Lampen')} target="_blank" rel="nofollow noreferrer" className="bg-blue-600 text-white px-4 py-2 rounded-lg font-bold hover:bg-blue-700 transition-colors flex items-center justify-center gap-2">
-                 WiZ Deals (Bol.com)
+                 WiZ Deals (bol)
               </a>
            </div>
         </div>

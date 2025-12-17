@@ -24,14 +24,14 @@ export const AiAdvisor: React.FC = () => {
         Jij bent de shopping expert van Kiesjeshop.nl.
         Een bezoeker stelt de volgende vraag: "${query}"
         
-        Geef een zeer concreet advies welke webshop (Bol.com, Coolblue, of Amazon) het beste past bij deze specifieke vraag.
+        Geef een zeer concreet advies welke webshop (bol, Coolblue, of Amazon) het beste past bij deze specifieke vraag.
         
         Richtlijnen:
         - Als het gaat om service, installatie of witgoed: Adviseer Coolblue.
         - Als het gaat om prijs, kabels, of internationale gadgets: Adviseer Amazon.
-        - Als het gaat om boeken, algemeen assortiment of snelle verzending zonder gedoe: Adviseer Bol.com.
+        - Als het gaat om boeken, algemeen assortiment of snelle verzending zonder gedoe: Adviseer bol.
         - Antwoord in maximaal 3 zinnen.
-        - Gebruik de namen 'Bol.com', 'Coolblue' of 'Amazon' exact zo, zodat ik er automatisch linkjes van kan maken.
+        - Gebruik de namen 'bol', 'Coolblue' of 'Amazon' exact zo, zodat ik er automatisch linkjes van kan maken.
       `;
 
       const response = await ai.models.generateContent({
@@ -67,7 +67,7 @@ export const AiAdvisor: React.FC = () => {
   // Functie om tekst om te zetten naar klikbare links
   const renderAdviceWithLinks = (text: string) => {
     // Regex zoekt naar Bol(.com), Coolblue, Amazon(.nl) - hoofdletterongevoelig
-    const regex = /(Bol(?:\.com)?|Coolblue|Amazon(?:\.nl)?)/gi;
+    const regex = /(bol(?:\.com)?|Coolblue|Amazon(?:\.nl)?)/gi;
     const parts = text.split(regex);
 
     return parts.map((part, index) => {

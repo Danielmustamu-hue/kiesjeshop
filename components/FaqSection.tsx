@@ -5,7 +5,7 @@ export const FaqSection: React.FC = () => {
   const faqs = [
     {
       question: "Welke webshop is het goedkoopst?",
-      answer: "Over het algemeen staat Amazon.nl bekend om zijn scherpe prijzen, vooral bij internationale producten en dagdeals. Bol.com heeft echter vaak goede aanbiedingen met 'Bol 7-daagse' en Coolblue concurreert niet op prijs, maar op service."
+      answer: "Over het algemeen staat Amazon.nl bekend om zijn scherpe prijzen, vooral bij internationale producten en dagdeals. bol heeft echter vaak goede aanbiedingen met 'bol 7-daagse' en Coolblue concurreert niet op prijs, maar op service."
     },
     {
       question: "Waar kan ik het beste elektronica kopen?",
@@ -13,11 +13,11 @@ export const FaqSection: React.FC = () => {
     },
     {
       question: "Hoe snel wordt er geleverd?",
-      answer: "Coolblue levert vaak de volgende dag en heeft opties voor 'VandaagNog'. Bol.com levert met Select vaak ook de volgende dag, zelfs op zondag. Amazon Prime biedt snelle, gratis levering, vaak binnen 1-2 dagen."
+      answer: "Coolblue levert vaak de volgende dag en heeft opties voor 'VandaagNog'. bol levert met Select vaak ook de volgende dag, zelfs op zondag. Amazon Prime biedt snelle, gratis levering, vaak binnen 1-2 dagen."
     },
     {
-      question: "Wat is het voordeel van Bol Select of Amazon Prime?",
-      answer: "Met Bol Select betaal je geen verzendkosten voor een vast bedrag per jaar. Amazon Prime biedt gratis verzending, maar geeft je ook toegang tot Prime Video (films en series) en Prime Gaming, wat het een zeer complete deal maakt."
+      question: "Wat is het voordeel van bol Select of Amazon Prime?",
+      answer: "Met bol Select betaal je geen verzendkosten voor een vast bedrag per jaar. Amazon Prime biedt gratis verzending, maar geeft je ook toegang tot Prime Video (films en series) en Prime Gaming, wat het een zeer complete deal maakt."
     }
   ];
 

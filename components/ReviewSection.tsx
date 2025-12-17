@@ -28,7 +28,7 @@ export const ReviewSection: React.FC = () => {
             </div>
             <h3 className="text-xl font-bold text-slate-900 mb-3">Snel & Simpel</h3>
             <p className="text-slate-600 leading-relaxed">
-                Geen eindeloze tabbladen meer openen. Wij zetten de belangrijkste verschillen tussen Bol, Coolblue en Amazon direct naast elkaar.
+                Geen eindeloze tabbladen meer openen. Wij zetten de belangrijkste verschillen tussen bol, Coolblue en Amazon direct naast elkaar.
             </p>
         </div>
 

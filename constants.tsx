@@ -3,7 +3,7 @@ import { ShopData, Review } from './types';
 export const SHOPS: ShopData[] = [
   {
     id: 'bol',
-    name: 'Bol.com',
+    name: 'bol',
     color: 'text-blue-700',
     logoText: 'bol',
     logoBg: 'bg-[#F5F9FF]', // Zacht blauw, herkenbaar voor Bol
