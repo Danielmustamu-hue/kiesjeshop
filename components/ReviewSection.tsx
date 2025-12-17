@@ -11,7 +11,7 @@ export const ReviewSection: React.FC = () => {
            <span>100% Transparant</span>
         </div>
         <h2 className="text-3xl md:text-4xl font-extrabold text-slate-900 mb-4">
-          Waarom Kiesjeshop.nl?
+          Waarom kiezen via Kiesjeshop.nl?
         </h2>
         <p className="text-lg text-slate-600">
           Geen onzin, gewoon direct weten waar je aan toe bent.
@@ -26,9 +26,9 @@ export const ReviewSection: React.FC = () => {
             <div className="w-14 h-14 bg-indigo-100 text-indigo-600 rounded-full flex items-center justify-center mx-auto mb-6">
                 <Zap className="w-7 h-7" />
             </div>
-            <h3 className="text-xl font-bold text-slate-900 mb-3">Snel & Simpel</h3>
+            <h3 className="text-xl font-bold text-slate-900 mb-3">Bespaar Tijd</h3>
             <p className="text-slate-600 leading-relaxed">
-                Geen eindeloze tabbladen meer openen. Wij zetten de belangrijkste verschillen tussen bol, Coolblue en Amazon direct naast elkaar.
+                Geen 10 tabbladen meer openen. Wij zetten de belangrijkste verschillen tussen bol, Coolblue en Amazon direct naast elkaar.
             </p>
         </div>
 
@@ -37,7 +37,7 @@ export const ReviewSection: React.FC = () => {
             <div className="w-14 h-14 bg-green-100 text-green-600 rounded-full flex items-center justify-center mx-auto mb-6">
                 <Heart className="w-7 h-7" />
             </div>
-            <h3 className="text-xl font-bold text-slate-900 mb-3">Eerlijk Advies</h3>
+            <h3 className="text-xl font-bold text-slate-900 mb-3">Kies voor zekerheid</h3>
             <p className="text-slate-600 leading-relaxed">
                 Onze AI-assistent kijkt objectief naar jouw vraag. Zoeken naar service? Dan raden we Coolblue aan. Zoeken naar prijs? Dan vaak Amazon.
             </p>
@@ -48,9 +48,9 @@ export const ReviewSection: React.FC = () => {
             <div className="w-14 h-14 bg-orange-100 text-orange-600 rounded-full flex items-center justify-center mx-auto mb-6">
                 <MousePointerClick className="w-7 h-7" />
             </div>
-            <h3 className="text-xl font-bold text-slate-900 mb-3">Direct Bestellen</h3>
+            <h3 className="text-xl font-bold text-slate-900 mb-3">Veilig Bestellen</h3>
             <p className="text-slate-600 leading-relaxed">
-                Eén klik en je bent op de juiste pagina bij de webshop van jouw keuze. Veilig en vertrouwd afrekenen bij de winkel zelf.
+                Je bestelt gewoon veilig bij de webshop zelf. Wij sturen je alleen direct naar de juiste pagina.
             </p>
         </div>
 

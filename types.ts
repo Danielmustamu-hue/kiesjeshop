@@ -11,6 +11,7 @@ export interface ShopData {
   delivery: string;
   usp: string;
   ctaLink: string; // This is the crucial field for your affiliate links!
+  ctaText?: string; // Optimized CTA text per shop
   pros: string[];
 }
 

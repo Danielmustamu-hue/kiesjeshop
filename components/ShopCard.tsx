@@ -17,7 +17,7 @@ export const ShopCard: React.FC<ShopCardProps> = ({ shop }) => {
         target="_blank"
         rel="nofollow noopener noreferrer"
         className={`h-28 flex items-center justify-center p-6 block cursor-pointer transition-opacity hover:opacity-90 ${shop.logoBg}`}
-        aria-label={`Ga naar ${shop.name}`}
+        aria-label={`Ga direct naar de website van ${shop.name}`}
       >
          {shop.logoUrl ? (
            <img 
@@ -47,7 +47,7 @@ export const ShopCard: React.FC<ShopCardProps> = ({ shop }) => {
       <div className="p-6 flex-grow flex flex-col gap-6">
         {/* Ratings */}
         <div className="flex flex-col items-center justify-center gap-1">
-          <span className="text-sm font-semibold text-slate-500 uppercase tracking-wider">Klantenservice</span>
+          <span className="text-sm font-semibold text-slate-500 uppercase tracking-wider">Service Score</span>
           <StarRating score={shop.serviceScore} />
         </div>
 
@@ -56,21 +56,21 @@ export const ShopCard: React.FC<ShopCardProps> = ({ shop }) => {
           <div className="flex items-start gap-3">
             <Package className="w-5 h-5 text-indigo-500 shrink-0 mt-0.5" />
             <div>
-              <span className="font-bold block text-slate-900">Aanbod</span>
+              <span className="font-bold block text-slate-900">Focus</span>
               {shop.offerings}
             </div>
           </div>
           <div className="flex items-start gap-3">
             <Truck className="w-5 h-5 text-emerald-500 shrink-0 mt-0.5" />
             <div>
-              <span className="font-bold block text-slate-900">Levering</span>
+              <span className="font-bold block text-slate-900">Levertijd</span>
               {shop.delivery}
             </div>
           </div>
           <div className="flex items-start gap-3">
             <HeartHandshake className="w-5 h-5 text-rose-500 shrink-0 mt-0.5" />
             <div>
-              <span className="font-bold block text-slate-900">Uniek</span>
+              <span className="font-bold block text-slate-900">Waarom hier kopen?</span>
               {shop.usp}
             </div>
           </div>
@@ -92,9 +92,9 @@ export const ShopCard: React.FC<ShopCardProps> = ({ shop }) => {
           href={shop.ctaLink} 
           target="_blank"
           rel="nofollow noopener noreferrer"
-          className={`block w-full text-center py-3 rounded-xl font-bold transition-all active:scale-95 shadow-md hover:shadow-lg no-underline ${shop.buttonColor}`}
+          className={`block w-full text-center py-4 rounded-xl font-bold text-base transition-all active:scale-95 shadow-md hover:shadow-lg no-underline ${shop.buttonColor}`}
         >
-          Ga naar {shop.name}
+          {shop.ctaText || `Ga naar ${shop.name}`}
         </a>
       </div>
     </div>

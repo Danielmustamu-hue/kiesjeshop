@@ -107,15 +107,15 @@ export const AiAdvisor: React.FC = () => {
           <span>Persoonlijk AI Advies</span>
         </div>
         
-        <h2 className="text-2xl md:text-3xl font-bold mb-4">Twijfel je nog? Vraag het de expert.</h2>
-        <p className="text-indigo-200 mb-8">Vertel ons wat je zoekt (bijv. "goedkope laptop" of "wasmachine met installatie"), en wij vertellen je direct waar je moet zijn.</p>
+        <h2 className="text-2xl md:text-3xl font-bold mb-4">Keuzestress? Krijg direct antwoord.</h2>
+        <p className="text-indigo-200 mb-8">Type wat je zoekt (bijv. "goedkope 4k tv" of "wasmachine installeren") en wij vertellen binnen 3 seconden waar je moet zijn.</p>
 
         <form onSubmit={handleAskAi} className="relative max-w-lg mx-auto">
           <input 
             type="text" 
             value={query}
             onChange={(e) => setQuery(e.target.value)}
-            placeholder="Type hier je vraag..." 
+            placeholder="Bijv: Ik zoek een goedkope laptop voor school..." 
             className="w-full pl-6 pr-14 py-4 rounded-full bg-white/10 border border-white/20 text-white placeholder-indigo-300 focus:outline-none focus:ring-2 focus:ring-indigo-400 focus:bg-white/20 backdrop-blur-sm transition-all"
           />
           <button 

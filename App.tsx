@@ -26,10 +26,7 @@ const App: React.FC = () => {
     const handleScroll = () => {
       const aiSection = document.getElementById('advies');
       if (aiSection) {
-        const rect = aiSection.getBoundingClientRect();
-        // Show button if AI section is scrolled out of view (top is negative and larger than height)
-        // OR if we haven't reached it yet? No, mainly if we scroll PAST it or if it's not in view.
-        // Let's keep it simple: Show button if we scroll down a bit (> 600px) so it's always available
+        // Show button if we scroll down a bit (> 600px) so it's always available
         setShowFloatingButton(window.scrollY > 600);
       }
     };
@@ -147,27 +144,27 @@ const App: React.FC = () => {
           <div className="text-center md:text-left z-10">
             <div className="inline-flex items-center gap-2 bg-orange-100 text-orange-700 px-4 py-1.5 rounded-full text-sm font-semibold mb-6 border border-orange-200">
                <span>🚀</span>
-               <span>Vergelijk slimmer, niet harder</span>
+               <span>Vergelijk slimmer, bestel sneller</span>
             </div>
             <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold text-slate-900 tracking-tight mb-6 leading-tight">
-              Kies de webshop die bij <span className="text-indigo-600">jou</span> past.
+              Betaal nooit meer te veel bij <span className="text-indigo-600">bol, Coolblue of Amazon</span>.
             </h1>
             <p className="text-lg sm:text-xl text-slate-600 mb-8 leading-relaxed max-w-lg mx-auto md:mx-0">
-              bol, Coolblue of Amazon? Wij helpen je beslissen op basis van service, snelheid en de beste prijs voor jouw aankoop.
+              Stop met twijfelen. Wij vergelijken direct prijs, levertijd en service zodat jij binnen 1 minuut de beste deal sluit.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center md:justify-start">
               <button 
                 onClick={() => scrollToSection('shop-grid')}
                 className="px-8 py-4 bg-slate-900 text-white font-bold rounded-xl hover:bg-slate-800 transition-all shadow-lg hover:shadow-xl active:scale-95 flex items-center justify-center gap-2"
               >
-                Start met vergelijken
+                Bekijk direct het overzicht
                 <ArrowDown className="w-4 h-4" />
               </button>
               <button 
                 onClick={() => scrollToSection('advies')}
                 className="px-8 py-4 bg-white text-indigo-600 border border-indigo-200 font-bold rounded-xl hover:bg-indigo-50 transition-all shadow-sm active:scale-95"
               >
-                Vraag AI advies
+                Start AI keuzehulp
               </button>
             </div>
           </div>
@@ -192,8 +189,8 @@ const App: React.FC = () => {
                     <ShoppingBag className="w-5 h-5 text-green-600" />
                   </div>
                   <div>
-                    <p className="text-xs text-slate-500 font-medium">Onafhankelijk</p>
-                    <p className="text-sm font-bold text-slate-900">100% Advies</p>
+                    <p className="text-xs text-slate-500 font-medium">Transparant</p>
+                    <p className="text-sm font-bold text-slate-900">100% Onafhankelijk</p>
                   </div>
                </div>
             </div>
@@ -251,9 +248,9 @@ const App: React.FC = () => {
 
         {/* Info Text */}
         <section className="prose prose-slate max-w-3xl mx-auto text-center">
-            <h3 className="text-2xl font-bold text-slate-800">Waarom vergelijken?</h3>
+            <h3 className="text-2xl font-bold text-slate-800">Waarom wij vergelijken?</h3>
             <p className="text-slate-600">
-                Niet elke winkel is gelijk. Waar <strong>Coolblue</strong> uitblinkt in advies en installatie, wint <strong>bol</strong> vaak op het gebied van algemeen assortiment en Nederlandse boeken. <strong>Amazon</strong> is daarentegen vaak de prijsvechter voor internationale gadgets. Kies slim!
+                Niet elke winkel is gelijk. Waar <strong>Coolblue</strong> wint op installatieservice, is <strong>bol</strong> vaak de koning van het assortiment en is <strong>Amazon</strong> dé plek voor de laagste prijs.
             </p>
         </section>
       </main>
@@ -270,12 +267,11 @@ const App: React.FC = () => {
           
           <div className="bg-slate-900/50 border border-slate-800 rounded-xl p-6 md:p-8 mb-12 text-center max-w-4xl mx-auto">
             <p className="text-slate-200 font-semibold text-base mb-2">
-              ℹ️ Transparantie over onze inkomsten
+              🤝 Eerlijk & Transparant
             </p>
-            <p className="text-slate-400 text-sm leading-relaxed">
-              De links op Kiesjeshop.nl naar webwinkels zijn zogenaamde <strong>affiliate links</strong>. 
-              Dit betekent dat wij een kleine commissie kunnen ontvangen wanneer u via onze site een aankoop doet bij bijvoorbeeld bol, Coolblue of Amazon. 
-              Dit kost u als gebruiker <strong>niets extra</strong>, maar stelt ons in staat om dit platform gratis en onafhankelijk te houden.
+            <p className="text-slate-400 text-sm leading-relaxed max-w-2xl mx-auto">
+              Wij zijn 100% onafhankelijk. Als jij via onze links iets moois koopt bij bol, Coolblue of Amazon, krijgen wij soms een kleine beloning. 
+              Het mooie is: <strong>jij betaalt helemaal niets extra.</strong> Zo houden wij deze site gratis en reclamevrij voor iedereen.
             </p>
           </div>
 
@@ -286,27 +282,24 @@ const App: React.FC = () => {
                   <span className="text-slate-100 font-bold text-lg">Kiesjeshop.nl</span>
                </div>
                <p className="text-sm text-slate-500 mb-6 max-w-xs">
-                 De eerlijke startplek voor al je online aankopen. Vergelijk, kies en shop slim.
+                 De snelste weg naar de beste deal. Vergelijk, klik en bespaar.
                </p>
                <p className="text-xs text-slate-600">
-                  © {new Date().getFullYear()} Kiesjeshop.nl Alle rechten voorbehouden. <span className="text-green-500 font-bold ml-1">v1.1 LIVE</span>
+                  © {new Date().getFullYear()} Kiesjeshop.nl Alle rechten voorbehouden.
                </p>
             </div>
 
             <div className="flex flex-col items-center md:items-start text-center md:text-left">
-                <h4 className="text-slate-100 font-semibold mb-4 text-sm uppercase tracking-wider">Informatie</h4>
+                <h4 className="text-slate-100 font-semibold mb-4 text-sm uppercase tracking-wider">Handig</h4>
                 <ul className="space-y-3 text-sm">
                     <li>
-                        <button onClick={() => setIsAboutOpen(true)} className="hover:text-indigo-400 transition-colors">Over Kiesjeshop</button>
+                        <button onClick={() => setIsAboutOpen(true)} className="hover:text-indigo-400 transition-colors">Over ons</button>
                     </li>
                     <li>
-                        <button onClick={() => setIsTermsOpen(true)} className="hover:text-indigo-400 transition-colors">Algemene Voorwaarden</button>
+                        <button onClick={() => setIsTermsOpen(true)} className="hover:text-indigo-400 transition-colors">Voorwaarden</button>
                     </li>
                     <li>
-                        <button onClick={() => setIsPrivacyOpen(true)} className="hover:text-indigo-400 transition-colors">Privacyverklaring</button>
-                    </li>
-                    <li>
-                        <button onClick={() => setIsPrivacyOpen(true)} className="hover:text-indigo-400 transition-colors">Cookiebeleid</button>
+                        <button onClick={() => setIsPrivacyOpen(true)} className="hover:text-indigo-400 transition-colors">Privacy & Cookies</button>
                     </li>
                     <li>
                         <a href="mailto:info@kiesjeshop.nl" className="hover:text-indigo-400 transition-colors">Contact</a>
@@ -317,7 +310,7 @@ const App: React.FC = () => {
             <div className="flex flex-col items-center md:items-start text-center md:text-left">
                  <h4 className="text-slate-100 font-semibold mb-4 text-sm uppercase tracking-wider">Disclaimer</h4>
                  <p className="text-xs text-slate-500 leading-relaxed max-w-xs">
-                    Kiesjeshop.nl is een onafhankelijke vergelijkingssite en is geen onderdeel van de genoemde webwinkels.
+                    Kiesjeshop.nl is een onafhankelijke vergelijker en geen onderdeel van de genoemde webwinkels. Prijzen kunnen wijzigen.
                  </p>
             </div>
           </div>

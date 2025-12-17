@@ -27,9 +27,9 @@ export const ProductShowcase: React.FC = () => {
            <Tag className="w-4 h-4" />
            <span>Populaire Producten</span>
         </div>
-        <h2 className="text-3xl font-bold text-slate-900">Direct vergelijken</h2>
+        <h2 className="text-3xl font-bold text-slate-900">Wie is vandaag het goedkoopst?</h2>
         <p className="text-slate-600 mt-2 max-w-2xl mx-auto">
-          Bekijk direct de actuele prijs en voorraad bij jouw favoriete webshop.
+          Wij checken de populairste producten. Klik door voor de actuele prijs.
         </p>
       </div>
 
@@ -47,8 +47,7 @@ export const ProductShowcase: React.FC = () => {
                   // Fallback: verberg de gebroken afbeelding en toon een placeholder container
                   const target = e.target as HTMLImageElement;
                   target.style.display = 'none';
-                  // Zoek de parent container en voeg een placeholder toe (simulatie via CSS classes op een sibling zou schoner zijn in React state, 
-                  // maar directe DOM manipulatie voor onError is hier effectief)
+                  // Zoek de parent container en voeg een placeholder toe
                   const parent = target.parentElement;
                   if (parent) {
                     const fallback = document.createElement('div');

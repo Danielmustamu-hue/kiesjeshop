@@ -8,13 +8,14 @@ export const SHOPS: ShopData[] = [
     logoText: 'bol',
     logoBg: 'bg-[#F5F9FF]', // Zacht blauw, herkenbaar voor Bol
     buttonColor: 'bg-blue-800 hover:bg-blue-900 text-white',
-    offerings: 'Extreem breed (De winkel van ons allemaal)',
+    offerings: 'Alles-in-één (Boeken, Wonen & Meer)',
     serviceScore: 4.5,
-    delivery: 'Select: Veelal morgen in huis',
-    usp: 'Vertrouwd Nederlands, focus op partners',
+    delivery: 'Select: Vaak morgen of zondag in huis',
+    usp: 'Vertrouwd Nederlands & makkelijk retour',
     // Affiliate link voor Bol.com
     ctaLink: 'https://partner.bol.com/click/click?p=2&t=url&s=1491898&f=TXL&url=https%3A%2F%2Fwww.bol.com%2Fnl%2Fnl%2F&name=De%20winkel%20van%20ons%20allemaal&subid=Algemeen-AI-Hulp',
-    pros: ['Enorm assortiment', 'Makkelijk retourneren', 'Select voordeel'],
+    ctaText: 'Bekijk dagaanbiedingen bij bol',
+    pros: ['Grootste assortiment van NL', '30 dagen bedenktijd', 'Gratis verzending met Select'],
   },
   {
     id: 'coolblue',
@@ -23,13 +24,14 @@ export const SHOPS: ShopData[] = [
     logoText: 'Coolblue',
     logoBg: 'bg-[#0090E3]', // De echte Coolblue blauw
     buttonColor: 'bg-orange-500 hover:bg-orange-600 text-white',
-    offerings: 'Specialisatie in Elektronica & Witgoed',
+    offerings: 'Expert in Elektronica & Witgoed',
     serviceScore: 5,
-    delivery: 'VandaagNog®, eigen bezorgdienst',
-    usp: 'Alles voor een glimlach (Top Service)',
+    delivery: 'VandaagNog® & eigen installatie',
+    usp: 'Beste service & advies (Winnaar)',
     // Standaard link
     ctaLink: 'https://www.awin1.com/cread.php?awinmid=85161&awinaffid=2694054&ued=https%3A%2F%2Fwww.coolblue.nl%2F', 
-    pros: ['Beste klantenservice', 'Eigen installatiedienst', 'Fysieke winkels'],
+    ctaText: 'Check voorraad bij Coolblue',
+    pros: ['Gratis installatie witgoed', 'Vandaag besteld, morgen in huis', 'Fysieke winkels voor advies'],
   },
   {
     id: 'amazon',
@@ -38,13 +40,14 @@ export const SHOPS: ShopData[] = [
     logoText: 'amazon',
     logoBg: 'bg-[#232F3E]', // Amazon Dark Blue
     buttonColor: 'bg-[#FF9900] hover:bg-[#FFAD33] text-slate-900', // Amazon Yellow
-    offerings: 'Wereldwijd gigantisch aanbod',
+    offerings: 'Gigantisch aanbod & Gadgets',
     serviceScore: 4,
     delivery: 'Prime: Snelle, gratis levering',
-    usp: 'Scherpe prijzen & Prime Video',
+    usp: 'Vaak de allerlaagste prijs',
     // Affiliate link voor Amazon
     ctaLink: 'https://amzn.to/4oOzyrm',
-    pros: ['Vaak de goedkoopste', 'Prime voordelen', 'Internationaal aanbod'],
+    ctaText: 'Pak laagste prijs bij Amazon',
+    pros: ['Scherpste prijzen (Prijsvechter)', 'Gratis bezorging met Prime', 'Internationaal aanbod'],
   },
 ];
 
