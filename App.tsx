@@ -8,6 +8,8 @@ import { FaqSection } from './components/FaqSection';
 import { BlogSection } from './components/BlogSection';
 import { ProductShowcase } from './components/ProductShowcase';
 import { NicheGuides } from './components/NicheGuides';
+import { NicheDetail } from './components/NicheDetail'; // New Component
+import { NicheCategory } from './data/niches'; // Data Type
 import { TermsModal } from './components/TermsModal';
 import { PrivacyModal } from './components/PrivacyModal';
 import { AboutModal } from './components/AboutModal';
@@ -15,6 +17,8 @@ import { FloatingAiButton } from './components/FloatingAiButton';
 import { ShoppingBag, ArrowDown, Menu, X } from 'lucide-react';
 
 const App: React.FC = () => {
+  const [activeNiche, setActiveNiche] = useState<NicheCategory | null>(null);
+  
   const [isTermsOpen, setIsTermsOpen] = useState(false);
   const [isPrivacyOpen, setIsPrivacyOpen] = useState(false);
   const [isAboutOpen, setIsAboutOpen] = useState(false);
@@ -24,22 +28,38 @@ const App: React.FC = () => {
   // Logic to show floating button only after scrolling past the main AI section
   useEffect(() => {
     const handleScroll = () => {
-      const aiSection = document.getElementById('advies');
-      if (aiSection) {
-        // Show button if we scroll down a bit (> 600px) so it's always available
-        setShowFloatingButton(window.scrollY > 600);
+      // Only active on homepage when not in niche view
+      if (!activeNiche) {
+        const aiSection = document.getElementById('advies');
+        if (aiSection) {
+            setShowFloatingButton(window.scrollY > 600);
+        }
+      } else {
+          setShowFloatingButton(false);
       }
     };
 
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
+  }, [activeNiche]);
 
   const scrollToSection = (id: string) => {
-    setIsMobileMenuOpen(false); // Sluit mobiel menu na klik
+    // If we are on a niche page, go back to home first
+    if (activeNiche) {
+        setActiveNiche(null);
+        // Wait for render cycle to finish, then scroll
+        setTimeout(() => {
+            scrollToId(id);
+        }, 100);
+    } else {
+        scrollToId(id);
+    }
+    setIsMobileMenuOpen(false);
+  };
+
+  const scrollToId = (id: string) => {
     const element = document.getElementById(id);
     if (element) {
-      // Offset voor de fixed header (ongeveer 80px)
       const headerOffset = 80;
       const elementPosition = element.getBoundingClientRect().top;
       const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
@@ -51,9 +71,39 @@ const App: React.FC = () => {
     }
   };
 
+  const handleNicheSelect = (niche: NicheCategory) => {
+      setActiveNiche(niche);
+      window.scrollTo({ top: 0, behavior: 'instant' });
+  };
+
+  const handleBackToHome = () => {
+      setActiveNiche(null);
+      // Scroll back to niche section after rendering home
+      setTimeout(() => {
+          scrollToId('niches');
+      }, 100);
+  };
+
+  // RENDER NICHE DETAIL PAGE IF ACTIVE
+  if (activeNiche) {
+      return (
+          <>
+            <NicheDetail guide={activeNiche} onBack={handleBackToHome} />
+            <footer className="bg-slate-950 text-slate-400 pt-16 pb-8 border-t border-slate-900">
+                <div className="max-w-7xl mx-auto px-4 text-center">
+                    <p className="text-xs text-slate-600">
+                        © {new Date().getFullYear()} Kiesjeshop.nl Alle rechten voorbehouden.
+                    </p>
+                </div>
+            </footer>
+          </>
+      );
+  }
+
+  // RENDER HOMEPAGE
   const navLinks = [
     { name: 'Vergelijker', id: 'shop-grid' },
-    { name: 'AI Advies', id: 'advies' }, // Naar boven verplaatst in menu
+    { name: 'AI Advies', id: 'advies' }, 
     { name: 'Deals', id: 'deals' },
     { name: 'Niches', id: 'niches' },
     { name: 'Koopgidsen', id: 'koopgidsen' },
@@ -226,9 +276,9 @@ const App: React.FC = () => {
              <ComparisonTable />
         </section>
 
-        {/* 5. Niche Guides */}
+        {/* 5. Niche Guides - NOW WITH SELECTION HANDLER */}
         <section id="niches" className="scroll-mt-28">
-          <NicheGuides />
+          <NicheGuides onSelectGuide={handleNicheSelect} />
         </section>
 
         {/* 6. Blog / Content Section */}
