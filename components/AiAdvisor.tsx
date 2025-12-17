@@ -1,13 +1,24 @@
 import React, { useState } from 'react';
 import { GoogleGenAI } from '@google/genai';
-import { Sparkles, Send, Loader2, Info, AlertTriangle, Cpu, ExternalLink } from 'lucide-react';
+import { Sparkles, Send, Loader2, Info, AlertTriangle, Cpu, ExternalLink, Search } from 'lucide-react';
 import { SHOPS } from '../constants';
 
 export const AiAdvisor: React.FC = () => {
   const [query, setQuery] = useState('');
   const [advice, setAdvice] = useState<string | null>(null);
+  const [searchLinks, setSearchLinks] = useState<{shopId: string, query: string}[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+
+  const getSearchLink = (type: string, query: string) => {
+    const encoded = encodeURIComponent(query);
+    switch (type.toLowerCase()) {
+      case 'bol': return `https://partner.bol.com/click/click?p=2&t=url&s=1491898&f=TXL&url=https%3A%2F%2Fwww.bol.com%2Fnl%2Fnl%2Fs%2F${encoded}%2F&name=${encoded}`;
+      case 'coolblue': return `https://www.coolblue.nl/zoeken?query=${encoded}`;
+      case 'amazon': return `https://www.amazon.nl/s?k=${encoded}&tag=kiesjeshop-21`;
+      default: return '#';
+    }
+  };
 
   const handleAskAi = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -16,6 +27,7 @@ export const AiAdvisor: React.FC = () => {
     setLoading(true);
     setError(null);
     setAdvice(null);
+    setSearchLinks([]);
 
     try {
       const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
@@ -24,14 +36,20 @@ export const AiAdvisor: React.FC = () => {
         Jij bent de shopping expert van Kiesjeshop.nl.
         Een bezoeker stelt de volgende vraag: "${query}"
         
-        Geef een zeer concreet advies welke webshop (bol, Coolblue, of Amazon) het beste past bij deze specifieke vraag.
+        STAP 1: Geef een kort, krachtig advies (max 2 zinnen) over welke shop (bol, Coolblue of Amazon) het beste past.
+        
+        STAP 2: Identificeer het specifieke product of de categorie waar de gebruiker naar zoekt.
+        
+        STAP 3: Eindig je antwoord ALTIJD met een nieuwe regel in dit exacte formaat:
+        SEARCH_ACTION: [ShopNaam]|[Zoekterm]
+        
+        Voorbeeld: "SEARCH_ACTION: bol|draadloze oortjes" of "SEARCH_ACTION: Coolblue|wasmachine"
         
         Richtlijnen:
-        - Als het gaat om service, installatie of witgoed: Adviseer Coolblue.
-        - Als het gaat om prijs, kabels, of internationale gadgets: Adviseer Amazon.
-        - Als het gaat om boeken, algemeen assortiment of snelle verzending zonder gedoe: Adviseer bol.
-        - Antwoord in maximaal 3 zinnen.
-        - Gebruik de namen 'bol', 'Coolblue' of 'Amazon' exact zo, zodat ik er automatisch linkjes van kan maken.
+        - Coolblue: Voor service, installatie, witgoed, high-end elektronica.
+        - Amazon: Voor de laagste prijs, kabels, gadgets, internationaal aanbod.
+        - bol: Voor boeken, speelgoed, breed assortiment, snelle Select-levering.
+        - Gebruik NOOIT bol.com, maar altijd 'bol'.
       `;
 
       const response = await ai.models.generateContent({
@@ -39,44 +57,39 @@ export const AiAdvisor: React.FC = () => {
         contents: { parts: [{ text: promptText }] }, 
       });
       
-      if (response.text) {
-        setAdvice(response.text);
-      } else {
-        throw new Error("Geen antwoord ontvangen van de assistent.");
+      const fullText = response.text || "";
+      
+      // Parse de SEARCH_ACTION
+      const actionMatch = fullText.match(/SEARCH_ACTION:\s*(bol|coolblue|amazon)\s*\|\s*(.*)/i);
+      let cleanAdvice = fullText;
+      let links: {shopId: string, query: string}[] = [];
+
+      if (actionMatch) {
+        cleanAdvice = fullText.replace(/SEARCH_ACTION: .*/i, '').trim();
+        links.push({
+          shopId: actionMatch[1].toLowerCase(),
+          query: actionMatch[2].trim()
+        });
       }
+
+      setAdvice(cleanAdvice);
+      setSearchLinks(links);
 
     } catch (err: any) {
       console.error("AI Error:", err);
-      let msg = "Er ging iets mis. Probeer het later opnieuw.";
-      const errorString = String(err);
-      
-      if (err.message && (err.message.includes("API Key") || err.message.includes("403"))) {
-         msg = "Configuratiefout: API Key ongeldig of ontbreekt.";
-      } else if (errorString.includes("404")) {
-         msg = "Service niet beschikbaar (404).";
-      } else if (errorString.includes("429")) {
-         msg = "Te druk. Probeer het morgen weer.";
-      }
-      
-      setError(msg);
+      setError("Er ging iets mis bij het ophalen van het advies. Probeer het opnieuw.");
     } finally {
       setLoading(false);
     }
   };
 
-  // Functie om tekst om te zetten naar klikbare links
   const renderAdviceWithLinks = (text: string) => {
-    // Regex zoekt naar Bol(.com), Coolblue, Amazon(.nl) - hoofdletterongevoelig
-    const regex = /(bol(?:\.com)?|Coolblue|Amazon(?:\.nl)?)/gi;
+    const regex = /(bol|Coolblue|Amazon)/gi;
     const parts = text.split(regex);
 
     return parts.map((part, index) => {
       const lowerPart = part.toLowerCase();
-      let shop = null;
-
-      if (lowerPart.includes('bol')) shop = SHOPS.find(s => s.id === 'bol');
-      else if (lowerPart.includes('cool')) shop = SHOPS.find(s => s.id === 'coolblue');
-      else if (lowerPart.includes('amazon')) shop = SHOPS.find(s => s.id === 'amazon');
+      const shop = SHOPS.find(s => s.id === (lowerPart === 'bol' ? 'bol' : lowerPart === 'coolblue' ? 'coolblue' : 'amazon'));
 
       if (shop) {
         return (
@@ -85,11 +98,9 @@ export const AiAdvisor: React.FC = () => {
             href={shop.ctaLink}
             target="_blank"
             rel="nofollow noopener noreferrer"
-            className={`font-bold hover:underline underline-offset-2 inline-flex items-center gap-0.5 ${shop.color}`}
-            title={`Ga direct naar ${shop.name}`}
+            className={`font-bold hover:underline underline-offset-2 ${shop.color}`}
           >
             {part}
-            <ExternalLink className="w-3 h-3 opacity-50" />
           </a>
         );
       }
@@ -108,14 +119,14 @@ export const AiAdvisor: React.FC = () => {
         </div>
         
         <h2 className="text-2xl md:text-3xl font-bold mb-4">Keuzestress? Krijg direct antwoord.</h2>
-        <p className="text-indigo-200 mb-8">Type wat je zoekt (bijv. "goedkope 4k tv" of "wasmachine installeren") en wij vertellen binnen 3 seconden waar je moet zijn.</p>
+        <p className="text-indigo-200 mb-8">Type wat je zoekt en wij vertellen binnen 3 seconden waar je de beste deal scoort.</p>
 
         <form onSubmit={handleAskAi} className="relative max-w-lg mx-auto">
           <input 
             type="text" 
             value={query}
             onChange={(e) => setQuery(e.target.value)}
-            placeholder="Bijv: Ik zoek een goedkope laptop voor school..." 
+            placeholder="Bijv: Ik zoek een goede laptop voor werk..." 
             className="w-full pl-6 pr-14 py-4 rounded-full bg-white/10 border border-white/20 text-white placeholder-indigo-300 focus:outline-none focus:ring-2 focus:ring-indigo-400 focus:bg-white/20 backdrop-blur-sm transition-all"
           />
           <button 
@@ -127,13 +138,13 @@ export const AiAdvisor: React.FC = () => {
           </button>
         </form>
 
-        <div className="mt-3 flex items-center justify-center gap-1.5 opacity-50 hover:opacity-80 transition-opacity">
+        <div className="mt-3 flex items-center justify-center gap-1.5 opacity-50">
             <Cpu className="w-3 h-3" />
             <span className="text-[10px] uppercase tracking-widest font-semibold">Powered by Google Gemini</span>
         </div>
 
         {error && (
-            <div className="mt-4 flex items-center justify-center gap-2 text-sm text-red-200 bg-red-900/50 py-2 px-4 rounded-lg animate-in fade-in border border-red-500/30">
+            <div className="mt-4 flex items-center justify-center gap-2 text-sm text-red-200 bg-red-900/50 py-2 px-4 rounded-lg border border-red-500/30">
                 <AlertTriangle className="w-4 h-4" />
                 <span>{error}</span>
             </div>
@@ -144,10 +155,35 @@ export const AiAdvisor: React.FC = () => {
              <div className="flex items-start gap-3">
                 <Info className="w-6 h-6 text-indigo-300 shrink-0 mt-1" />
                 <div className="w-full">
-                    <h3 className="font-bold text-lg mb-2 text-white">Advies op maat:</h3>
-                    <p className="text-indigo-50 leading-relaxed text-lg">
+                    <h3 className="font-bold text-lg mb-2 text-white">Ons advies:</h3>
+                    <p className="text-indigo-50 leading-relaxed text-lg mb-6">
                       {renderAdviceWithLinks(advice)}
                     </p>
+
+                    {searchLinks.length > 0 && (
+                      <div className="pt-4 border-t border-white/10">
+                        <p className="text-xs font-bold text-indigo-300 uppercase tracking-wider mb-3">Direct naar de resultaten:</p>
+                        <div className="flex flex-wrap gap-3">
+                          {searchLinks.map((link, i) => {
+                            const shop = SHOPS.find(s => s.id === link.shopId);
+                            if (!shop) return null;
+                            return (
+                              <a
+                                key={i}
+                                href={getSearchLink(link.shopId, link.query)}
+                                target="_blank"
+                                rel="nofollow noopener noreferrer"
+                                className={`flex items-center gap-2 px-5 py-3 rounded-xl font-bold transition-all active:scale-95 shadow-md hover:shadow-lg ${shop.buttonColor}`}
+                              >
+                                <Search className="w-4 h-4" />
+                                Zoek '{link.query}' bij {shop.name}
+                                <ExternalLink className="w-4 h-4 opacity-50" />
+                              </a>
+                            );
+                          })}
+                        </div>
+                      </div>
+                    )}
                 </div>
              </div>
           </div>
