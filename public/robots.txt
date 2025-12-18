@@ -1,0 +1,5 @@
+User-agent: *
+Allow: /
+
+# Sitemap locatie (indien je deze later genereert)
+# Sitemap: https://www.kiesjeshop.nl/sitemap.xml
