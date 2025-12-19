@@ -24,6 +24,15 @@ export const NicheDetail: React.FC<NicheDetailProps> = ({ guide, onBack }) => {
     }
   };
 
+  const getGuideCtaText = (shopId: string) => {
+    switch (shopId) {
+      case 'bol': return 'Bestel de winnaar bij bol';
+      case 'amazon': return "Bekijk Amazon's beste deal";
+      case 'coolblue': return 'Koop met de beste service';
+      default: return 'Bekijk prijs';
+    }
+  };
+
   return (
     <div className="min-h-screen bg-white">
       {/* Sticky Header */}
@@ -115,30 +124,30 @@ export const NicheDetail: React.FC<NicheDetailProps> = ({ guide, onBack }) => {
                             <h3 className="text-sm font-bold text-slate-400 uppercase tracking-wider mb-4 flex items-center gap-2">
                                 <ShoppingBag className="w-4 h-4" /> Check actuele voorraad & prijs
                             </h3>
-                            <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                            <div className="grid grid-cols-1 gap-3">
                                 <a 
                                     href={getSearchLink('bol', product.searchQuery)}
                                     target="_blank"
                                     rel="nofollow noopener noreferrer"
-                                    className="flex items-center justify-center gap-2 px-4 py-3 rounded-xl bg-[#F5F9FF] text-blue-700 font-bold border border-blue-100 hover:bg-blue-600 hover:text-white hover:border-blue-600 transition-all active:scale-95"
+                                    className="flex items-center justify-between px-6 py-4 rounded-xl bg-[#F5F9FF] text-blue-700 font-bold border border-blue-100 hover:bg-blue-600 hover:text-white hover:border-blue-600 transition-all active:scale-95 shadow-sm"
                                 >
-                                    bol <ExternalLink className="w-4 h-4 opacity-70" />
-                                </a>
-                                <a 
-                                    href={getSearchLink('coolblue', product.searchQuery)}
-                                    target="_blank"
-                                    rel="nofollow noopener noreferrer"
-                                    className="flex items-center justify-center gap-2 px-4 py-3 rounded-xl bg-[#FFF9F5] text-orange-600 font-bold border border-orange-100 hover:bg-orange-500 hover:text-white hover:border-orange-500 transition-all active:scale-95"
-                                >
-                                    Coolblue <ExternalLink className="w-4 h-4 opacity-70" />
+                                    <span>{getGuideCtaText('bol')}</span> <ExternalLink className="w-5 h-5 opacity-70" />
                                 </a>
                                 <a 
                                     href={getSearchLink('amazon', product.searchQuery)}
                                     target="_blank"
                                     rel="nofollow noopener noreferrer"
-                                    className="flex items-center justify-center gap-2 px-4 py-3 rounded-xl bg-[#FFFAEF] text-slate-800 font-bold border border-yellow-200 hover:bg-[#FF9900] hover:border-[#FF9900] transition-all active:scale-95"
+                                    className="flex items-center justify-between px-6 py-4 rounded-xl bg-[#FFFAEF] text-slate-800 font-bold border border-yellow-200 hover:bg-[#FF9900] hover:border-[#FF9900] transition-all active:scale-95 shadow-sm"
                                 >
-                                    Amazon <ExternalLink className="w-4 h-4 opacity-70" />
+                                    <span>{getGuideCtaText('amazon')}</span> <ExternalLink className="w-5 h-5 opacity-70" />
+                                </a>
+                                <a 
+                                    href={getSearchLink('coolblue', product.searchQuery)}
+                                    target="_blank"
+                                    rel="nofollow noopener noreferrer"
+                                    className="flex items-center justify-between px-6 py-4 rounded-xl bg-[#FFF9F5] text-orange-600 font-bold border border-orange-100 hover:bg-orange-500 hover:text-white hover:border-orange-500 transition-all active:scale-95 shadow-sm"
+                                >
+                                    <span>{getGuideCtaText('coolblue')}</span> <ExternalLink className="w-5 h-5 opacity-70" />
                                 </a>
                             </div>
                         </div>

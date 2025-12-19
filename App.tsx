@@ -14,7 +14,7 @@ import { TermsModal } from './components/TermsModal';
 import { PrivacyModal } from './components/PrivacyModal';
 import { AboutModal } from './components/AboutModal';
 import { FloatingAiButton } from './components/FloatingAiButton';
-import { ShoppingBag, ArrowDown, Menu, X } from 'lucide-react';
+import { ShoppingBag, ArrowDown, Menu, X, Sparkles } from 'lucide-react';
 
 const App: React.FC = () => {
   const [activeNiche, setActiveNiche] = useState<NicheCategory | null>(null);
@@ -24,11 +24,12 @@ const App: React.FC = () => {
   const [isAboutOpen, setIsAboutOpen] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [showFloatingButton, setShowFloatingButton] = useState(false);
+  const [showExitIntent, setShowExitIntent] = useState(false);
+  const [exitIntentVariant, setExitIntentVariant] = useState(1);
 
-  // Logic to show floating button only after scrolling past the main AI section
+  // Logic for scroll button and exit intent
   useEffect(() => {
     const handleScroll = () => {
-      // Only active on homepage when not in niche view
       if (!activeNiche) {
         const aiSection = document.getElementById('advies');
         if (aiSection) {
@@ -39,9 +40,31 @@ const App: React.FC = () => {
       }
     };
 
+    const handleMouseOut = (e: MouseEvent) => {
+      if (e.clientY < 0 && !sessionStorage.getItem('exitIntentShown')) {
+        setExitIntentVariant(Math.floor(Math.random() * 3) + 1);
+        setShowExitIntent(true);
+        sessionStorage.setItem('exitIntentShown', 'true');
+      }
+    };
+
     window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
+    document.addEventListener('mouseleave', handleMouseOut);
+    
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+      document.removeEventListener('mouseleave', handleMouseOut);
+    };
   }, [activeNiche]);
+
+  const getExitIntentText = () => {
+    switch (exitIntentVariant) {
+      case 1: return "Nog niet de perfecte match gevonden? Vraag het onze AI.";
+      case 2: return "Wacht even! Bespaar je niet liever? Laat de AI de huidige prijzen van bol en Amazon checken.";
+      case 3: return "Zeker weten dat je de juiste kiest? De redactie heeft de top 3 van 2025 net bijgewerkt.";
+      default: return "Nog niet de perfecte match gevonden? Vraag het onze AI.";
+    }
+  };
 
   const scrollToSection = (id: string) => {
     // If we are on a niche page, go back to home first
@@ -87,16 +110,16 @@ const App: React.FC = () => {
   // RENDER NICHE DETAIL PAGE IF ACTIVE
   if (activeNiche) {
       return (
-          <>
+          <div className="min-h-screen flex flex-col">
             <NicheDetail guide={activeNiche} onBack={handleBackToHome} />
-            <footer className="bg-slate-950 text-slate-400 pt-16 pb-8 border-t border-slate-900">
+            <footer className="bg-slate-950 text-slate-400 pt-16 pb-8 border-t border-slate-900 mt-auto">
                 <div className="max-w-7xl mx-auto px-4 text-center">
                     <p className="text-xs text-slate-600">
                         © {new Date().getFullYear()} Kiesjeshop.nl Alle rechten voorbehouden.
                     </p>
                 </div>
             </footer>
-          </>
+          </div>
       );
   }
 
@@ -366,6 +389,42 @@ const App: React.FC = () => {
           </div>
         </div>
       </footer>
+
+      {/* Exit Intent Popup */}
+      {showExitIntent && (
+        <div className="fixed inset-0 z-[100] flex items-center justify-center p-4">
+          <div className="absolute inset-0 bg-slate-950/80 backdrop-blur-sm" onClick={() => setShowExitIntent(false)}></div>
+          <div className="relative bg-white rounded-3xl p-8 max-w-md w-full shadow-2xl border border-indigo-100 animate-in fade-in zoom-in-95 duration-300">
+             <button 
+               onClick={() => setShowExitIntent(false)}
+               className="absolute top-4 right-4 text-slate-400 hover:text-slate-600 p-2"
+             >
+               <X className="w-5 h-5" />
+             </button>
+             <div className="bg-indigo-50 w-16 h-16 rounded-full flex items-center justify-center mb-6 mx-auto">
+               <Sparkles className="w-8 h-8 text-indigo-600" />
+             </div>
+             <h3 className="text-2xl font-bold text-slate-900 text-center mb-4">Wacht even!</h3>
+             <p className="text-slate-600 text-center mb-8 leading-relaxed font-medium">
+               {getExitIntentText()}
+             </p>
+             <div className="flex flex-col gap-3">
+                <button 
+                  onClick={() => { setShowExitIntent(false); scrollToSection('advies'); }}
+                  className="w-full py-4 bg-indigo-600 text-white font-bold rounded-2xl hover:bg-indigo-700 transition-all shadow-lg shadow-indigo-200"
+                >
+                  Ja, help mij kiezen
+                </button>
+                <button 
+                  onClick={() => setShowExitIntent(false)}
+                  className="w-full py-4 bg-slate-100 text-slate-600 font-bold rounded-2xl hover:bg-slate-200 transition-all"
+                >
+                  Nee, ik kijk zelf verder
+                </button>
+             </div>
+          </div>
+        </div>
+      )}
 
       <TermsModal isOpen={isTermsOpen} onClose={() => setIsTermsOpen(false)} />
       <PrivacyModal isOpen={isPrivacyOpen} onClose={() => setIsPrivacyOpen(false)} />

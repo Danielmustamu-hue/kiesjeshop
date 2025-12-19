@@ -7,6 +7,15 @@ export const ProductShowcase: React.FC = () => {
   
   const getShopDetails = (id: string) => SHOPS.find(s => s.id === id);
 
+  const getCtaText = (shopId: string) => {
+    switch (shopId) {
+      case 'amazon': return 'Pak de laagste prijs';
+      case 'bol': return 'Bekijk dagaanbieding';
+      case 'coolblue': return 'Check huidige voorraad';
+      default: return 'Bekijk prijs';
+    }
+  };
+
   const getButtonStyle = (shopId: string) => {
     switch (shopId) {
         case 'bol':
@@ -99,7 +108,7 @@ export const ProductShowcase: React.FC = () => {
                            rel="nofollow noopener noreferrer"
                            className={`px-4 py-2 rounded-lg text-xs font-bold flex items-center gap-1.5 border transition-all active:scale-95 shadow-sm ${getButtonStyle(offer.shopId)}`}
                         >
-                            Bekijk prijs <ArrowRight className="w-3 h-3" />
+                            {getCtaText(offer.shopId)} <ArrowRight className="w-3 h-3" />
                         </a>
                       </div>
                     </div>

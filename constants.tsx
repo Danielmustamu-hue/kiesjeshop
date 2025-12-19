@@ -12,9 +12,9 @@ export const SHOPS: ShopData[] = [
     serviceScore: 4.5,
     delivery: 'Select: Vaak morgen of zondag in huis',
     usp: 'Vertrouwd Nederlands & makkelijk retour',
-    // Affiliate link voor Bol.com
+    // Affiliate link voor bol
     ctaLink: 'https://partner.bol.com/click/click?p=2&t=url&s=1491898&f=TXL&url=https%3A%2F%2Fwww.bol.com%2Fnl%2Fnl%2F&name=De%20winkel%20van%20ons%20allemaal&subid=Algemeen-AI-Hulp',
-    ctaText: 'Bekijk dagaanbiedingen bij bol',
+    ctaText: 'Bekijk dagaanbieding',
     pros: ['Grootste assortiment van NL', '30 dagen bedenktijd', 'Gratis verzending met Select'],
   },
   {
@@ -30,7 +30,7 @@ export const SHOPS: ShopData[] = [
     usp: 'Beste service & advies (Winnaar)',
     // Standaard link
     ctaLink: 'https://www.awin1.com/cread.php?awinmid=85161&awinaffid=2694054&ued=https%3A%2F%2Fwww.coolblue.nl%2F', 
-    ctaText: 'Check voorraad bij Coolblue',
+    ctaText: 'Check huidige voorraad',
     pros: ['Gratis installatie witgoed', 'Vandaag besteld, morgen in huis', 'Fysieke winkels voor advies'],
   },
   {
@@ -46,7 +46,7 @@ export const SHOPS: ShopData[] = [
     usp: 'Vaak de allerlaagste prijs',
     // Affiliate link voor Amazon
     ctaLink: 'https://amzn.to/4oOzyrm',
-    ctaText: 'Pak laagste prijs bij Amazon',
+    ctaText: 'Pak de laagste prijs',
     pros: ['Scherpste prijzen (Prijsvechter)', 'Gratis bezorging met Prime', 'Internationaal aanbod'],
   },
 ];

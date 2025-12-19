@@ -34,12 +34,13 @@ export const AiAdvisor: React.FC = () => {
       
       const promptText = `
         Jij bent de shopping expert van Kiesjeshop.nl. Je geeft "insider tips" die eerlijk, onafhankelijk en direct zijn.
+        Stuur antwoorden altijd terug als pure tekst (string).
         Een bezoeker stelt de volgende vraag: "${query}"
         
         DOEL: Help de gebruiker direct beslissen tussen de drie grootste winkels: bol, Coolblue en Amazon.
         
-        STAP 1: Geef een kort, krachtig advies (max 2-3 zinnen). Noem expliciet een specifiek voordeel van minimaal twee verschillende winkels voor dit product.
-        Voorbeeld van de gewenste toon: "Ik heb de [Productnaam] gevonden. Bij bol is hij vaak het snelst leverbaar (vaak morgen al), maar Amazon is voor dit specifieke merk meestal de prijsvechter waar je een paar euro bespaart. Wat heeft je voorkeur?"
+        STAP 1: Geef een kort, krachtig advies (max 2-3 zinnen). Noem expliciet een specifiek voordeel van minimaal twee verschillende winkels voor dit product of de service.
+        Hanteer een behulpzame, deskundige toon (de 'expert-vriend').
         
         STAP 2: Gebruik ALTIJD de naam 'bol', NOOIT 'bol.com'.
         
@@ -55,8 +56,8 @@ export const AiAdvisor: React.FC = () => {
       `;
 
       const response = await ai.models.generateContent({
-        model: 'gemini-2.5-flash',
-        contents: { parts: [{ text: promptText }] }, 
+        model: 'gemini-3-flash-preview',
+        contents: [{ parts: [{ text: promptText }] }], 
       });
       
       const fullText = response.text || "";
@@ -142,7 +143,7 @@ export const AiAdvisor: React.FC = () => {
 
         <div className="mt-4 flex items-center justify-center gap-1.5 opacity-40">
             <Cpu className="w-3 h-3" />
-            <span className="text-[10px] uppercase tracking-widest font-semibold">Gemini 2.5 Real-time Analysis</span>
+            <span className="text-[10px] uppercase tracking-widest font-semibold">Gemini 3 Flash Real-time Analysis</span>
         </div>
 
         {error && (
