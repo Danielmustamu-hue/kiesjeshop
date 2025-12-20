@@ -212,6 +212,7 @@ const App: React.FC = () => {
                   <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold text-slate-900 tracking-tight mb-6 leading-tight">
                     Betaal nooit meer te veel bij <span className="text-indigo-600">bol, Coolblue of Amazon</span>.
                   </h1>
+                  <h2 className="sr-only">Kiesjeshop.nl - Jouw shopping expert</h2>
                   <p className="text-lg sm:text-xl text-slate-600 mb-8 leading-relaxed max-w-lg mx-auto md:mx-0">
                     Stop met twijfelen. Wij vergelijken direct prijs, levertijd en service zodat jij binnen 1 minuut de beste deal sluit.
                   </p>
@@ -307,6 +308,7 @@ const App: React.FC = () => {
                     <li><button onClick={() => setIsAboutOpen(true)} className="hover:text-indigo-400 transition-colors">Over ons</button></li>
                     <li><button onClick={() => setIsTermsOpen(true)} className="hover:text-indigo-400 transition-colors">Voorwaarden</button></li>
                     <li><button onClick={() => setIsPrivacyOpen(true)} className="hover:text-indigo-400 transition-colors">Privacy & Cookies</button></li>
+                    <li><a href="mailto:info@kiesjeshop.nl" className="hover:text-indigo-400 transition-colors">Contact: info@kiesjeshop.nl</a></li>
                 </ul>
             </div>
             <div className="flex flex-col items-center md:items-start text-center md:text-left">
