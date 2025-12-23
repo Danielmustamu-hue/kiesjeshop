@@ -1,16 +1,22 @@
+
 <!DOCTYPE html>
 <html lang="nl">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="theme-color" content="#FFF3E0" />
-    <meta name="description" content="Vergelijk bol, Coolblue en Amazon.nl. Kies de beste webshop op basis van prijs, service en levertijd." />
+    <title>Kiesjeshop.nl | De Grote 3 Vergelijker: bol, Amazon & Coolblue</title>
+    <meta name="description" content="Vergelijk direct prijzen, service en levertijd van bol, Coolblue en Amazon.nl. Bespaar op elektronica, wonen en meer met onafhankelijk advies." />
     
-    <!-- SEO & Indexing Fix -->
-    <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
+    <!-- SEO & Indexing -->
+    <meta name="robots" content="index, follow, max-image-preview:large" />
     <link rel="canonical" href="https://www.kiesjeshop.nl/" />
+    <meta property="og:title" content="Kiesjeshop.nl - Slimmer Shoppen" />
+    <meta property="og:description" content="Wie wint vandaag op prijs en service? Check bol, Amazon en Coolblue." />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://www.kiesjeshop.nl/" />
 
-    <!-- Favicon settings voor Google Search -->
+    <!-- Favicon -->
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="apple-touch-icon" href="/favicon.svg" />
 
@@ -28,34 +34,24 @@
     }
     </script>
     
-    <!-- Google tag (gtag.js) -->
+    <!-- Google Tag Manager -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-L2T8T5EJ5C"></script>
     <script>
       window.dataLayer = window.dataLayer || [];
       function gtag(){dataLayer.push(arguments);}
       gtag('js', new Date());
-
-      gtag('config', 'G-L2T8T5EJ5C');
+      gtag('config', 'G-L2T8T5EJ5C', { 'anonymize_ip': true });
     </script>
 
-    <!-- Cookiebot CMP -->
-    <script id="Cookiebot" src="https://consent.cookiebot.com/uc.js" data-cbid="86e185d1-c3fe-4c1f-bb5d-8db1ba0a68dd" data-blockingmode="auto" type="text/javascript"></script>
-
-    <!-- Anti-Cache Meta Tags -->
-    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
-    <meta http-equiv="Pragma" content="no-cache" />
-    <meta http-equiv="Expires" content="0" />
-
-    <!-- Tailwind CSS CDN (Safety fallback) -->
+    <!-- Tailwind Config -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
       tailwind.config = {
         theme: {
           extend: {
             colors: {
-              slate: { 50: '#f8fafc', 100: '#f1f5f9', 200: '#e2e8f0', 300: '#cbd5e1', 400: '#94a3b8', 500: '#64748b', 600: '#475569', 700: '#334155', 800: '#1e293b', 900: '#0f172a', 950: '#020617' },
-              indigo: { 50: '#eef2ff', 100: '#e0e7ff', 200: '#c7d2fe', 300: '#a5b4fc', 400: '#818cf8', 500: '#6366f1', 600: '#4f46e5', 700: '#4338ca', 800: '#3730a3', 900: '#312e81', 950: '#1e1b4b' },
               orange: { 50: '#fff7ed', 100: '#ffedd5', 200: '#fed7aa', 300: '#fdba74', 400: '#fb923c', 500: '#f97316', 600: '#ea580c', 700: '#c2410c', 800: '#9a3412', 900: '#7c2d12', 950: '#431407' },
+              slate: { 50: '#f8fafc', 100: '#f1f5f9', 200: '#e2e8f0', 300: '#cbd5e1', 400: '#94a3b8', 500: '#64748b', 600: '#475569', 700: '#334155', 800: '#1e293b', 900: '#0f172a', 950: '#020617' }
             }
           }
         }
@@ -63,14 +59,17 @@
     </script>
     
     <style>
+      @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;900&display=swap');
       body {
         margin: 0;
-        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-          'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-          sans-serif;
+        font-family: 'Inter', sans-serif;
         -webkit-font-smoothing: antialiased;
-        -moz-osx-font-smoothing: grayscale;
         background-color: #FFF3E0;
+      }
+      .text-gradient {
+        background: linear-gradient(to right, #f97316, #ea580c);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
       }
     </style>
   </head>
