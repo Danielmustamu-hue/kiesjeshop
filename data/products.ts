@@ -1,3 +1,4 @@
+
 import { ShopData } from '../types';
 
 export interface ProductOffer {
@@ -37,7 +38,7 @@ export const PRODUCTS: ProductComparison[] = [
       {
         shopId: 'coolblue',
         deliveryText: 'Morgen in huis + Gratis retour',
-        link: 'https://www.coolblue.nl/zoeken?query=Sony+WH-1000XM5'
+        link: 'https://www.awin1.com/cread.php?awinmid=85161&awinaffid=2694054&ued=https%3A%2F%2Fwww.coolblue.nl%2Fzoeken%3Fquery%3DSony%2BWH-1000XM5'
       }
     ]
   },
@@ -62,7 +63,7 @@ export const PRODUCTS: ProductComparison[] = [
       {
         shopId: 'coolblue',
         deliveryText: 'VandaagNog® mogelijk',
-        link: 'https://www.coolblue.nl/zoeken?query=Philips+Airfryer+XXL'
+        link: 'https://www.awin1.com/cread.php?awinmid=85161&awinaffid=2694054&ued=https%3A%2F%2Fwww.coolblue.nl%2Fzoeken%3Fquery%3DPhilips%2BAirfryer%2BXXL'
       }
     ]
   },
@@ -87,7 +88,7 @@ export const PRODUCTS: ProductComparison[] = [
       {
         shopId: 'coolblue',
         deliveryText: 'Morgen in huis',
-        link: 'https://www.coolblue.nl/zoeken?query=Dyson+V15+Detect'
+        link: 'https://www.awin1.com/cread.php?awinmid=85161&awinaffid=2694054&ued=https%3A%2F%2Fwww.coolblue.nl%2Fzoeken%3Fquery%3DDyson%2BV15%2BDetect'
       }
     ]
   }

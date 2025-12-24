@@ -14,7 +14,7 @@ export const AiAdvisor: React.FC = () => {
     const encoded = encodeURIComponent(query);
     switch (type.toLowerCase()) {
       case 'bol': return `https://partner.bol.com/click/click?p=2&t=url&s=1491898&f=TXL&url=https%3A%2F%2Fwww.bol.com%2Fnl%2Fnl%2Fs%2F${encoded}%2F&name=${encoded}`;
-      case 'coolblue': return `https://www.coolblue.nl/zoeken?query=${encoded}`;
+      case 'coolblue': return `https://www.awin1.com/cread.php?awinmid=85161&awinaffid=2694054&ued=https%3A%2F%2Fwww.coolblue.nl%2Fzoeken%3Fquery%3D${encoded}`;
       case 'amazon': return `https://www.amazon.nl/s?k=${encoded}&tag=kiesjeshop-21`;
       default: return '#';
     }
@@ -47,8 +47,6 @@ export const AiAdvisor: React.FC = () => {
         STAP 3: Eindig je antwoord ALTIJD met een nieuwe regel in dit exacte formaat (voor de zoekknop):
         SEARCH_ACTION: [ShopNaam]|[Zoekterm]
         
-        Voorbeeld: "SEARCH_ACTION: bol|draadloze oortjes" of "SEARCH_ACTION: Coolblue|wasmachine"
-        
         Algemene Shop Kennis:
         - Coolblue: Beste voor elektronica service, installatie van witgoed en deskundig advies.
         - Amazon: Meestal de laagste prijs, groot internationaal aanbod, Prime voordelen.
@@ -61,14 +59,13 @@ export const AiAdvisor: React.FC = () => {
       });
       
       const fullText = response.text || "";
-      
-      // Parse de SEARCH_ACTION
       const actionMatch = fullText.match(/SEARCH_ACTION:\s*(bol|coolblue|amazon)\s*\|\s*(.*)/i);
+      
       let cleanAdvice = fullText;
       let links: {shopId: string, query: string}[] = [];
 
       if (actionMatch) {
-        cleanAdvice = fullText.replace(/SEARCH_ACTION: .*/i, '').trim();
+        cleanAdvice = fullText.split('SEARCH_ACTION:')[0].trim();
         links.push({
           shopId: actionMatch[1].toLowerCase(),
           query: actionMatch[2].trim()
@@ -86,18 +83,25 @@ export const AiAdvisor: React.FC = () => {
     }
   };
 
-  const renderAdviceWithLinks = (text: string) => {
+  const renderAdviceWithLinks = (text: string | null) => {
+    if (!text) return null;
     const regex = /(bol|Coolblue|Amazon)/gi;
     const parts = text.split(regex);
 
     return parts.map((part, index) => {
       const lowerPart = part.toLowerCase();
-      const shop = SHOPS.find(s => s.id === (lowerPart === 'bol' ? 'bol' : lowerPart === 'coolblue' ? 'coolblue' : 'amazon'));
+      let shopId: 'bol' | 'coolblue' | 'amazon' | null = null;
+      
+      if (lowerPart === 'bol') shopId = 'bol';
+      else if (lowerPart === 'coolblue') shopId = 'coolblue';
+      else if (lowerPart === 'amazon') shopId = 'amazon';
+
+      const shop = shopId ? SHOPS.find(s => s.id === shopId) : null;
 
       if (shop) {
         return (
           <a 
-            key={index}
+            key={`${shopId}-${index}`}
             href={shop.ctaLink}
             target="_blank"
             rel="nofollow noopener noreferrer"
@@ -107,7 +111,7 @@ export const AiAdvisor: React.FC = () => {
           </a>
         );
       }
-      return <span key={index}>{part}</span>;
+      return <span key={`text-${index}`}>{part}</span>;
     });
   };
 
@@ -135,7 +139,7 @@ export const AiAdvisor: React.FC = () => {
           <button 
             type="submit" 
             disabled={loading || !query.trim()}
-            className="absolute right-2 top-2 p-2 bg-white text-indigo-900 rounded-full hover:bg-indigo-50 disabled:opacity-50 disabled:cursor-not-allowed transition-all active:scale-90"
+            className="absolute right-2 top-2 p-2 bg-white text-indigo-900 rounded-full hover:bg-indigo-50 disabled:opacity-50 disabled:cursor-not-allowed transition-all active:scale-90 flex items-center justify-center w-10 h-10"
           >
             {loading ? <Loader2 className="w-5 h-5 animate-spin" /> : <Send className="w-5 h-5" />}
           </button>
@@ -161,9 +165,9 @@ export const AiAdvisor: React.FC = () => {
                 </div>
                 <div className="w-full">
                     <h3 className="font-bold text-lg mb-2 text-white">Mijn insider-tip:</h3>
-                    <p className="text-indigo-50 leading-relaxed text-lg mb-6">
+                    <div className="text-indigo-50 leading-relaxed text-lg mb-6">
                       {renderAdviceWithLinks(advice)}
-                    </p>
+                    </div>
 
                     {searchLinks.length > 0 && (
                       <div className="pt-4 border-t border-white/10">

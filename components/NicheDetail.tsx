@@ -18,7 +18,7 @@ export const NicheDetail: React.FC<NicheDetailProps> = ({ guide, onBack }) => {
     const encoded = encodeURIComponent(query);
     switch (type) {
       case 'bol': return `https://partner.bol.com/click/click?p=2&t=url&s=1491898&f=TXL&url=https%3A%2F%2Fwww.bol.com%2Fnl%2Fnl%2Fs%2F${encoded}%2F&name=${encoded}`;
-      case 'coolblue': return `https://www.coolblue.nl/zoeken?query=${encoded}`;
+      case 'coolblue': return `https://www.awin1.com/cread.php?awinmid=85161&awinaffid=2694054&ued=https%3A%2F%2Fwww.coolblue.nl%2Fzoeken%3Fquery%3D${encoded}`;
       case 'amazon': return `https://www.amazon.nl/s?k=${encoded}&tag=kiesjeshop-21`;
       default: return '#';
     }

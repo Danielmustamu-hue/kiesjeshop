@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { 
   Laptop, Gift, Home, Tag, Book, Lightbulb, Bot, Headphones, Wind, 
@@ -10,7 +11,7 @@ const getSearchLink = (type: 'bol' | 'coolblue' | 'amazon', query: string) => {
   const encoded = encodeURIComponent(query);
   switch (type) {
     case 'bol': return `https://partner.bol.com/click/click?p=2&t=url&s=1491898&f=TXL&url=https%3A%2F%2Fwww.bol.com%2Fnl%2Fnl%2Fs%2F${encoded}%2F&name=${encoded}`;
-    case 'coolblue': return `https://www.coolblue.nl/zoeken?query=${encoded}`;
+    case 'coolblue': return `https://www.awin1.com/cread.php?awinmid=85161&awinaffid=2694054&ued=https%3A%2F%2Fwww.coolblue.nl%2Fzoeken%3Fquery%3D${encoded}`;
     case 'amazon': return `https://www.amazon.nl/s?k=${encoded}&tag=kiesjeshop-21`;
     default: return '#';
   }
@@ -79,7 +80,7 @@ export const ARTICLES: Article[] = [
         <div className="mt-8 p-6 bg-cyan-50 rounded-2xl border border-cyan-100 text-center">
            <h4 className="font-bold text-cyan-900 text-lg mb-2">🤔 Conclusie: Welke moet ik kiezen?</h4>
            <p className="text-slate-700 mb-4">
-              Investeer in je gezondheid. De Aranet4 is de beste stand-alone meter, Netatmo wint op connectiviteit.
+              Investeer in je gezondheid. De Aranet4 is the beste stand-alone meter, Netatmo wint op connectiviteit.
            </p>
            <div className="flex flex-col sm:flex-row gap-3 justify-center">
               <a href={getSearchLink('bol', 'Aranet4 Home')} target="_blank" rel="nofollow noreferrer" className="bg-blue-600 text-white px-4 py-2 rounded-lg font-bold hover:bg-blue-700 transition-colors flex items-center justify-center gap-2">
