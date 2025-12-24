@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { ShoppingBag, ChevronLeft, LayoutDashboard, Newspaper, TrendingUp, ShoppingCart, Sparkles, Menu, X, ArrowLeft } from 'lucide-react';
+import { ShoppingBag, LayoutDashboard, Newspaper, TrendingUp, ShoppingCart, Sparkles, Menu, X, ArrowLeft } from 'lucide-react';
 
 // Components
 import { ShopCard } from './components/ShopCard';
@@ -15,44 +15,83 @@ import { NicheDetail } from './components/NicheDetail';
 import { TermsModal } from './components/TermsModal';
 import { PrivacyModal } from './components/PrivacyModal';
 import { AboutModal } from './components/AboutModal';
+import { ArticleModal } from './components/ArticleModal';
 
 // Data & Types
 import { SHOPS } from './constants';
-import { NicheCategory } from './data/niches';
+import { NICHE_GUIDES, NicheCategory } from './data/niches';
+import { ARTICLES, Article } from './data/articles';
 
-type View = 'home' | 'redactie' | 'koopgidsen' | 'trending' | 'niche-detail';
+type View = 'home' | 'redactie' | 'koopgidsen' | 'trending' | 'niche-detail' | 'artikel-detail';
 
 const App: React.FC = () => {
   const [currentView, setCurrentView] = useState<View>('home');
   const [selectedGuide, setSelectedGuide] = useState<NicheCategory | null>(null);
+  const [selectedArticle, setSelectedArticle] = useState<Article | null>(null);
   const [showAiAdvisor, setShowAiAdvisor] = useState(false);
   const [isTermsOpen, setIsTermsOpen] = useState(false);
   const [isPrivacyOpen, setIsPrivacyOpen] = useState(false);
   const [isAboutOpen, setIsAboutOpen] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
-  // SEO METADATA MANAGER
+  // URL ROUTING & PARSING
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    const p = params.get('p');
+    const id = params.get('id');
+
+    if (p === 'redactie') setCurrentView('redactie');
+    else if (p === 'koopgidsen') setCurrentView('koopgidsen');
+    else if (p === 'trending') setCurrentView('trending');
+    else if (p === 'niche' && id) {
+      const guide = NICHE_GUIDES.find(g => g.id === id);
+      if (guide) {
+        setSelectedGuide(guide);
+        setCurrentView('niche-detail');
+      }
+    } else if (p === 'artikel' && id) {
+      const art = ARTICLES.find(a => a.id.toString() === id);
+      if (art) {
+        setSelectedArticle(art);
+        setCurrentView('artikel-detail');
+      }
+    }
+  }, []);
+
+  // SEO METADATA & URL SYNC
   useEffect(() => {
     let title = "Kiesjeshop.nl | De Grote 3 Vergelijker: bol, Amazon & Coolblue";
     let description = "Kies de webshop die bij jou past. bol, Coolblue of Amazon? Wij helpen je beslissen op basis van service, snelheid en de beste prijs voor jouw aankoop.";
+    let path = "/";
 
     switch (currentView) {
       case 'redactie':
         title = "Redactie & Shopping Advies | Kiesjeshop.nl";
-        description = "Diepgaande reviews, insider-tips en achtergrondverhalen over de nieuwste producten en webshop trends bij bol, Amazon en Coolblue.";
+        description = "Diepgaande reviews en insider-tips over de nieuwste producten bij bol, Amazon en Coolblue.";
+        path = "?p=redactie";
         break;
       case 'koopgidsen':
         title = "Onafhankelijke Koopgidsen 2025 | Vergelijk bol, Amazon & Coolblue";
-        description = "Directe productvergelijkingen voor elektronica, wonen en huishouden. Bekijk wie van bol, Amazon of Coolblue vandaag de beste prijs heeft.";
+        description = "Directe productvergelijkingen voor elektronica en wonen. Bekijk wie vandaag de beste prijs heeft.";
+        path = "?p=koopgidsen";
         break;
       case 'trending':
         title = "Trending Productcategorieën 2025 | Kiesjeshop.nl Top Picks";
-        description = "Onze experts hebben de 8 belangrijkste niches van 2025 geanalyseerd voor bol, Amazon en Coolblue shoppers.";
+        description = "Onze experts hebben de 8 belangrijkste niches van 2025 geanalyseerd.";
+        path = "?p=trending";
         break;
       case 'niche-detail':
         if (selectedGuide) {
           title = `${selectedGuide.title} | Top 3 Advies 2025 - Kiesjeshop`;
           description = selectedGuide.seoText;
+          path = `?p=niche&id=${selectedGuide.id}`;
+        }
+        break;
+      case 'artikel-detail':
+        if (selectedArticle) {
+          title = `${selectedArticle.title} | Kiesjeshop Redactie`;
+          description = selectedArticle.excerpt;
+          path = `?p=artikel&id=${selectedArticle.id}`;
         }
         break;
     }
@@ -61,18 +100,31 @@ const App: React.FC = () => {
     const metaDesc = document.querySelector('meta[name="description"]');
     if (metaDesc) metaDesc.setAttribute('content', description);
     
+    // Update URL without reloading
+    if (window.location.search !== path && path !== "/") {
+      window.history.pushState({}, '', path);
+    } else if (path === "/" && window.location.search !== "") {
+      window.history.pushState({}, '', '/');
+    }
+
     window.scrollTo({ top: 0, behavior: 'smooth' });
     setIsMobileMenuOpen(false);
-  }, [currentView, selectedGuide]);
+  }, [currentView, selectedGuide, selectedArticle]);
 
   const handleSelectGuide = (guide: NicheCategory) => {
     setSelectedGuide(guide);
     setCurrentView('niche-detail');
   };
 
+  const handleSelectArticle = (article: Article) => {
+    setSelectedArticle(article);
+    setCurrentView('artikel-detail');
+  };
+
   const navigateTo = (view: View) => {
     setCurrentView(view);
     setSelectedGuide(null);
+    setSelectedArticle(null);
     setIsMobileMenuOpen(false);
   };
 
@@ -108,7 +160,7 @@ const App: React.FC = () => {
                 key={link.id}
                 onClick={() => navigateTo(link.id as View)} 
                 className={`hover:text-orange-500 transition-colors flex items-center gap-2 py-2 px-1 border-b-2 transition-all ${
-                  currentView === link.id ? 'text-orange-600 border-orange-500' : 'border-transparent'
+                  (currentView === link.id || (link.id === 'redactie' && currentView === 'artikel-detail') || (link.id === 'trending' && currentView === 'niche-detail')) ? 'text-orange-600 border-orange-500' : 'border-transparent'
                 }`}
               >
                 <link.icon className="w-4 h-4" /> {link.label}
@@ -215,12 +267,10 @@ const App: React.FC = () => {
               </div>
             </div>
 
-            {/* AI ADVISOR SECTION */}
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 bg-white rounded-[4rem] shadow-sm mb-20 border border-orange-50/50">
               <AiAdvisor />
             </div>
 
-            {/* SEO AUTHORITY SECTION */}
             <section className="bg-slate-900 py-24 text-white overflow-hidden relative">
               <div className="absolute top-0 right-0 w-64 h-64 bg-orange-500/10 rounded-full blur-[120px] -mr-32 -mt-32"></div>
               <div className="max-w-4xl mx-auto px-6 relative z-10">
@@ -230,10 +280,6 @@ const App: React.FC = () => {
                   <p>
                     Online shoppen is in 2025 een spel van data geworden. Grote spelers zoals <strong>bol</strong>, <strong>Amazon</strong> en <strong>Coolblue</strong> gebruiken geavanceerde algoritmes om prijzen real-time aan te passen. 
                     Wij helpen u begrijpen wanneer u waar moet toeslaan.
-                  </p>
-                  <p className="mt-6">
-                    Wist u dat de prijs van een CO2-meter bij Amazon op een regenachtige dinsdag soms 15% lager ligt dan in het weekend? 
-                    Dit is <strong>prijsintelligentie</strong>. Kiesjeshop.nl fungeert als uw onafhankelijke gids om deze schommelingen in uw voordeel te gebruiken.
                   </p>
                 </div>
               </div>
@@ -246,63 +292,36 @@ const App: React.FC = () => {
 
         {currentView === 'redactie' && (
           <div className="py-20 animate-in slide-in-from-bottom-4 duration-500">
-            <div className="max-w-7xl mx-auto px-4 mb-12 flex flex-col items-center text-center">
-               <span className="text-orange-500 font-black text-[10px] uppercase tracking-widest mb-4 block">Diepgang & Reviews</span>
-               <h1 className="text-5xl md:text-6xl font-black text-slate-900 tracking-tighter mb-4">Redactie Feed.</h1>
-               <p className="text-xl text-slate-600 font-medium max-w-2xl">Onafhankelijke reviews en koopadvies van onze experts die de diepte in gaan bij bol, Amazon en Coolblue.</p>
-            </div>
-            <BlogSection />
-            <div className="max-w-7xl mx-auto px-4 text-center mt-20">
-               <button onClick={() => navigateTo('home')} className="inline-flex items-center gap-2 text-slate-500 hover:text-orange-500 font-bold text-sm transition-colors">
-                  <ArrowLeft className="w-4 h-4" /> Terug naar Dashboard
-               </button>
-            </div>
+            <BlogSection onSelectArticle={handleSelectArticle} />
           </div>
         )}
 
         {currentView === 'koopgidsen' && (
           <div className="py-20 animate-in slide-in-from-bottom-4 duration-500">
-            <div className="max-w-7xl mx-auto px-4 mb-12 flex flex-col items-center text-center">
-               <span className="text-orange-500 font-black text-[10px] uppercase tracking-widest mb-4 block">Prijsvergelijking</span>
-               <h1 className="text-5xl md:text-6xl font-black text-slate-900 tracking-tighter mb-4">Koopgidsen 2025.</h1>
-               <p className="text-xl text-slate-600 font-medium max-w-2xl">Directe vergelijkingen van de meest gezochte producten van dit moment bij de grote drie.</p>
-            </div>
             <ProductShowcase />
             <div className="mt-20">
               <ComparisonTable />
-            </div>
-            <div className="max-w-7xl mx-auto px-4 text-center mt-20">
-               <button onClick={() => navigateTo('home')} className="inline-flex items-center gap-2 text-slate-500 hover:text-orange-500 font-bold text-sm transition-colors">
-                  <ArrowLeft className="w-4 h-4" /> Terug naar Dashboard
-               </button>
             </div>
           </div>
         )}
 
         {currentView === 'trending' && (
           <div className="py-20 animate-in slide-in-from-bottom-4 duration-500">
-            <div className="max-w-7xl mx-auto px-4 mb-12 flex flex-col items-center text-center">
-               <span className="text-orange-500 font-black text-[10px] uppercase tracking-widest mb-4 block">Niches & Trends</span>
-               <h1 className="text-5xl md:text-6xl font-black text-slate-900 tracking-tighter mb-4">Trending Nu.</h1>
-               <p className="text-xl text-slate-600 font-medium max-w-2xl">De 8 belangrijkste categorieën van dit jaar volledig geanalyseerd voor jou.</p>
-            </div>
             <NicheGuides onSelectGuide={handleSelectGuide} />
-            <div className="max-w-7xl mx-auto px-4 text-center mt-20">
-               <button onClick={() => navigateTo('home')} className="inline-flex items-center gap-2 text-slate-500 hover:text-orange-500 font-bold text-sm transition-colors">
-                  <ArrowLeft className="w-4 h-4" /> Terug naar Dashboard
-               </button>
-            </div>
           </div>
         )}
 
         {currentView === 'niche-detail' && selectedGuide && (
           <NicheDetail guide={selectedGuide} onBack={() => navigateTo('trending')} />
         )}
+
+        {currentView === 'artikel-detail' && selectedArticle && (
+          <ArticleModal article={selectedArticle} onClose={() => navigateTo('redactie')} inline={true} />
+        )}
       </main>
 
       {/* FOOTER */}
       <footer className="bg-slate-900 text-white py-20 mt-20 relative">
-        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-1/2 h-1 bg-gradient-to-r from-transparent via-orange-500/30 to-transparent"></div>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 md:grid-cols-4 gap-12 mb-16">
             <div className="col-span-1 md:col-span-2">
@@ -311,7 +330,7 @@ const App: React.FC = () => {
                 <span className="text-3xl font-black tracking-tighter text-white">Kiesjeshop<span className="text-orange-500">.nl</span></span>
               </div>
               <p className="text-slate-400 max-w-sm mb-8 font-medium leading-relaxed">
-                De #1 onafhankelijke shopping guide van Nederland. Wij brengen transparantie terug in de wereld van de grote webshops.
+                De #1 onafhankelijke shopping guide van Nederland.
               </p>
             </div>
             <div>
@@ -335,25 +354,22 @@ const App: React.FC = () => {
           
           <div className="pt-8 border-t border-slate-800 text-center">
              <p className="text-[10px] font-black uppercase tracking-[0.4em] text-slate-500 mb-4 px-4">
-                Affiliate Disclaimer: Wij ontvangen een kleine commissie bij aankopen via onze links bij bol, Amazon of Coolblue. Dit kost u niets extra.
+                Affiliate Disclaimer: Wij ontvangen een kleine commissie bij aankopen via onze links bij bol, Amazon of Coolblue.
              </p>
-             <p className="text-slate-600 text-xs">© 2025 Kiesjeshop.nl - Intelligence Driven Shopping Experience</p>
+             <p className="text-slate-600 text-xs">© 2025 Kiesjeshop.nl</p>
           </div>
         </div>
       </footer>
 
-      {/* MODALS & OVERLAYS */}
+      {/* MODALS */}
       <FloatingAiButton visible={!showAiAdvisor} onClick={() => setShowAiAdvisor(true)} />
       
       {showAiAdvisor && (
         <div className="fixed inset-0 z-[100] flex items-center justify-center p-4">
           <div className="absolute inset-0 bg-slate-900/80 backdrop-blur-sm" onClick={() => setShowAiAdvisor(false)}></div>
-          <div className="relative w-full max-w-4xl max-h-[90vh] overflow-y-auto rounded-[3rem] shadow-2xl animate-in zoom-in-95">
+          <div className="relative w-full max-w-4xl max-h-[90vh] overflow-y-auto rounded-[3rem] shadow-2xl">
              <AiAdvisor />
-             <button 
-                onClick={() => setShowAiAdvisor(false)}
-                className="absolute top-6 right-6 p-2 bg-white/10 hover:bg-white/20 text-white rounded-full transition-colors border border-white/20 backdrop-blur-md"
-             >
+             <button onClick={() => setShowAiAdvisor(false)} className="absolute top-6 right-6 p-2 bg-white/10 text-white rounded-full">
                 <X className="w-5 h-5" />
              </button>
           </div>
@@ -363,7 +379,6 @@ const App: React.FC = () => {
       <TermsModal isOpen={isTermsOpen} onClose={() => setIsTermsOpen(false)} />
       <PrivacyModal isOpen={isPrivacyOpen} onClose={() => setIsPrivacyOpen(false)} />
       <AboutModal isOpen={isAboutOpen} onClose={() => setIsAboutOpen(false)} />
-
     </div>
   );
 };

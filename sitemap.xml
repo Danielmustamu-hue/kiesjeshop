@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <!-- Hoofdpagina's -->
+  <url><loc>https://www.kiesjeshop.nl/</loc><priority>1.0</priority><changefreq>daily</changefreq></url>
+  <url><loc>https://www.kiesjeshop.nl/?p=redactie</loc><priority>0.8</priority></url>
+  <url><loc>https://www.kiesjeshop.nl/?p=koopgidsen</loc><priority>0.8</priority></url>
+  <url><loc>https://www.kiesjeshop.nl/?p=trending</loc><priority>0.8</priority></url>
+
+  <!-- Niche Gidsen -->
+  <url><loc>https://www.kiesjeshop.nl/?p=niche&amp;id=co2-meter</loc><priority>0.7</priority></url>
+  <url><loc>https://www.kiesjeshop.nl/?p=niche&amp;id=ergonomie</loc><priority>0.7</priority></url>
+  <url><loc>https://www.kiesjeshop.nl/?p=niche&amp;id=hifi-audio</loc><priority>0.7</priority></url>
+  <url><loc>https://www.kiesjeshop.nl/?p=niche&amp;id=power-stations</loc><priority>0.7</priority></url>
+  <url><loc>https://www.kiesjeshop.nl/?p=niche&amp;id=sous-vide</loc><priority>0.7</priority></url>
+  <url><loc>https://www.kiesjeshop.nl/?p=niche&amp;id=home-gym</loc><priority>0.7</priority></url>
+  <url><loc>https://www.kiesjeshop.nl/?p=niche&amp;id=huisdier</loc><priority>0.7</priority></url>
+  <url><loc>https://www.kiesjeshop.nl/?p=niche&amp;id=kabelmanagement</loc><priority>0.7</priority></url>
+
+  <!-- Artikelen -->
+  <url><loc>https://www.kiesjeshop.nl/?p=artikel&amp;id=1</loc><priority>0.6</priority></url>
+  <url><loc>https://www.kiesjeshop.nl/?p=artikel&amp;id=2</loc><priority>0.6</priority></url>
+  <url><loc>https://www.kiesjeshop.nl/?p=artikel&amp;id=3</loc><priority>0.6</priority></url>
+  <url><loc>https://www.kiesjeshop.nl/?p=artikel&amp;id=4</loc><priority>0.6</priority></url>
+  <url><loc>https://www.kiesjeshop.nl/?p=artikel&amp;id=5</loc><priority>0.6</priority></url>
+  <url><loc>https://www.kiesjeshop.nl/?p=artikel&amp;id=6</loc><priority>0.6</priority></url>
+  <url><loc>https://www.kiesjeshop.nl/?p=artikel&amp;id=7</loc><priority>0.6</priority></url>
+  <url><loc>https://www.kiesjeshop.nl/?p=artikel&amp;id=8</loc><priority>0.6</priority></url>
+  <url><loc>https://www.kiesjeshop.nl/?p=artikel&amp;id=9</loc><priority>0.6</priority></url>
+  <url><loc>https://www.kiesjeshop.nl/?p=artikel&amp;id=10</loc><priority>0.6</priority></url>
+</urlset>
