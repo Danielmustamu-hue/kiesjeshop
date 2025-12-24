@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { ShoppingBag, ChevronLeft, LayoutDashboard, Newspaper, TrendingUp, ShoppingCart, Sparkles, Menu, X, ArrowLeft } from 'lucide-react';
 
@@ -35,20 +34,20 @@ const App: React.FC = () => {
   // SEO METADATA MANAGER
   useEffect(() => {
     let title = "Kiesjeshop.nl | De Grote 3 Vergelijker: bol, Amazon & Coolblue";
-    let description = "Vind de beste deals bij bol, Amazon.nl en Coolblue. Onafhankelijk advies, real-time prijschecks en AI-shopping hulp.";
+    let description = "Vind de beste deals bij bol, Amazon en Coolblue. Onafhankelijk advies, real-time prijschecks en AI-shopping hulp.";
 
     switch (currentView) {
       case 'redactie':
         title = "Redactie & Shopping Advies | Kiesjeshop.nl";
-        description = "Diepgaande reviews, insider-tips en achtergrondverhalen over de nieuwste producten en webshop trends.";
+        description = "Diepgaande reviews, insider-tips en achtergrondverhalen over de nieuwste producten en webshop trends bij bol, Amazon en Coolblue.";
         break;
       case 'koopgidsen':
         title = "Onafhankelijke Koopgidsen 2025 | Vergelijk bol, Amazon & Coolblue";
-        description = "Directe productvergelijkingen voor elektronica, wonen en huishouden. Bekijk wie vandaag de beste prijs heeft.";
+        description = "Directe productvergelijkingen voor elektronica, wonen en huishouden. Bekijk wie van bol, Amazon of Coolblue vandaag de beste prijs heeft.";
         break;
       case 'trending':
         title = "Trending Productcategorieën 2025 | Kiesjeshop.nl Top Picks";
-        description = "Onze experts hebben de 8 belangrijkste niches van 2025 geanalyseerd. Van CO2-meters tot Home Gyms.";
+        description = "Onze experts hebben de 8 belangrijkste niches van 2025 geanalyseerd voor bol, Amazon en Coolblue shoppers.";
         break;
       case 'niche-detail':
         if (selectedGuide) {
@@ -202,7 +201,7 @@ const App: React.FC = () => {
             </div>
 
             {/* SHOP GRID SECTION */}
-            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20" id="shop-grid">
               <div className="flex flex-col md:flex-row md:items-end justify-between mb-12 gap-4">
                 <div>
                    <h2 className="text-3xl sm:text-4xl font-black text-slate-900 tracking-tighter">De Grote Drie Ontleed.</h2>
@@ -250,7 +249,7 @@ const App: React.FC = () => {
             <div className="max-w-7xl mx-auto px-4 mb-12 flex flex-col items-center text-center">
                <span className="text-orange-500 font-black text-[10px] uppercase tracking-widest mb-4 block">Diepgang & Reviews</span>
                <h1 className="text-5xl md:text-6xl font-black text-slate-900 tracking-tighter mb-4">Redactie Feed.</h1>
-               <p className="text-xl text-slate-600 font-medium max-w-2xl">Onafhankelijke reviews en koopadvies van onze experts die de diepte in gaan.</p>
+               <p className="text-xl text-slate-600 font-medium max-w-2xl">Onafhankelijke reviews en koopadvies van onze experts die de diepte in gaan bij bol, Amazon en Coolblue.</p>
             </div>
             <BlogSection />
             <div className="max-w-7xl mx-auto px-4 text-center mt-20">
@@ -266,7 +265,7 @@ const App: React.FC = () => {
             <div className="max-w-7xl mx-auto px-4 mb-12 flex flex-col items-center text-center">
                <span className="text-orange-500 font-black text-[10px] uppercase tracking-widest mb-4 block">Prijsvergelijking</span>
                <h1 className="text-5xl md:text-6xl font-black text-slate-900 tracking-tighter mb-4">Koopgidsen 2025.</h1>
-               <p className="text-xl text-slate-600 font-medium max-w-2xl">Directe vergelijkingen van de meest gezochte producten van dit moment.</p>
+               <p className="text-xl text-slate-600 font-medium max-w-2xl">Directe vergelijkingen van de meest gezochte producten van dit moment bij de grote drie.</p>
             </div>
             <ProductShowcase />
             <div className="mt-20">
@@ -336,7 +335,7 @@ const App: React.FC = () => {
           
           <div className="pt-8 border-t border-slate-800 text-center">
              <p className="text-[10px] font-black uppercase tracking-[0.4em] text-slate-500 mb-4 px-4">
-                Affiliate Disclaimer: Wij ontvangen een kleine commissie bij aankopen via onze links. Dit kost u niets extra en helpt ons onafhankelijk te blijven.
+                Affiliate Disclaimer: Wij ontvangen een kleine commissie bij aankopen via onze links bij bol, Amazon of Coolblue. Dit kost u niets extra.
              </p>
              <p className="text-slate-600 text-xs">© 2025 Kiesjeshop.nl - Intelligence Driven Shopping Experience</p>
           </div>
