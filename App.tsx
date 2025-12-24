@@ -34,7 +34,7 @@ const App: React.FC = () => {
   // SEO METADATA MANAGER
   useEffect(() => {
     let title = "Kiesjeshop.nl | De Grote 3 Vergelijker: bol, Amazon & Coolblue";
-    let description = "Vind de beste deals bij bol, Amazon en Coolblue. Onafhankelijk advies, real-time prijschecks en AI-shopping hulp.";
+    let description = "Kies de webshop die bij jou past. bol, Coolblue of Amazon? Wij helpen je beslissen op basis van service, snelheid en de beste prijs voor jouw aankoop.";
 
     switch (currentView) {
       case 'redactie':
