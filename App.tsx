@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { ShoppingBag, LayoutDashboard, Newspaper, TrendingUp, ShoppingCart, Sparkles, Menu, X, ArrowLeft } from 'lucide-react';
+import { ShoppingBag, LayoutDashboard, Newspaper, TrendingUp, ShoppingCart, Sparkles, Menu, X, ArrowLeft, BookOpen } from 'lucide-react';
 
 // Components
 import { ShopCard } from './components/ShopCard';
@@ -36,25 +36,29 @@ const App: React.FC = () => {
 
   // URL ROUTING & PARSING
   useEffect(() => {
-    const params = new URLSearchParams(window.location.search);
-    const p = params.get('p');
-    const id = params.get('id');
+    try {
+      const params = new URLSearchParams(window.location.search);
+      const p = params.get('p');
+      const id = params.get('id');
 
-    if (p === 'redactie') setCurrentView('redactie');
-    else if (p === 'koopgidsen') setCurrentView('koopgidsen');
-    else if (p === 'trending') setCurrentView('trending');
-    else if (p === 'niche' && id) {
-      const guide = NICHE_GUIDES.find(g => g.id === id);
-      if (guide) {
-        setSelectedGuide(guide);
-        setCurrentView('niche-detail');
+      if (p === 'redactie') setCurrentView('redactie');
+      else if (p === 'producten') setCurrentView('koopgidsen');
+      else if (p === 'koopgidsen') setCurrentView('trending');
+      else if (p === 'niche' && id) {
+        const guide = NICHE_GUIDES.find(g => g.id === id);
+        if (guide) {
+          setSelectedGuide(guide);
+          setCurrentView('niche-detail');
+        }
+      } else if (p === 'artikel' && id) {
+        const art = ARTICLES.find(a => a.id.toString() === id);
+        if (art) {
+          setSelectedArticle(art);
+          setCurrentView('artikel-detail');
+        }
       }
-    } else if (p === 'artikel' && id) {
-      const art = ARTICLES.find(a => a.id.toString() === id);
-      if (art) {
-        setSelectedArticle(art);
-        setCurrentView('artikel-detail');
-      }
+    } catch (e) {
+      console.warn("Routing error in preview mode:", e);
     }
   }, []);
 
@@ -62,7 +66,7 @@ const App: React.FC = () => {
   useEffect(() => {
     let title = "Kiesjeshop.nl | De Grote 3 Vergelijker: bol, Amazon & Coolblue";
     let description = "Kies de webshop die bij jou past. bol, Coolblue of Amazon? Wij helpen je beslissen op basis van service, snelheid en de beste prijs voor jouw aankoop.";
-    let path = "/";
+    let path = "";
 
     switch (currentView) {
       case 'redactie':
@@ -71,14 +75,14 @@ const App: React.FC = () => {
         path = "?p=redactie";
         break;
       case 'koopgidsen':
-        title = "Onafhankelijke Koopgidsen 2025 | Vergelijk bol, Amazon & Coolblue";
+        title = "Top Producten & Deals 2025 | Vergelijk bol, Amazon & Coolblue";
         description = "Directe productvergelijkingen voor elektronica en wonen. Bekijk wie vandaag de beste prijs heeft.";
-        path = "?p=koopgidsen";
+        path = "?p=producten";
         break;
       case 'trending':
-        title = "Trending Productcategorieën 2025 | Kiesjeshop.nl Top Picks";
+        title = "Onafhankelijke Koopgidsen 2025 | Kiesjeshop.nl Top Picks";
         description = "Onze experts hebben de 8 belangrijkste niches van 2025 geanalyseerd.";
-        path = "?p=trending";
+        path = "?p=koopgidsen";
         break;
       case 'niche-detail':
         if (selectedGuide) {
@@ -94,17 +98,24 @@ const App: React.FC = () => {
           path = `?p=artikel&id=${selectedArticle.id}`;
         }
         break;
+      default:
+        path = "/";
     }
 
     document.title = title;
     const metaDesc = document.querySelector('meta[name="description"]');
     if (metaDesc) metaDesc.setAttribute('content', description);
     
-    // Update URL without reloading
-    if (window.location.search !== path && path !== "/") {
-      window.history.pushState({}, '', path);
-    } else if (path === "/" && window.location.search !== "") {
-      window.history.pushState({}, '', '/');
+    // Sync URL safely
+    try {
+      const currentUrl = window.location.pathname + window.location.search;
+      const targetUrl = path.startsWith('?') ? window.location.pathname + path : path;
+      
+      if (currentUrl !== targetUrl) {
+        window.history.pushState({}, '', targetUrl);
+      }
+    } catch (e) {
+      console.log("URL state update blocked by environment security.");
     }
 
     window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -130,8 +141,8 @@ const App: React.FC = () => {
 
   const navLinks = [
     { id: 'home', label: 'Dashboard', icon: LayoutDashboard },
-    { id: 'koopgidsen', label: 'Koopgidsen', icon: ShoppingCart },
-    { id: 'trending', label: 'Trending', icon: TrendingUp },
+    { id: 'trending', label: 'Koopgidsen', icon: BookOpen },
+    { id: 'koopgidsen', label: 'Producten', icon: ShoppingCart },
     { id: 'redactie', label: 'Redactie', icon: Newspaper },
   ];
 
@@ -231,10 +242,10 @@ const App: React.FC = () => {
                   </p>
                   <div className="flex flex-wrap gap-4 justify-center lg:justify-start">
                     <button 
-                       onClick={() => navigateTo('koopgidsen')}
+                       onClick={() => navigateTo('trending')}
                        className="px-8 py-4 bg-slate-900 text-white rounded-2xl font-black text-xs uppercase tracking-widest shadow-xl hover:bg-orange-500 transition-all active:scale-95"
                     >
-                      Bekijk de deals
+                      Bekijk Koopgidsen
                     </button>
                     <button 
                        onClick={() => setShowAiAdvisor(true)}
@@ -292,12 +303,22 @@ const App: React.FC = () => {
 
         {currentView === 'redactie' && (
           <div className="py-20 animate-in slide-in-from-bottom-4 duration-500">
+            <div className="max-w-7xl mx-auto px-4 mb-12 flex flex-col items-center text-center">
+               <span className="text-orange-500 font-black text-[10px] uppercase tracking-widest mb-4 block">Diepgang & Reviews</span>
+               <h1 className="text-5xl md:text-6xl font-black text-slate-900 tracking-tighter mb-4">Redactie Feed.</h1>
+               <p className="text-xl text-slate-600 font-medium max-w-2xl">Onafhankelijke reviews en koopadvies van onze experts.</p>
+            </div>
             <BlogSection onSelectArticle={handleSelectArticle} />
           </div>
         )}
 
         {currentView === 'koopgidsen' && (
           <div className="py-20 animate-in slide-in-from-bottom-4 duration-500">
+            <div className="max-w-7xl mx-auto px-4 mb-12 flex flex-col items-center text-center">
+               <span className="text-orange-500 font-black text-[10px] uppercase tracking-widest mb-4 block">Prijsvergelijking</span>
+               <h1 className="text-5xl md:text-6xl font-black text-slate-900 tracking-tighter mb-4">Producten & Deals.</h1>
+               <p className="text-xl text-slate-600 font-medium max-w-2xl">Directe vergelijkingen van de meest gezochte producten van dit moment.</p>
+            </div>
             <ProductShowcase />
             <div className="mt-20">
               <ComparisonTable />
@@ -307,6 +328,11 @@ const App: React.FC = () => {
 
         {currentView === 'trending' && (
           <div className="py-20 animate-in slide-in-from-bottom-4 duration-500">
+            <div className="max-w-7xl mx-auto px-4 mb-12 flex flex-col items-center text-center">
+               <span className="text-orange-500 font-black text-[10px] uppercase tracking-widest mb-4 block">Niches & Trends</span>
+               <h1 className="text-5xl md:text-6xl font-black text-slate-900 tracking-tighter mb-4">Koopgidsen 2025.</h1>
+               <p className="text-xl text-slate-600 font-medium max-w-2xl">De 8 belangrijkste categorieën van dit jaar volledig geanalyseerd.</p>
+            </div>
             <NicheGuides onSelectGuide={handleSelectGuide} />
           </div>
         )}
@@ -337,8 +363,8 @@ const App: React.FC = () => {
               <h4 className="font-black text-[10px] uppercase tracking-[0.3em] text-orange-500 mb-8">Menu</h4>
               <ul className="space-y-4 text-sm font-bold">
                 <li><button onClick={() => navigateTo('home')} className="hover:text-orange-500 transition-colors">Dashboard</button></li>
-                <li><button onClick={() => navigateTo('koopgidsen')} className="hover:text-orange-500 transition-colors">Koopgidsen</button></li>
-                <li><button onClick={() => navigateTo('trending')} className="hover:text-orange-500 transition-colors">Trending</button></li>
+                <li><button onClick={() => navigateTo('trending')} className="hover:text-orange-500 transition-colors">Koopgidsen</button></li>
+                <li><button onClick={() => navigateTo('koopgidsen')} className="hover:text-orange-500 transition-colors">Producten</button></li>
                 <li><button onClick={() => navigateTo('redactie')} className="hover:text-orange-500 transition-colors">Redactie</button></li>
               </ul>
             </div>

@@ -51,7 +51,7 @@ export const PrivacyModal: React.FC<PrivacyModalProps> = ({ isOpen, onClose }) =
 
             <h3 className="text-slate-900 font-bold mt-6 text-base">1. Verwerkingsverantwoordelijke</h3>
             <p>
-              De verwerkingsverantwoordelijke voor dit beleid is Daniel Mustamu, beheerder van de website kiesjeshop.nl, gevestigd te Amstelveen. 
+              De verwerkingsverantwoordelijke voor dit beleid is de directie van de website kiesjeshop.nl, gevestigd te Amstelveen. 
               Contact kan worden opgenomen via <a href="mailto:info@kiesjeshop.nl" className="text-indigo-600 hover:underline">info@kiesjeshop.nl</a>.
             </p>
 
