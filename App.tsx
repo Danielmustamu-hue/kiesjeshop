@@ -16,6 +16,7 @@ import { TermsModal } from './components/TermsModal';
 import { PrivacyModal } from './components/PrivacyModal';
 import { AboutModal } from './components/AboutModal';
 import { ArticleModal } from './components/ArticleModal';
+import { CookieBanner } from './components/CookieBanner';
 
 // Data & Types
 import { SHOPS } from './constants';
@@ -387,7 +388,7 @@ const App: React.FC = () => {
         </div>
       </footer>
 
-      {/* MODALS */}
+      {/* MODALS & OVERLAYS */}
       <FloatingAiButton visible={!showAiAdvisor} onClick={() => setShowAiAdvisor(true)} />
       
       {showAiAdvisor && (
@@ -405,6 +406,8 @@ const App: React.FC = () => {
       <TermsModal isOpen={isTermsOpen} onClose={() => setIsTermsOpen(false)} />
       <PrivacyModal isOpen={isPrivacyOpen} onClose={() => setIsPrivacyOpen(false)} />
       <AboutModal isOpen={isAboutOpen} onClose={() => setIsAboutOpen(false)} />
+      
+      <CookieBanner />
     </div>
   );
 };
