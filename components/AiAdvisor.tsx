@@ -33,24 +33,19 @@ export const AiAdvisor: React.FC = () => {
       const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
       
       const promptText = `
-        Jij bent de shopping expert van Kiesjeshop.nl. Je geeft "insider tips" die eerlijk, onafhankelijk en direct zijn.
-        Stuur antwoorden altijd terug als pure tekst (string).
-        Een bezoeker stelt de volgende vraag: "${query}"
+        Jij bent de ultra-efficiënte shopping expert van Kiesjeshop.nl. 
+        GEBRUIK ZO MIN MOGELIJK WOORDEN. Wees extreem kortaf maar feitelijk.
         
-        DOEL: Help de gebruiker direct beslissen tussen de drie grootste winkels: bol, Coolblue en Amazon.
+        STRIKTE REGELS:
+        1. Maximaal 15-20 woorden totaal voor het advies.
+        2. Geen begroetingen (geen "Hoi", geen "Succes").
+        3. Geen overbodige uitleg. Directe vergelijking tussen bol, Coolblue en Amazon.
+        4. Gebruik 'bol', nooit 'bol.com'.
         
-        STAP 1: Geef een kort, krachtig advies (max 2-3 zinnen). Noem expliciet een specifiek voordeel van minimaal twee verschillende winkels voor dit product of de service.
-        Hanteer een behulpzame, deskundige toon (de 'expert-vriend').
+        Vraag: "${query}"
         
-        STAP 2: Gebruik ALTIJD de naam 'bol', NOOIT 'bol.com'.
-        
-        STAP 3: Eindig je antwoord ALTIJD met een nieuwe regel in dit exacte formaat (voor de zoekknop):
+        Eindig ALTIJD met:
         SEARCH_ACTION: [ShopNaam]|[Zoekterm]
-        
-        Algemene Shop Kennis:
-        - Coolblue: Beste voor elektronica service, installatie van witgoed en deskundig advies.
-        - Amazon: Meestal de laagste prijs, groot internationaal aanbod, Prime voordelen.
-        - bol: Het grootste assortiment van Nederland, snelle levering (ook op zondag), simpel retourproces.
       `;
 
       const response = await ai.models.generateContent({
@@ -77,7 +72,7 @@ export const AiAdvisor: React.FC = () => {
 
     } catch (err: any) {
       console.error("AI Error:", err);
-      setError("Er ging iets mis bij het ophalen van het advies. Probeer het opnieuw.");
+      setError("Er ging iets mis. Probeer het opnieuw.");
     } finally {
       setLoading(false);
     }
@@ -122,11 +117,11 @@ export const AiAdvisor: React.FC = () => {
       <div className="relative z-10 max-w-2xl mx-auto text-center">
         <div className="inline-flex items-center gap-2 bg-indigo-800/50 px-4 py-1.5 rounded-full text-sm font-medium text-indigo-200 mb-4 border border-indigo-700">
           <Sparkles className="w-4 h-4" />
-          <span>Persoonlijk AI Advies</span>
+          <span>Snel AI Advies</span>
         </div>
         
-        <h2 className="text-2xl md:text-3xl font-bold mb-4">Hulp nodig bij je keuze?</h2>
-        <p className="text-indigo-200 mb-8 text-lg">Welk product zoek je? Ik vergelijk direct 3 winkels voor je.</p>
+        <h2 className="text-2xl md:text-3xl font-bold mb-4">Wat zoek je?</h2>
+        <p className="text-indigo-200 mb-8 text-lg">Direct antwoord op je shopping vraag.</p>
 
         <form onSubmit={handleAskAi} className="relative max-w-lg mx-auto group">
           <input 
@@ -147,7 +142,7 @@ export const AiAdvisor: React.FC = () => {
 
         <div className="mt-4 flex items-center justify-center gap-1.5 opacity-40">
             <Cpu className="w-3 h-3" />
-            <span className="text-[10px] uppercase tracking-widest font-semibold">Gemini 3 Flash Real-time Analysis</span>
+            <span className="text-[10px] uppercase tracking-widest font-semibold">Gemini Ultra-Short Logic</span>
         </div>
 
         {error && (
@@ -164,14 +159,13 @@ export const AiAdvisor: React.FC = () => {
                     <Info className="w-5 h-5 text-white" />
                 </div>
                 <div className="w-full">
-                    <h3 className="font-bold text-lg mb-2 text-white">Mijn insider-tip:</h3>
+                    <h3 className="font-bold text-lg mb-2 text-white">Direct Advies:</h3>
                     <div className="text-indigo-50 leading-relaxed text-lg mb-6">
                       {renderAdviceWithLinks(advice)}
                     </div>
 
                     {searchLinks.length > 0 && (
                       <div className="pt-4 border-t border-white/10">
-                        <p className="text-xs font-bold text-indigo-300 uppercase tracking-wider mb-4">Ga direct naar de beste resultaten:</p>
                         <div className="flex flex-wrap gap-3">
                           {searchLinks.map((link, i) => {
                             const shop = SHOPS.find(s => s.id === link.shopId);
@@ -185,7 +179,7 @@ export const AiAdvisor: React.FC = () => {
                                 className={`flex items-center gap-2 px-5 py-3 rounded-xl font-bold transition-all active:scale-95 shadow-md hover:shadow-lg group/btn ${shop.buttonColor}`}
                               >
                                 <Search className="w-4 h-4" />
-                                Bekijk '{link.query}' bij {shop.name}
+                                {shop.name}: {link.query}
                                 <ExternalLink className="w-4 h-4 opacity-50 group-hover/btn:translate-x-1 transition-transform" />
                               </a>
                             );

@@ -4,7 +4,7 @@ export const SHOPS: ShopData[] = [
   {
     id: 'bol',
     name: 'bol',
-    color: 'text-blue-700',
+    color: 'text-blue-400',
     logoText: 'bol',
     logoBg: 'bg-[#F5F9FF]', // Zacht blauw, herkenbaar voor Bol
     buttonColor: 'bg-blue-800 hover:bg-blue-900 text-white',
