@@ -1,5 +1,5 @@
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { ShoppingBag, Sparkles, Menu, X, Globe, Cpu, MapPin, ShieldCheck, ChevronRight, Mail, LayoutGrid, BarChart3, TrendingUp, Cookie, Info, ArrowRight, Zap, Search, Bell, ArrowUp, Loader2, CheckCircle2 } from 'lucide-react';
 
 // Components
@@ -26,8 +26,8 @@ import { FloatingAiButton } from './components/FloatingAiButton';
 import { ExitIntentModal } from './components/ExitIntentModal';
 import { SectionNav } from './components/SectionNav';
 
-// Config & Data
-import { API_CONFIG } from './config';
+// Services & Data
+import { fetchLiveMarketData, MarketSignal } from './services/MarketIntelligence';
 import { SHOPS } from './constants';
 import { NICHE_GUIDES, NicheCategory } from './data/niches';
 import { ARTICLES, Article } from './data/articles';
@@ -51,9 +51,20 @@ const App: React.FC = () => {
   const [showScrollTop, setShowScrollTop] = useState(false);
   const [cookieBannerKey, setCookieBannerKey] = useState(0);
 
-  // Newsletter states
-  const [newsletterEmail, setNewsletterEmail] = useState('');
-  const [newsletterStatus, setNewsletterStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle');
+  // Market Data State
+  const [marketSignals, setMarketSignals] = useState<MarketSignal[]>([]);
+  const [marketSources, setMarketSources] = useState<{uri: string, title: string}[]>([]);
+  const [isMarketLoading, setIsMarketLoading] = useState(true);
+
+  const loadMarketData = useCallback(async () => {
+    setIsMarketLoading(true);
+    const { signals, sources } = await fetchLiveMarketData();
+    if (signals && signals.length > 0) {
+      setMarketSignals(signals);
+      setMarketSources(sources);
+    }
+    setIsMarketLoading(false);
+  }, []);
 
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -61,6 +72,8 @@ const App: React.FC = () => {
   }, [currentView]);
 
   useEffect(() => {
+    loadMarketData();
+
     const handleScroll = () => {
       setShowScrollTop(window.scrollY > 1000);
     };
@@ -88,39 +101,7 @@ const App: React.FC = () => {
       window.removeEventListener('keydown', handleKeyDown);
       document.removeEventListener('mouseleave', handleMouseOut);
     };
-  }, [hasShownExitIntent, showAiAdvisor]);
-
-  const handleNewsletterSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!newsletterEmail) return;
-    
-    setNewsletterStatus('loading');
-
-    try {
-      const response = await fetch(API_CONFIG.NEWSLETTER_ENDPOINT, {
-        method: 'POST',
-        headers: {
-          'Accept': 'application/json',
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-          email: newsletterEmail,
-          source: 'Homepage Newsletter Footer',
-          timestamp: new Date().toISOString()
-        })
-      });
-
-      if (response.ok) {
-        setNewsletterStatus('success');
-        setNewsletterEmail('');
-      } else {
-        throw new Error('Server response was not ok');
-      }
-    } catch (err) {
-      console.error('Newsletter error:', err);
-      setNewsletterStatus('error');
-    }
-  };
+  }, [hasShownExitIntent, showAiAdvisor, loadMarketData]);
 
   const navigateTo = (view: View, item?: any) => {
     setCurrentView(view);
@@ -315,7 +296,7 @@ const App: React.FC = () => {
                 </div>
 
                 <div className="bg-indigo-600 rounded-[3.5rem] p-12 flex flex-col justify-between h-[360px] text-white shadow-2xl relative overflow-hidden group border border-white/10">
-                   <LiveMarketTicker />
+                   <LiveMarketTicker signals={marketSignals} sources={marketSources} loading={isMarketLoading} />
                 </div>
               </div>
             </div>
@@ -328,7 +309,7 @@ const App: React.FC = () => {
                   <span className="text-[10px] font-black uppercase tracking-[0.4em] text-slate-400 px-6">Live Market Analysis</span>
                   <div className="h-px flex-grow bg-slate-200"></div>
                </div>
-               <MarketPulseDashboard />
+               <MarketPulseDashboard onRefresh={loadMarketData} isLoading={isMarketLoading} />
             </div>
 
             <div id="compare" className="py-24">
@@ -386,7 +367,7 @@ const App: React.FC = () => {
                     Naar Redactie <ArrowRight className="w-5 h-5" />
                   </button>
                </div>
-               <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+               <div className="grid grid-cols-1 md:grid-cols-2 gap-8 pb-12">
                   {ARTICLES.slice(0, 2).map(article => (
                     <div key={article.id} onClick={() => handleSelectArticle(article)} className="group cursor-pointer bg-white rounded-[3rem] overflow-hidden border border-slate-100 shadow-sm hover:shadow-2xl transition-all h-[400px] relative">
                         <img src={article.image} alt={article.title} className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" />
@@ -398,45 +379,6 @@ const App: React.FC = () => {
                     </div>
                   ))}
                </div>
-            </div>
-
-            <div className="py-24 bg-slate-950 rounded-[4rem] p-12 md:p-24 text-center border border-white/5 relative overflow-hidden">
-                <div className="absolute top-0 right-0 p-20 opacity-10">
-                    <Bell className="w-64 h-64 text-indigo-400" />
-                </div>
-                <div className="relative z-10">
-                   {newsletterStatus === 'success' ? (
-                     <div className="animate-in zoom-in duration-500">
-                        <div className="w-24 h-24 bg-indigo-600/20 text-indigo-400 rounded-full flex items-center justify-center mx-auto mb-8 border border-indigo-400/30">
-                           <CheckCircle2 className="w-12 h-12" />
-                        </div>
-                        <h2 className="text-5xl font-black text-white tracking-tighter mb-4">Je bent verbonden!</h2>
-                        <p className="text-slate-400 text-xl font-medium max-w-xl mx-auto">De Intelligence Update is onderweg naar je inbox.</p>
-                     </div>
-                   ) : (
-                     <>
-                        <h2 className="text-5xl font-black text-white tracking-tighter mb-6">Mis Geen Deal<span className="text-indigo-400">.</span></h2>
-                        <p className="text-slate-400 text-xl font-medium max-w-xl mx-auto mb-12">Schrijf je in voor de Intelligence Update en ontvang prijs-alerts direct in je inbox.</p>
-                        <form onSubmit={handleNewsletterSubmit} className="flex flex-col sm:flex-row gap-4 max-w-md mx-auto">
-                           <input 
-                             required
-                             type="email" 
-                             placeholder="Email adres..." 
-                             className={`flex-grow px-8 py-5 bg-white/5 border rounded-2xl text-white outline-none focus:ring-2 focus:ring-indigo-500 transition-all ${newsletterStatus === 'error' ? 'border-rose-500' : 'border-white/10'}`}
-                             value={newsletterEmail}
-                             onChange={(e) => setNewsletterEmail(e.target.value)}
-                           />
-                           <button 
-                             disabled={newsletterStatus === 'loading'}
-                             className="bg-indigo-600 text-white px-10 py-5 rounded-2xl font-black uppercase tracking-widest text-[10px] hover:bg-indigo-700 transition-all flex items-center justify-center gap-2 min-w-[140px]"
-                           >
-                             {newsletterStatus === 'loading' ? <Loader2 className="w-4 h-4 animate-spin" /> : 'Aanmelden'}
-                           </button>
-                        </form>
-                        {newsletterStatus === 'error' && <p className="mt-4 text-rose-400 text-xs font-bold uppercase tracking-widest">Er ging iets mis. Probeer het later opnieuw.</p>}
-                     </>
-                   )}
-                </div>
             </div>
 
             <ReviewSection />

@@ -81,11 +81,12 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({ isOpen, onClose,
             </div>
           ) : (
             <div className="space-y-8 p-4">
-              {results?.shops.length! > 0 && (
+              {/* Fix: safely check for existence and length of shops array */}
+              {results?.shops && results.shops.length > 0 && (
                 <div>
                   <h4 className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400 mb-4 px-2">Webshops</h4>
                   <div className="grid grid-cols-1 gap-2">
-                    {results?.shops.map(shop => (
+                    {results.shops.map(shop => (
                       <button key={shop.id} onClick={() => { onNavigate('home'); onClose(); }} className="flex items-center justify-between p-4 bg-slate-50 rounded-2xl hover:bg-indigo-50 group transition-all">
                         <div className="flex items-center gap-4">
                           <div className={`w-10 h-10 rounded-xl ${shop.logoBg} flex items-center justify-center text-[10px] font-black text-white mix-blend-difference`}>{shop.name[0]}</div>
@@ -98,11 +99,12 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({ isOpen, onClose,
                 </div>
               )}
 
-              {results?.guides.length! > 0 && (
+              {/* Fix: safely check for existence and length of guides array */}
+              {results?.guides && results.guides.length > 0 && (
                 <div>
                   <h4 className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400 mb-4 px-2">Koopgidsen</h4>
                   <div className="grid grid-cols-1 gap-2">
-                    {results?.guides.map(guide => (
+                    {results.guides.map(guide => (
                       <button key={guide.id} onClick={() => onNavigate('niche-detail', guide)} className="flex items-center justify-between p-4 bg-slate-50 rounded-2xl hover:bg-indigo-50 group transition-all text-left">
                         <div className="flex items-center gap-4">
                           <div className="w-10 h-10 rounded-xl overflow-hidden"><img src={guide.image} className="w-full h-full object-cover" /></div>
@@ -115,11 +117,12 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({ isOpen, onClose,
                 </div>
               )}
 
-              {results?.articles.length! > 0 && (
+              {/* Fix: safely check for existence and length of articles array */}
+              {results?.articles && results.articles.length > 0 && (
                 <div>
                   <h4 className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400 mb-4 px-2">Redactie</h4>
                   <div className="grid grid-cols-1 gap-2">
-                    {results?.articles.map(article => (
+                    {results.articles.map(article => (
                       <button key={article.id} onClick={() => onNavigate('artikel-detail', article)} className="flex items-center justify-between p-4 bg-slate-50 rounded-2xl hover:bg-indigo-50 group transition-all text-left">
                         <div className="flex items-center gap-4">
                           <div className="w-10 h-10 rounded-xl bg-slate-200 flex items-center justify-center text-slate-500 font-bold text-xs"><BookOpen className="w-4 h-4" /></div>
@@ -132,7 +135,8 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({ isOpen, onClose,
                 </div>
               )}
 
-              {results && Object.values(results).every(r => r.length === 0) && (
+              {/* Fix: results can be null, and Object.values might return unknown values without length property */}
+              {results && Object.values(results).every(r => Array.isArray(r) && r.length === 0) && (
                 <div className="text-center py-12">
                    <p className="text-slate-400 mb-6">Geen directe resultaten gevonden voor "{query}"</p>
                    <button 
