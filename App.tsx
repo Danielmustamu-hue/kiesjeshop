@@ -55,6 +55,102 @@ const App: React.FC = () => {
   const [marketSignals, setMarketSignals] = useState<MarketSignal[]>([]);
   const [marketSources, setMarketSources] = useState<{uri: string, title: string}[]>([]);
   const [isMarketLoading, setIsMarketLoading] = useState(true);
+  const [lastMarketUpdate, setLastMarketUpdate] = useState<string | null>(null);
+
+  // Deep Linking / Routing Logic voor Google Crawler
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    const page = params.get('p');
+    const id = params.get('id');
+
+    if (page === 'redactie') setCurrentView('redactie');
+    if (page === 'koopgidsen') setCurrentView('koopgidsen');
+    if (page === 'niche' && id) {
+      const guide = NICHE_GUIDES.find(g => g.id === id);
+      if (guide) {
+        setSelectedGuide(guide);
+        setCurrentView('niche-detail');
+      }
+    }
+    if (page === 'artikel' && id) {
+      const article = ARTICLES.find(a => a.id === parseInt(id));
+      if (article) {
+        setSelectedArticle(article);
+        setCurrentView('artikel-detail');
+      }
+    }
+  }, []);
+
+  const updateUrl = (view: View, id?: string | number) => {
+    const url = new URL(window.location.href);
+    url.searchParams.delete('p');
+    url.searchParams.delete('id');
+    
+    if (view === 'redactie') url.searchParams.set('p', 'redactie');
+    if (view === 'koopgidsen') url.searchParams.set('p', 'koopgidsen');
+    if (view === 'niche-detail' && id) {
+      url.searchParams.set('p', 'niche');
+      url.searchParams.set('id', id.toString());
+    }
+    if (view === 'artikel-detail' && id) {
+      url.searchParams.set('p', 'artikel');
+      url.searchParams.set('id', id.toString());
+    }
+    
+    window.history.pushState({}, '', url);
+  };
+
+  const navigateTo = (view: View, item?: any) => {
+    setCurrentView(view);
+    setIsSearchOpen(false);
+    
+    if (view === 'niche-detail' && item) {
+      setSelectedGuide(item);
+      updateUrl(view, item.id);
+    } else if (view === 'artikel-detail' && item) {
+      setSelectedArticle(item);
+      updateUrl(view, item.id);
+    } else if (view === 'home') {
+      updateUrl('home');
+      setSelectedGuide(null);
+      setSelectedArticle(null);
+    } else if (view === 'ai-advisor') {
+      setShowAiAdvisor(true);
+    } else {
+      updateUrl(view);
+    }
+  };
+
+  // Add missing handlers
+  // Fix: Added handleSelectGuide to navigate to niche details
+  const handleSelectGuide = (guide: NicheCategory) => {
+    navigateTo('niche-detail', guide);
+  };
+
+  // Fix: Added handleSelectArticle to navigate to article details
+  const handleSelectArticle = (article: Article) => {
+    navigateTo('artikel-detail', article);
+  };
+
+  // Fix: Added handleModalToShops to navigate home and scroll to shops
+  const handleModalToShops = () => {
+    navigateTo('home');
+    setTimeout(() => {
+      const el = document.getElementById('shops-section');
+      if (el) el.scrollIntoView({ behavior: 'smooth' });
+    }, 100);
+  };
+
+  // Fix: Added scrollToTop utility function
+  const scrollToTop = () => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+  // Fix: Added triggerCookieSettings to reset cookie banner
+  const triggerCookieSettings = () => {
+    localStorage.removeItem('kiesjeshop-cookie-consent');
+    setCookieBannerKey(prev => prev + 1);
+  };
 
   const loadMarketData = useCallback(async () => {
     setIsMarketLoading(true);
@@ -62,6 +158,7 @@ const App: React.FC = () => {
     if (signals && signals.length > 0) {
       setMarketSignals(signals);
       setMarketSources(sources);
+      setLastMarketUpdate(new Date().toLocaleTimeString('nl-NL', { hour: '2-digit', minute: '2-digit' }));
     }
     setIsMarketLoading(false);
   }, []);
@@ -73,6 +170,7 @@ const App: React.FC = () => {
 
   useEffect(() => {
     loadMarketData();
+    const refreshInterval = setInterval(loadMarketData, 15 * 60 * 1000);
 
     const handleScroll = () => {
       setShowScrollTop(window.scrollY > 1000);
@@ -100,55 +198,9 @@ const App: React.FC = () => {
       window.removeEventListener('scroll', handleScroll);
       window.removeEventListener('keydown', handleKeyDown);
       document.removeEventListener('mouseleave', handleMouseOut);
+      clearInterval(refreshInterval);
     };
   }, [hasShownExitIntent, showAiAdvisor, loadMarketData]);
-
-  const navigateTo = (view: View, item?: any) => {
-    setCurrentView(view);
-    setIsSearchOpen(false);
-    
-    if (view === 'niche-detail' && item) {
-      setSelectedGuide(item);
-    } else if (view === 'artikel-detail' && item) {
-      setSelectedArticle(item);
-    } else if (view === 'ai-advisor') {
-      setShowAiAdvisor(true);
-      setCurrentView('home'); 
-    } else {
-      setSelectedGuide(null);
-      setSelectedArticle(null);
-    }
-  };
-
-  const handleSelectArticle = (article: Article) => {
-    setSelectedArticle(article);
-    setCurrentView('artikel-detail');
-  };
-
-  const handleSelectGuide = (guide: NicheCategory) => {
-    setSelectedGuide(guide);
-    setCurrentView('niche-detail');
-  };
-
-  const handleModalToShops = () => {
-    setCurrentView('home');
-    setSelectedArticle(null);
-    setTimeout(() => {
-      const shopSection = document.getElementById('shops-section');
-      if (shopSection) {
-        shopSection.scrollIntoView({ behavior: 'smooth' });
-      }
-    }, 100);
-  };
-
-  const triggerCookieSettings = () => {
-    localStorage.removeItem('kiesjeshop-cookie-consent');
-    setCookieBannerKey(prev => prev + 1);
-  };
-
-  const scrollToTop = () => {
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-  };
 
   return (
     <div className="min-h-screen bg-[#F8FAFC] font-sans selection:bg-indigo-100">
@@ -156,27 +208,33 @@ const App: React.FC = () => {
       <nav className="bg-white/90 backdrop-blur-2xl sticky top-0 z-50 border-b border-slate-100 h-20">
         <div className="max-w-7xl mx-auto px-6 h-full flex items-center justify-between">
           <div className="flex items-center gap-12">
-            <div 
+            <a 
+              href="/"
               className="flex items-center gap-2 cursor-pointer group" 
-              onClick={() => navigateTo('home')}
+              onClick={(e) => { e.preventDefault(); navigateTo('home'); }}
             >
-              <div className="bg-slate-950 p-2 rounded-lg group-hover:bg-indigo-600 transition-colors">
+              <div className="bg-slate-950 p-2 rounded-lg group-hover:bg-indigo-600 transition-colors relative">
                 <ShoppingBag className="w-5 h-5 text-white" />
+                <div className="absolute -top-1 -right-1 w-2 h-2 bg-emerald-500 rounded-full border border-white animate-pulse"></div>
               </div>
-              <span className="text-xl font-black text-slate-950 tracking-tighter">
-                Kiesjeshop<span className="text-slate-400">.nl</span>
-              </span>
-            </div>
+              <div className="flex flex-col -gap-1">
+                <span className="text-xl font-black text-slate-950 tracking-tighter leading-none">
+                  Kiesjeshop<span className="text-slate-400">.nl</span>
+                </span>
+                <span className="text-[7px] font-black uppercase tracking-[0.2em] text-emerald-600">Market Intelligence</span>
+              </div>
+            </a>
 
             <div className="hidden md:flex items-center gap-6">
-               <button 
-                 onClick={() => navigateTo('home')}
+               <a 
+                 href="/"
+                 onClick={(e) => { e.preventDefault(); navigateTo('home'); }}
                  className={`flex items-center gap-2 px-4 py-2 rounded-xl text-[10px] font-black uppercase tracking-[0.3em] transition-all ${currentView === 'home' ? 'bg-indigo-600/10 text-indigo-600' : 'text-slate-400 hover:text-slate-900'}`}
                >
                  <Cpu className="w-3.5 h-3.5" /> Intelligence
-               </button>
-               <button onClick={() => navigateTo('koopgidsen')} className={`px-4 py-2 text-[10px] font-black uppercase tracking-[0.3em] transition-colors ${currentView === 'koopgidsen' ? 'text-indigo-600' : 'text-slate-400 hover:text-slate-900'}`}>Koopgidsen</button>
-               <button onClick={() => navigateTo('redactie')} className={`px-4 py-2 text-[10px] font-black uppercase tracking-[0.3em] transition-colors ${currentView === 'redactie' ? 'text-indigo-600' : 'text-slate-400 hover:text-slate-900'}`}>Redactie</button>
+               </a>
+               <a href="/?p=koopgidsen" onClick={(e) => { e.preventDefault(); navigateTo('koopgidsen'); }} className={`px-4 py-2 text-[10px] font-black uppercase tracking-[0.3em] transition-colors ${currentView === 'koopgidsen' ? 'text-indigo-600' : 'text-slate-400 hover:text-slate-900'}`}>Koopgidsen</a>
+               <a href="/?p=redactie" onClick={(e) => { e.preventDefault(); navigateTo('redactie'); }} className={`px-4 py-2 text-[10px] font-black uppercase tracking-[0.3em] transition-colors ${currentView === 'redactie' ? 'text-indigo-600' : 'text-slate-400 hover:text-slate-900'}`}>Redactie</a>
             </div>
           </div>
 
@@ -296,7 +354,7 @@ const App: React.FC = () => {
                 </div>
 
                 <div className="bg-indigo-600 rounded-[3.5rem] p-12 flex flex-col justify-between h-[360px] text-white shadow-2xl relative overflow-hidden group border border-white/10">
-                   <LiveMarketTicker signals={marketSignals} sources={marketSources} loading={isMarketLoading} />
+                   <LiveMarketTicker signals={marketSignals} sources={marketSources} loading={isMarketLoading} lastUpdate={lastMarketUpdate} />
                 </div>
               </div>
             </div>
@@ -314,8 +372,8 @@ const App: React.FC = () => {
 
             <div id="compare" className="py-24">
                <div className="mb-16">
-                  <h2 className="text-5xl font-black text-slate-950 tracking-tighter mb-4">Directe Vergelijking<span className="text-indigo-600">.</span></h2>
-                  <p className="text-slate-500 font-medium text-xl max-w-xl">Top-tier producten direct geanalyseerd op prijs en levertijd bij de Grote 3.</p>
+                  <h2 className="text-5xl font-black text-slate-950 tracking-tighter mb-4">Vergelijk Beste Producten<span className="text-indigo-600">.</span></h2>
+                  <p className="text-slate-500 font-medium text-xl max-w-xl">Top-tier producten direct geanalyseerd op prijs en levertijd bij bol, Amazon and Coolblue.</p>
                </div>
                <ProductShowcase />
             </div>
@@ -331,7 +389,7 @@ const App: React.FC = () => {
 
             <div id="shops-section" className="py-24">
                <div className="mb-16 text-center">
-                  <h2 className="text-5xl md:text-7xl font-black text-slate-950 tracking-tighter mb-4">De Grote 3<span className="text-indigo-600">.</span></h2>
+                  <h2 className="text-5xl md:text-7xl font-black text-slate-950 tracking-tighter mb-4">De Grote 3 Winkels<span className="text-indigo-600">.</span></h2>
                   <p className="text-slate-500 font-medium text-xl max-w-2xl mx-auto leading-relaxed">De giganten van de Benelux vergeleken op service, prijs en betrouwbaarheid.</p>
                </div>
                <div className="grid grid-cols-1 md:grid-cols-3 gap-10">
@@ -348,11 +406,11 @@ const App: React.FC = () => {
                <div className="flex flex-col md:flex-row justify-between items-end mb-16 gap-8">
                   <div>
                     <h2 className="text-5xl font-black text-slate-950 tracking-tighter mb-4">Beste Koop 2025<span className="text-indigo-600">.</span></h2>
-                    <p className="text-slate-500 font-medium text-xl max-w-xl">Onze redactie heeft de 8 meest complexe categorieën voor je uitgezocht.</p>
+                    <p className="text-slate-500 font-medium text-xl max-w-xl">Onze redactie heeft de 8 meest complexe categorieën voor je uitgezocht in deze koopgidsen.</p>
                   </div>
-                  <button onClick={() => navigateTo('koopgidsen')} className="flex items-center gap-4 bg-slate-100 text-slate-900 px-10 py-5 rounded-2xl font-black text-[10px] uppercase tracking-widest hover:bg-indigo-600 hover:text-white transition-all">
+                  <a href="/?p=koopgidsen" onClick={(e) => { e.preventDefault(); navigateTo('koopgidsen'); }} className="flex items-center gap-4 bg-slate-100 text-slate-900 px-10 py-5 rounded-2xl font-black text-[10px] uppercase tracking-widest hover:bg-indigo-600 hover:text-white transition-all">
                     Alle Gidsen <ArrowRight className="w-5 h-5" />
-                  </button>
+                  </a>
                </div>
                <NicheGuides onSelectGuide={handleSelectGuide} limit={4} />
             </div>
@@ -360,23 +418,23 @@ const App: React.FC = () => {
             <div id="redactie" className="py-24">
                <div className="flex flex-col md:flex-row justify-between items-end mb-16 gap-8">
                   <div>
-                    <h2 className="text-5xl font-black text-slate-950 tracking-tighter mb-4">Latest Intelligence<span className="text-indigo-600">.</span></h2>
+                    <h2 className="text-5xl font-black text-slate-950 tracking-tighter mb-4">Latest Market Intelligence<span className="text-indigo-600">.</span></h2>
                     <p className="text-slate-500 font-medium text-xl max-w-xl">Diepgaande analyses van de nieuwste tech-trends en winkel-psychologie.</p>
                   </div>
-                  <button onClick={() => navigateTo('redactie')} className="flex items-center gap-4 bg-slate-950 text-white px-10 py-5 rounded-2xl font-black text-[10px] uppercase tracking-widest hover:bg-indigo-600 transition-all">
+                  <a href="/?p=redactie" onClick={(e) => { e.preventDefault(); navigateTo('redactie'); }} className="flex items-center gap-4 bg-slate-950 text-white px-10 py-5 rounded-2xl font-black text-[10px] uppercase tracking-widest hover:bg-indigo-600 transition-all">
                     Naar Redactie <ArrowRight className="w-5 h-5" />
-                  </button>
+                  </a>
                </div>
                <div className="grid grid-cols-1 md:grid-cols-2 gap-8 pb-12">
                   {ARTICLES.slice(0, 2).map(article => (
-                    <div key={article.id} onClick={() => handleSelectArticle(article)} className="group cursor-pointer bg-white rounded-[3rem] overflow-hidden border border-slate-100 shadow-sm hover:shadow-2xl transition-all h-[400px] relative">
-                        <img src={article.image} alt={article.title} className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" />
+                    <a key={article.id} href={`/?p=artikel&id=${article.id}`} onClick={(e) => { e.preventDefault(); handleSelectArticle(article); }} className="group cursor-pointer bg-white rounded-[3rem] overflow-hidden border border-slate-100 shadow-sm hover:shadow-2xl transition-all h-[400px] relative">
+                        <img src={article.image} alt={article.title} loading="lazy" className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" />
                         <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/40 to-transparent"></div>
                         <div className="absolute bottom-10 left-10 right-10">
                            <span className="text-[10px] font-black uppercase tracking-widest text-indigo-400 mb-4 block">{article.category}</span>
                            <h3 className="text-3xl font-black text-white tracking-tighter group-hover:text-indigo-300 transition-colors">{article.title}</h3>
                         </div>
-                    </div>
+                    </a>
                   ))}
                </div>
             </div>
@@ -391,7 +449,7 @@ const App: React.FC = () => {
         {currentView === 'koopgidsen' && (
           <div className="animate-in fade-in duration-700">
              <div className="mb-16">
-                <h2 className="text-5xl md:text-7xl font-black text-slate-950 tracking-tighter mb-4">Koopgidsen<span className="text-indigo-600">.</span></h2>
+                <h2 className="text-5xl md:text-7xl font-black text-slate-950 tracking-tighter mb-4">Onafhankelijke Koopgidsen<span className="text-indigo-600">.</span></h2>
                 <p className="text-slate-500 font-medium text-xl">8 Specialistische categorieën waar de verschillen tussen shops het grootst zijn.</p>
              </div>
              <NicheGuides onSelectGuide={handleSelectGuide} />
@@ -426,16 +484,16 @@ const App: React.FC = () => {
                 <span className="text-3xl font-black tracking-tighter">Kiesjeshop<span className="text-slate-600">.nl</span></span>
               </div>
               <p className="text-slate-500 max-w-sm font-medium leading-relaxed text-lg mb-12">
-                Intelligence driven platform voor shop-analyse. Wij filteren de ruis, jij kiest de kwaliteit.
+                Intelligence driven platform for shop-analysis. Wij filteren de ruis, jij kiest de kwaliteit.
               </p>
             </div>
 
             <div className="md:col-span-2">
               <h4 className="text-[10px] font-black uppercase tracking-[0.4em] text-indigo-400 mb-10">Platform</h4>
               <ul className="space-y-6 text-slate-400 font-bold text-sm">
-                <li><button onClick={() => navigateTo('home')} className="hover:text-white transition-colors">Intelligence</button></li>
-                <li><button onClick={() => navigateTo('koopgidsen')} className="hover:text-white transition-colors">Koopgidsen</button></li>
-                <li><button onClick={() => navigateTo('redactie')} className="hover:text-white transition-colors">Redactie</button></li>
+                <li><a href="/" onClick={(e) => { e.preventDefault(); navigateTo('home'); }} className="hover:text-white transition-colors">Intelligence</a></li>
+                <li><a href="/?p=koopgidsen" onClick={(e) => { e.preventDefault(); navigateTo('koopgidsen'); }} className="hover:text-white transition-colors">Koopgidsen</a></li>
+                <li><a href="/?p=redactie" onClick={(e) => { e.preventDefault(); navigateTo('redactie'); }} className="hover:text-white transition-colors">Redactie</a></li>
               </ul>
             </div>
 

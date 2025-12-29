@@ -1,15 +1,16 @@
 
 import React from 'react';
-import { Terminal, RefreshCcw, ArrowDownCircle, AlertCircle, Zap, Globe, ExternalLink, ShieldCheck, ArrowUpRight } from 'lucide-react';
+import { Terminal, RefreshCcw, ArrowDownCircle, AlertCircle, Zap, Globe, ExternalLink, ShieldCheck, ArrowUpRight, Clock } from 'lucide-react';
 import { MarketSignal } from '../services/MarketIntelligence';
 
 interface LiveMarketTickerProps {
   signals: MarketSignal[];
   sources: {uri: string, title: string}[];
   loading?: boolean;
+  lastUpdate?: string | null;
 }
 
-export const LiveMarketTicker: React.FC<LiveMarketTickerProps> = ({ signals, sources, loading }) => {
+export const LiveMarketTicker: React.FC<LiveMarketTickerProps> = ({ signals, sources, loading, lastUpdate }) => {
   const getSignalIcon = (type: string) => {
     switch (type) {
       case 'price': return <ArrowDownCircle className="w-4 h-4 text-emerald-400" />;
@@ -30,11 +31,18 @@ export const LiveMarketTicker: React.FC<LiveMarketTickerProps> = ({ signals, sou
   return (
     <div className="flex flex-col h-full font-mono relative">
       <div className="flex items-center justify-between mb-8">
-        <div className="flex items-center gap-2">
-          <div className={`w-2 h-2 rounded-full animate-pulse ${loading ? 'bg-amber-500' : 'bg-emerald-500'}`}></div>
-          <span className="text-[10px] font-black uppercase tracking-[0.2em] text-indigo-200">
-            {loading ? 'Analyzing Live Data...' : 'Intelligence Feed'}
-          </span>
+        <div className="flex flex-col gap-1">
+          <div className="flex items-center gap-2">
+            <div className={`w-2 h-2 rounded-full animate-pulse ${loading ? 'bg-amber-500' : 'bg-emerald-500'}`}></div>
+            <span className="text-[10px] font-black uppercase tracking-[0.2em] text-indigo-200">
+              {loading ? 'Analyzing Live Data...' : 'Intelligence Feed'}
+            </span>
+          </div>
+          {lastUpdate && !loading && (
+            <div className="flex items-center gap-1.5 text-[8px] font-bold text-white/30 uppercase tracking-widest">
+              <Clock className="w-2.5 h-2.5" /> Scan voltooid: {lastUpdate}
+            </div>
+          )}
         </div>
         <div className="text-right">
           <div className="flex items-center gap-2">
