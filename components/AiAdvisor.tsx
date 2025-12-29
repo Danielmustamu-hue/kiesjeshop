@@ -1,6 +1,7 @@
+
 import React, { useState } from 'react';
 import { GoogleGenAI } from '@google/genai';
-import { Sparkles, Send, Loader2, Info, AlertTriangle, Cpu, ExternalLink, Search } from 'lucide-react';
+import { Sparkles, Loader2, Cpu, ExternalLink, Search } from 'lucide-react';
 import { SHOPS } from '../constants';
 
 export const AiAdvisor: React.FC = () => {
@@ -8,7 +9,6 @@ export const AiAdvisor: React.FC = () => {
   const [advice, setAdvice] = useState<string | null>(null);
   const [searchLinks, setSearchLinks] = useState<{shopId: string, query: string}[]>([]);
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
 
   const getSearchLink = (type: string, query: string) => {
     const encoded = encodeURIComponent(query);
@@ -23,171 +23,88 @@ export const AiAdvisor: React.FC = () => {
   const handleAskAi = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!query.trim()) return;
-
     setLoading(true);
-    setError(null);
     setAdvice(null);
     setSearchLinks([]);
 
     try {
       const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
-      
-      const promptText = `
-        Jij bent de ultra-efficiënte shopping expert van Kiesjeshop.nl. 
-        GEBRUIK ZO MIN MOGELIJK WOORDEN. Wees extreem kortaf maar feitelijk.
-        
-        STRIKTE REGELS:
-        1. Maximaal 15-20 woorden totaal voor het advies.
-        2. Geen begroetingen (geen "Hoi", geen "Succes").
-        3. Geen overbodige uitleg. Directe vergelijking tussen bol, Coolblue en Amazon.
-        4. Gebruik 'bol', nooit 'bol.com'.
-        
-        Vraag: "${query}"
-        
-        Eindig ALTIJD met:
-        SEARCH_ACTION: [ShopNaam]|[Zoekterm]
-      `;
-
+      const promptText = `Jij bent de ultra-efficiënte shopping expert van Kiesjeshop.nl. GEBRUIK ZO MIN MOGELIJK WOORDEN. Wees extreem kortaf maar feitelijk. Maximaal 20 woorden. Vraag: "${query}" Eindig met: SEARCH_ACTION: [ShopNaam]|[Zoekterm]`;
       const response = await ai.models.generateContent({
         model: 'gemini-3-flash-preview',
         contents: [{ parts: [{ text: promptText }] }], 
       });
-      
       const fullText = response.text || "";
       const actionMatch = fullText.match(/SEARCH_ACTION:\s*(bol|coolblue|amazon)\s*\|\s*(.*)/i);
-      
       let cleanAdvice = fullText;
-      let links: {shopId: string, query: string}[] = [];
-
       if (actionMatch) {
         cleanAdvice = fullText.split('SEARCH_ACTION:')[0].trim();
-        links.push({
-          shopId: actionMatch[1].toLowerCase(),
-          query: actionMatch[2].trim()
-        });
+        setSearchLinks([{ shopId: actionMatch[1].toLowerCase(), query: actionMatch[2].trim() }]);
       }
-
       setAdvice(cleanAdvice);
-      setSearchLinks(links);
-
     } catch (err: any) {
-      console.error("AI Error:", err);
-      setError("Er ging iets mis. Probeer het opnieuw.");
+      setAdvice("Error bij het verwerken van uw aanvraag.");
     } finally {
       setLoading(false);
     }
   };
 
-  const renderAdviceWithLinks = (text: string | null) => {
-    if (!text) return null;
-    const regex = /(bol|Coolblue|Amazon)/gi;
-    const parts = text.split(regex);
-
-    return parts.map((part, index) => {
-      const lowerPart = part.toLowerCase();
-      let shopId: 'bol' | 'coolblue' | 'amazon' | null = null;
-      
-      if (lowerPart === 'bol') shopId = 'bol';
-      else if (lowerPart === 'coolblue') shopId = 'coolblue';
-      else if (lowerPart === 'amazon') shopId = 'amazon';
-
-      const shop = shopId ? SHOPS.find(s => s.id === shopId) : null;
-
-      if (shop) {
-        return (
-          <a 
-            key={`${shopId}-${index}`}
-            href={shop.ctaLink}
-            target="_blank"
-            rel="nofollow noopener noreferrer"
-            className={`font-bold hover:underline underline-offset-2 ${shop.color}`}
-          >
-            {part}
-          </a>
-        );
-      }
-      return <span key={`text-${index}`}>{part}</span>;
-    });
-  };
-
   return (
-    <div className="bg-indigo-900 text-white rounded-3xl p-6 md:p-10 shadow-2xl overflow-hidden relative border border-indigo-500/20">
-      <div className="absolute top-0 right-0 -mt-10 -mr-10 w-64 h-64 bg-indigo-700 rounded-full blur-3xl opacity-50 pointer-events-none"></div>
+    <div className="bg-slate-950 text-white h-full p-12 md:p-24 relative flex flex-col items-center justify-center">
+      <div className="absolute top-0 right-0 -mt-24 -mr-24 w-full max-w-[500px] h-[500px] bg-brand-indigo/10 rounded-full blur-[160px]"></div>
       
-      <div className="relative z-10 max-w-2xl mx-auto text-center">
-        <div className="inline-flex items-center gap-2 bg-indigo-800/50 px-4 py-1.5 rounded-full text-sm font-medium text-indigo-200 mb-4 border border-indigo-700">
-          <Sparkles className="w-4 h-4" />
-          <span>Snel AI Advies</span>
+      <div className="relative z-10 w-full max-w-3xl mx-auto text-center">
+        <div className="inline-flex items-center gap-3 bg-indigo-500/10 px-5 py-2.5 rounded-2xl text-[10px] font-black uppercase tracking-[0.4em] text-indigo-400 mb-10 border border-indigo-500/20">
+          <Cpu className="w-4 h-4" />
+          <span>Neural Comparison Engine</span>
         </div>
         
-        <h2 className="text-2xl md:text-3xl font-bold mb-4">Wat zoek je?</h2>
-        <p className="text-indigo-200 mb-8 text-lg">Direct antwoord op je shopping vraag.</p>
+        <h2 className="text-6xl md:text-7xl font-black mb-6 tracking-tighter">AI Consultant<span className="text-brand-indigo">.</span></h2>
+        <p className="text-slate-400 mb-16 text-xl font-medium max-w-xl mx-auto">Analyseer prijsverschillen en productreviews met onze real-time assistent.</p>
 
-        <form onSubmit={handleAskAi} className="relative max-w-lg mx-auto group">
+        <form onSubmit={handleAskAi} className="relative group mb-16">
           <input 
             type="text" 
             value={query}
             onChange={(e) => setQuery(e.target.value)}
-            placeholder="Bijv: Welke oortjes hebben de beste bas?" 
-            className="w-full pl-6 pr-14 py-4 rounded-full bg-white/10 border border-white/20 text-white placeholder-indigo-300 focus:outline-none focus:ring-2 focus:ring-indigo-400 focus:bg-white/20 backdrop-blur-sm transition-all shadow-inner"
+            placeholder="Bijv: Welke oortjes hebben de beste bas onder €150?" 
+            className="w-full px-10 py-7 rounded-[2.5rem] bg-white/5 border border-white/10 text-white placeholder-slate-600 focus:outline-none focus:ring-4 focus:ring-brand-indigo/20 focus:bg-white/10 transition-all text-xl font-medium shadow-3xl"
           />
           <button 
             type="submit" 
             disabled={loading || !query.trim()}
-            className="absolute right-2 top-2 p-2 bg-white text-indigo-900 rounded-full hover:bg-indigo-50 disabled:opacity-50 disabled:cursor-not-allowed transition-all active:scale-90 flex items-center justify-center w-10 h-10"
+            className="absolute right-3 top-3 px-10 h-[calc(100%-1.5rem)] bg-white text-slate-950 rounded-[2rem] font-black text-[11px] uppercase tracking-widest hover:bg-brand-indigo hover:text-white transition-all active:scale-95 disabled:opacity-30"
           >
-            {loading ? <Loader2 className="w-5 h-5 animate-spin" /> : <Send className="w-5 h-5" />}
+            {loading ? <Loader2 className="w-5 h-5 animate-spin mx-auto" /> : "Consult"}
           </button>
         </form>
 
-        <div className="mt-4 flex items-center justify-center gap-1.5 opacity-40">
-            <Cpu className="w-3 h-3" />
-            <span className="text-[10px] uppercase tracking-widest font-semibold">Gemini Ultra-Short Logic</span>
-        </div>
-
-        {error && (
-            <div className="mt-4 flex items-center justify-center gap-2 text-sm text-red-200 bg-red-900/50 py-2 px-4 rounded-lg border border-red-500/30">
-                <AlertTriangle className="w-4 h-4" />
-                <span>{error}</span>
-            </div>
-        )}
-
         {advice && (
-          <div className="mt-8 bg-white/10 border border-white/20 rounded-xl p-6 text-left animate-in fade-in slide-in-from-bottom-4 duration-500 shadow-lg backdrop-blur-sm">
-             <div className="flex items-start gap-4">
-                <div className="bg-indigo-600 p-2 rounded-lg shrink-0">
-                    <Info className="w-5 h-5 text-white" />
+          <div className="bg-white/5 border border-white/10 rounded-[3.5rem] p-12 text-left animate-in fade-in zoom-in-95 duration-500 shadow-3xl">
+             <div className="flex flex-col gap-10">
+                <div className="text-3xl font-black text-white leading-tight tracking-tight">
+                  {advice}
                 </div>
-                <div className="w-full">
-                    <h3 className="font-bold text-lg mb-2 text-white">Direct Advies:</h3>
-                    <div className="text-indigo-50 leading-relaxed text-lg mb-6">
-                      {renderAdviceWithLinks(advice)}
-                    </div>
 
-                    {searchLinks.length > 0 && (
-                      <div className="pt-4 border-t border-white/10">
-                        <div className="flex flex-wrap gap-3">
-                          {searchLinks.map((link, i) => {
-                            const shop = SHOPS.find(s => s.id === link.shopId);
-                            if (!shop) return null;
-                            return (
-                              <a
-                                key={i}
-                                href={getSearchLink(link.shopId, link.query)}
-                                target="_blank"
-                                rel="nofollow noopener noreferrer"
-                                className={`flex items-center gap-2 px-5 py-3 rounded-xl font-bold transition-all active:scale-95 shadow-md hover:shadow-lg group/btn ${shop.buttonColor}`}
-                              >
-                                <Search className="w-4 h-4" />
-                                {shop.name}: {link.query}
-                                <ExternalLink className="w-4 h-4 opacity-50 group-hover/btn:translate-x-1 transition-transform" />
-                              </a>
-                            );
-                          })}
-                        </div>
-                      </div>
-                    )}
-                </div>
+                {searchLinks.length > 0 && (
+                  <div className="pt-10 border-t border-white/10 flex flex-wrap gap-5">
+                    {searchLinks.map((link, i) => {
+                      const shop = SHOPS.find(s => s.id === link.shopId);
+                      if (!shop) return null;
+                      return (
+                        <a
+                          key={i}
+                          href={getSearchLink(link.shopId, link.query)}
+                          target="_blank"
+                          rel="nofollow noopener noreferrer"
+                          className={`flex items-center gap-4 px-10 py-5 rounded-3xl font-black text-[10px] uppercase tracking-[0.2em] transition-all active:scale-95 shadow-xl ${shop.buttonColor}`}
+                        >
+                          <Search className="w-4 h-4" /> {shop.name}: {link.query} <ExternalLink className="w-4 h-4" />
+                        </a>
+                      );
+                    })}
+                  </div>
+                )}
              </div>
           </div>
         )}

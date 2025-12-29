@@ -1,83 +1,54 @@
+
 import React from 'react';
-import { Check, X, Minus, ArrowRight } from 'lucide-react';
+import { Check, X, Minus } from 'lucide-react';
 
 export const ComparisonTable: React.FC = () => {
   return (
-    <div className="w-full">
-      <div className="hidden md:block text-center mb-8">
-        <h2 className="text-3xl font-black text-slate-900 tracking-tighter">Snel Overzicht</h2>
-        <p className="text-slate-600 font-medium">De Grote Drie direct vergeleken.</p>
+    <div className="mb-32">
+      <div className="text-center mb-16">
+        <h2 className="text-5xl font-black text-slate-950 tracking-tighter mb-4">Benchmarks<span className="text-indigo-600">.</span></h2>
+        <p className="text-slate-400 font-bold text-xs uppercase tracking-[0.2em]">Technische specificaties van de Big 3.</p>
       </div>
 
-      <div className="bg-white rounded-3xl shadow-2xl border border-slate-100 w-full overflow-hidden relative">
+      <div className="intelligence-card p-10 overflow-hidden border border-slate-100/50">
         <div className="overflow-x-auto scrollbar-hide">
-          <table className="w-full text-left text-slate-600 min-w-[500px] border-collapse">
-            <caption className="sr-only">Vergelijking tussen bol, Coolblue en Amazon</caption>
-            <thead className="text-[10px] text-slate-700 uppercase bg-slate-50/80 border-b border-slate-100">
+          <table className="w-full text-left border-collapse">
+            <thead className="text-[10px] font-black uppercase tracking-[0.3em] text-slate-400 border-b border-slate-50">
               <tr>
-                <th scope="col" className="px-4 py-5 font-black w-[25%] bg-slate-50/80 sticky left-0 z-10 border-r border-slate-100">Functie</th>
-                <th scope="col" className="px-2 py-5 text-blue-700 font-black text-center">bol</th>
-                <th scope="col" className="px-2 py-5 text-orange-600 font-black text-center">Coolblue</th>
-                <th scope="col" className="px-2 py-5 text-yellow-600 font-black text-center">Amazon</th>
+                <th className="px-8 py-8 w-1/3">Feature</th>
+                <th className="px-4 py-8 text-center text-blue-500">bol</th>
+                <th className="px-4 py-8 text-center text-orange-500">Coolblue</th>
+                <th className="px-4 py-8 text-center text-yellow-600">Amazon</th>
               </tr>
             </thead>
-            <tbody className="text-[11px] sm:text-xs">
-              <tr className="border-b border-slate-50 hover:bg-slate-50/50 transition-colors">
-                <th scope="row" className="px-4 py-4 font-bold text-slate-900 bg-white sticky left-0 z-10 border-r border-slate-50">Retour</th>
-                <td className="px-2 py-4 text-center">30 dg</td>
-                <td className="px-2 py-4 text-center">30 dg</td>
-                <td className="px-2 py-4 text-center">30 dg</td>
+            <tbody className="text-sm font-bold text-slate-700">
+              <tr className="border-b border-slate-50">
+                <td className="px-8 py-8">Gratis Verzending</td>
+                <td className="px-4 py-8 text-center">v.a. €20</td>
+                <td className="px-4 py-8 text-center text-emerald-500">ALTIJD</td>
+                <td className="px-4 py-8 text-center">Prime / v.a. €25</td>
               </tr>
-              <tr className="border-b border-slate-50 hover:bg-slate-50/50 transition-colors">
-                <th scope="row" className="px-4 py-4 font-bold text-slate-900 bg-white sticky left-0 z-10 border-r border-slate-50">Gratis verz.</th>
-                <td className="px-2 py-4 text-center">v.a. €20</td>
-                <td className="px-2 py-4 text-center font-bold text-green-600">Altijd</td>
-                <td className="px-2 py-4 text-center text-[10px]">Prime / v.a. €25</td>
+              <tr className="border-b border-slate-50">
+                <td className="px-8 py-8">Abonnement Model</td>
+                <td className="px-4 py-8 text-center"><span className="px-4 py-1.5 bg-blue-50 text-blue-600 rounded-full text-[9px] font-black tracking-widest uppercase">Select</span></td>
+                <td className="px-4 py-8 text-center"><Minus className="w-4 h-4 mx-auto text-slate-200" /></td>
+                <td className="px-4 py-8 text-center"><span className="px-4 py-1.5 bg-yellow-50 text-yellow-700 rounded-full text-[9px] font-black tracking-widest uppercase">Prime</span></td>
               </tr>
-              <tr className="border-b border-slate-50 hover:bg-slate-50/50 transition-colors">
-                <th scope="row" className="px-4 py-4 font-bold text-slate-900 bg-white sticky left-0 z-10 border-r border-slate-50">Abonnement</th>
-                <td className="px-2 py-4 text-center">
-                  <span className="bg-blue-50 text-blue-700 px-2 py-0.5 rounded-full text-[9px] font-black inline-block">SELECT</span>
-                </td>
-                <td className="px-2 py-4 text-center">
-                  <div className="flex justify-center"><Minus className="w-3 h-3 text-slate-300" /></div>
-                </td>
-                <td className="px-2 py-4 text-center">
-                  <span className="bg-yellow-50 text-yellow-800 px-2 py-0.5 rounded-full text-[9px] font-black inline-block">PRIME</span>
-                </td>
+              <tr className="border-b border-slate-50">
+                <td className="px-8 py-8">Service Focus</td>
+                <td className="px-4 py-8 text-center">Allround</td>
+                <td className="px-4 py-8 text-center text-indigo-600 uppercase tracking-widest text-[10px]">Premium Expert</td>
+                <td className="px-4 py-8 text-center">Prijs-vechter</td>
               </tr>
-              <tr className="border-b border-slate-50 hover:bg-slate-50/50 transition-colors">
-                <th scope="row" className="px-4 py-4 font-bold text-slate-900 bg-white sticky left-0 z-10 border-r border-slate-50">Service</th>
-                <td className="px-2 py-4 text-center">Goed</td>
-                <td className="px-2 py-4 text-center font-bold text-orange-500 uppercase tracking-tighter">Winnaar</td>
-                <td className="px-2 py-4 text-center">Standaard</td>
-              </tr>
-              <tr className="border-b border-slate-50 hover:bg-slate-50/50 transition-colors">
-                <th scope="row" className="px-4 py-4 font-bold text-slate-900 bg-white sticky left-0 z-10 border-r border-slate-50">Zondag-lev.</th>
-                <td className="px-2 py-4 text-center"><div className="flex justify-center"><Check className="w-4 h-4 text-green-500" /></div></td>
-                <td className="px-2 py-4 text-center"><div className="flex justify-center"><Check className="w-4 h-4 text-green-500" /></div></td>
-                <td className="px-2 py-4 text-center"><div className="flex justify-center"><X className="w-4 h-4 text-red-300" /></div></td>
-              </tr>
-              <tr className="border-b border-slate-50 hover:bg-slate-50/50 transition-colors">
-                <th scope="row" className="px-4 py-4 font-bold text-slate-900 bg-white sticky left-0 z-10 border-r border-slate-50">Afhaalptn.</th>
-                <td className="px-2 py-4 text-center">Zeer veel</td>
-                <td className="px-2 py-4 text-center">Gematigd</td>
-                <td className="px-2 py-4 text-center">Veel</td>
-              </tr>
-              <tr className="hover:bg-slate-50/50 transition-colors">
-                <th scope="row" className="px-4 py-4 font-bold text-slate-900 italic bg-white sticky left-0 z-10 border-r border-slate-50">Prijsfocus</th>
-                <td className="px-2 py-4 text-center">Allround</td>
-                <td className="px-2 py-4 text-center">Kwaliteit</td>
-                <td className="px-2 py-4 text-center font-bold text-green-600 uppercase tracking-tighter">Budget</td>
+              <tr>
+                <td className="px-8 py-8">Zondag Levering</td>
+                <td className="px-4 py-8 text-center"><Check className="w-5 h-5 mx-auto text-emerald-500" /></td>
+                <td className="px-4 py-8 text-center"><Check className="w-5 h-5 mx-auto text-emerald-500" /></td>
+                <td className="px-4 py-8 text-center"><X className="w-5 h-5 mx-auto text-slate-200" /></td>
               </tr>
             </tbody>
           </table>
         </div>
-      </div>
-      <div className="md:hidden mt-4 text-center flex items-center justify-center gap-2">
-        <ArrowRight className="w-3 h-3 text-slate-400" />
-        <p className="text-[9px] text-slate-400 font-black uppercase tracking-widest">Swipe voor Amazon & Details</p>
-        <ArrowRight className="w-3 h-3 text-slate-400" />
       </div>
     </div>
   );

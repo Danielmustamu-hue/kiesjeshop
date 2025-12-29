@@ -1,41 +1,29 @@
+
 <!DOCTYPE html>
 <html lang="nl">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="theme-color" content="#FFF3E0" />
-    <title>Kiesjeshop.nl | De Grote 3 Vergelijker: bol, Amazon & Coolblue</title>
-    <meta name="description" content="Kies de webshop die bij jou past. bol, Coolblue of Amazon? Wij helpen je beslissen op basis van service, snelheid en de beste prijs voor jouw aankoop." />
+    <meta name="theme-color" content="#F8FAFC" />
+    <title>Kiesjeshop.nl | Intelligence Driven Comparison</title>
+    <meta name="description" content="Kies de webshop die bij jou past op basis van real-time data en service-scores." />
     
-    <!-- SEO & Indexing -->
-    <meta name="robots" content="index, follow, max-image-preview:large" />
-    <link rel="canonical" href="https://www.kiesjeshop.nl/" />
-    <meta property="og:title" content="Kiesjeshop.nl - Slimmer Shoppen" />
-    <meta property="og:description" content="Wie wint vandaag op prijs en service? Check bol, Amazon en Coolblue." />
-    <meta property="og:type" content="website" />
-    <meta property="og:url" content="https://www.kiesjeshop.nl/" />
-
-    <!-- Favicon -->
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <link rel="apple-touch-icon" href="/favicon.svg" />
-
     <script type="importmap">
 {
   "imports": {
     "react": "https://esm.sh/react@18.2.0",
     "react/": "https://esm.sh/react@18.2.0/",
     "react-dom": "https://esm.sh/react-dom@18.2.0",
-    "react-dom/": "https://esm.sh/react-dom@18.2.0/",
     "react-dom/client": "https://esm.sh/react-dom@18.2.0/client",
     "@google/genai": "https://esm.sh/@google/genai@1.33.0",
     "lucide-react": "https://esm.sh/lucide-react@0.344.0?external=react",
-    "@vitejs/plugin-react": "https://esm.sh/@vitejs/plugin-react@^5.1.2",
-    "vite": "https://esm.sh/vite@^7.3.0"
+    "react-dom/": "https://esm.sh/react-dom@^19.2.3/",
+    "vite": "https://esm.sh/vite@^7.3.0",
+    "@vitejs/plugin-react": "https://esm.sh/@vitejs/plugin-react@^5.1.2"
   }
 }
 </script>
     
-    <!-- Google Tag Manager -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-L2T8T5EJ5C"></script>
     <script>
       window.dataLayer = window.dataLayer || [];
@@ -44,15 +32,21 @@
       gtag('config', 'G-L2T8T5EJ5C', { 'anonymize_ip': true });
     </script>
 
-    <!-- Tailwind Config -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
       tailwind.config = {
         theme: {
           extend: {
             colors: {
-              orange: { 50: '#fff7ed', 100: '#ffedd5', 200: '#fed7aa', 300: '#fdba74', 400: '#fb923c', 500: '#f97316', 600: '#ea580c', 700: '#c2410c', 800: '#9a3412', 900: '#7c2d12', 950: '#431407' },
-              slate: { 50: '#f8fafc', 100: '#f1f5f9', 200: '#e2e8f0', 300: '#cbd5e1', 400: '#94a3b8', 500: '#64748b', 600: '#475569', 700: '#334155', 800: '#1e293b', 900: '#0f172a', 950: '#020617' }
+              brand: {
+                indigo: '#4F46E5',
+                navy: '#0F172A',
+                accent: '#6366F1'
+              }
+            },
+            borderRadius: {
+              '4xl': '2rem',
+              '5xl': '3.5rem'
             }
           }
         }
@@ -60,24 +54,56 @@
     </script>
     
     <style>
-      @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;900&display=swap');
+      @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;700&display=swap');
       body {
         margin: 0;
         font-family: 'Inter', sans-serif;
         -webkit-font-smoothing: antialiased;
-        background-color: #FFF3E0;
+        background-color: #F8FAFC;
+        color: #0F172A;
       }
-      .text-gradient {
-        background: linear-gradient(to right, #f97316, #ea580c);
+      .font-mono { font-family: 'JetBrains Mono', monospace; }
+      .text-intelligence {
+        background: linear-gradient(135deg, #0F172A 0%, #4F46E5 100%);
         -webkit-background-clip: text;
         -webkit-text-fill-color: transparent;
       }
-      .scrollbar-hide::-webkit-scrollbar {
-        display: none;
+      .intelligence-card {
+        background: white;
+        border-radius: 3.5rem;
+        box-shadow: 0 25px 50px -12px rgba(15, 23, 42, 0.04);
       }
-      .scrollbar-hide {
-        -ms-overflow-style: none;
-        scrollbar-width: none;
+      .animate-spin-slow {
+        animation: spin 3s linear infinite;
+      }
+      @keyframes spin {
+        from { transform: rotate(0deg); }
+        to { transform: rotate(360deg); }
+      }
+      .animate-scroll {
+        display: inline-block;
+        animation: scroll 40s linear infinite;
+      }
+      @keyframes scroll {
+        0% { transform: translateX(100%); }
+        100% { transform: translateX(-100%); }
+      }
+      .mask-fade-bottom {
+        mask-image: linear-gradient(to bottom, black 50%, transparent 100%);
+      }
+      /* Custom Scrollbar */
+      ::-webkit-scrollbar {
+        width: 8px;
+      }
+      ::-webkit-scrollbar-track {
+        background: #f1f1f1;
+      }
+      ::-webkit-scrollbar-thumb {
+        background: #0F172A;
+        border-radius: 10px;
+      }
+      ::-webkit-scrollbar-thumb:hover {
+        background: #4F46E5;
       }
     </style>
   </head>

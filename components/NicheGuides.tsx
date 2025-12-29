@@ -1,27 +1,33 @@
+
 import React from 'react';
 import { TrendingUp, ArrowRight, BookOpen } from 'lucide-react';
 import { NICHE_GUIDES, NicheCategory } from '../data/niches';
 
 interface NicheGuidesProps {
   onSelectGuide: (guide: NicheCategory) => void;
+  limit?: number;
 }
 
-export const NicheGuides: React.FC<NicheGuidesProps> = ({ onSelectGuide }) => {
+export const NicheGuides: React.FC<NicheGuidesProps> = ({ onSelectGuide, limit }) => {
+  const guidesToDisplay = limit ? NICHE_GUIDES.slice(0, limit) : NICHE_GUIDES;
+
   return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-24">
-      <div className="text-center mb-16">
-        <div className="inline-flex items-center gap-2 bg-rose-100 text-rose-700 px-4 py-1.5 rounded-full text-sm font-semibold mb-4 border border-rose-200">
-           <BookOpen className="w-4 h-4" />
-           <span>Expert Selectie</span>
+    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      {!limit && (
+        <div className="text-center mb-16">
+          <div className="inline-flex items-center gap-2 bg-rose-100 text-rose-700 px-4 py-1.5 rounded-full text-sm font-semibold mb-4 border border-rose-200">
+             <BookOpen className="w-4 h-4" />
+             <span>Expert Selectie</span>
+          </div>
+          <h2 className="text-3xl sm:text-4xl font-extrabold text-slate-900 tracking-tight">Onze 8 Beste Koopgidsen</h2>
+          <p className="text-slate-600 mt-3 text-lg max-w-2xl mx-auto">
+            Wij hebben het uitzoekwerk al gedaan. Klik op een categorie voor onze top 3 aanbevelingen.
+          </p>
         </div>
-        <h2 className="text-3xl sm:text-4xl font-extrabold text-slate-900 tracking-tight">Onze 8 Beste Koopgidsen</h2>
-        <p className="text-slate-600 mt-3 text-lg max-w-2xl mx-auto">
-          Wij hebben het uitzoekwerk al gedaan. Klik op een categorie voor onze top 3 aanbevelingen.
-        </p>
-      </div>
+      )}
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-        {NICHE_GUIDES.map((guide) => (
+        {guidesToDisplay.map((guide) => (
           <div 
             key={guide.id} 
             onClick={() => onSelectGuide(guide)}
@@ -51,7 +57,7 @@ export const NicheGuides: React.FC<NicheGuidesProps> = ({ onSelectGuide }) => {
                 
                 <div className="mt-auto pt-4 border-t border-slate-50 flex items-center justify-between">
                     <span className="text-xs font-bold text-slate-400 uppercase tracking-wider">
-                        {guide.products.length} Producten
+                        2025 Edition
                     </span>
                     <span className="inline-flex items-center gap-1 text-sm font-bold text-indigo-600 group-hover:gap-2 transition-all">
                         Bekijk Gids <ArrowRight className="w-4 h-4" />

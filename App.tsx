@@ -1,29 +1,32 @@
+
 import React, { useState, useEffect } from 'react';
-import { ShoppingBag, LayoutDashboard, Newspaper, TrendingUp, ShoppingCart, Sparkles, Menu, X, ArrowLeft, BookOpen } from 'lucide-react';
+import { ShoppingBag, Sparkles, Menu, X, Globe, Cpu, MapPin, ShieldCheck, ChevronRight, Mail, LayoutGrid, BarChart3, TrendingUp, Cookie, Info, ArrowRight, Zap, Search, Bell, ArrowUp } from 'lucide-react';
 
 // Components
-import { ShopCard } from './components/ShopCard';
 import { AiAdvisor } from './components/AiAdvisor';
 import { ComparisonTable } from './components/ComparisonTable';
 import { ReviewSection } from './components/ReviewSection';
 import { FaqSection } from './components/FaqSection';
 import { BlogSection } from './components/BlogSection';
 import { NicheGuides } from './components/NicheGuides';
-import { ProductShowcase } from './components/ProductShowcase';
-import { FloatingAiButton } from './components/FloatingAiButton';
 import { NicheDetail } from './components/NicheDetail';
 import { TermsModal } from './components/TermsModal';
 import { PrivacyModal } from './components/PrivacyModal';
 import { AboutModal } from './components/AboutModal';
+import { AffiliateModal } from './components/AffiliateModal';
 import { ArticleModal } from './components/ArticleModal';
 import { CookieBanner } from './components/CookieBanner';
+import { ShopCard } from './components/ShopCard';
+import { LiveMarketTicker } from './components/LiveMarketTicker';
+import { MarketPulseDashboard } from './components/MarketPulseDashboard';
+import { ProductShowcase } from './components/ProductShowcase';
 
-// Data & Types
+// Data
 import { SHOPS } from './constants';
 import { NICHE_GUIDES, NicheCategory } from './data/niches';
 import { ARTICLES, Article } from './data/articles';
 
-type View = 'home' | 'redactie' | 'koopgidsen' | 'trending' | 'niche-detail' | 'artikel-detail';
+type View = 'home' | 'koopgidsen' | 'redactie' | 'niche-detail' | 'artikel-detail';
 
 const App: React.FC = () => {
   const [currentView, setCurrentView] = useState<View>('home');
@@ -33,99 +36,28 @@ const App: React.FC = () => {
   const [isTermsOpen, setIsTermsOpen] = useState(false);
   const [isPrivacyOpen, setIsPrivacyOpen] = useState(false);
   const [isAboutOpen, setIsAboutOpen] = useState(false);
+  const [isAffiliateOpen, setIsAffiliateOpen] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [showScrollTop, setShowScrollTop] = useState(false);
+  const [cookieBannerKey, setCookieBannerKey] = useState(0);
 
-  // URL ROUTING & PARSING
   useEffect(() => {
-    try {
-      const params = new URLSearchParams(window.location.search);
-      const p = params.get('p');
-      const id = params.get('id');
-
-      if (p === 'redactie') setCurrentView('redactie');
-      else if (p === 'producten') setCurrentView('koopgidsen');
-      else if (p === 'koopgidsen') setCurrentView('trending');
-      else if (p === 'niche' && id) {
-        const guide = NICHE_GUIDES.find(g => g.id === id);
-        if (guide) {
-          setSelectedGuide(guide);
-          setCurrentView('niche-detail');
-        }
-      } else if (p === 'artikel' && id) {
-        const art = ARTICLES.find(a => a.id.toString() === id);
-        if (art) {
-          setSelectedArticle(art);
-          setCurrentView('artikel-detail');
-        }
-      }
-    } catch (e) {
-      console.warn("Routing error in preview mode:", e);
-    }
-  }, []);
-
-  // SEO METADATA & URL SYNC
-  useEffect(() => {
-    let title = "Kiesjeshop.nl | De Grote 3 Vergelijker: bol, Amazon & Coolblue";
-    let description = "Kies de webshop die bij jou past. bol, Coolblue of Amazon? Wij helpen je beslissen op basis van service, snelheid en de beste prijs voor jouw aankoop.";
-    let path = "";
-
-    switch (currentView) {
-      case 'redactie':
-        title = "Redactie & Shopping Advies | Kiesjeshop.nl";
-        description = "Diepgaande reviews en insider-tips over de nieuwste producten bij bol, Amazon en Coolblue.";
-        path = "?p=redactie";
-        break;
-      case 'koopgidsen':
-        title = "Top Producten & Deals 2025 | Vergelijk bol, Amazon & Coolblue";
-        description = "Directe productvergelijkingen voor elektronica en wonen. Bekijk wie vandaag de beste prijs heeft.";
-        path = "?p=producten";
-        break;
-      case 'trending':
-        title = "Onafhankelijke Koopgidsen 2025 | Kiesjeshop.nl Top Picks";
-        description = "Onze experts hebben de 8 belangrijkste niches van 2025 geanalyseerd.";
-        path = "?p=koopgidsen";
-        break;
-      case 'niche-detail':
-        if (selectedGuide) {
-          title = `${selectedGuide.title} | Top 3 Advies 2025 - Kiesjeshop`;
-          description = selectedGuide.seoText;
-          path = `?p=niche&id=${selectedGuide.id}`;
-        }
-        break;
-      case 'artikel-detail':
-        if (selectedArticle) {
-          title = `${selectedArticle.title} | Kiesjeshop Redactie`;
-          description = selectedArticle.excerpt;
-          path = `?p=artikel&id=${selectedArticle.id}`;
-        }
-        break;
-      default:
-        path = "/";
-    }
-
-    document.title = title;
-    const metaDesc = document.querySelector('meta[name="description"]');
-    if (metaDesc) metaDesc.setAttribute('content', description);
-    
-    // Sync URL safely
-    try {
-      const currentUrl = window.location.pathname + window.location.search;
-      const targetUrl = path.startsWith('?') ? window.location.pathname + path : path;
-      
-      if (currentUrl !== targetUrl) {
-        window.history.pushState({}, '', targetUrl);
-      }
-    } catch (e) {
-      console.log("URL state update blocked by environment security.");
-    }
-
     window.scrollTo({ top: 0, behavior: 'smooth' });
     setIsMobileMenuOpen(false);
-  }, [currentView, selectedGuide, selectedArticle]);
+  }, [currentView]);
 
-  const handleSelectGuide = (guide: NicheCategory) => {
-    setSelectedGuide(guide);
-    setCurrentView('niche-detail');
+  useEffect(() => {
+    const handleScroll = () => {
+      setShowScrollTop(window.scrollY > 1000);
+    };
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
+  const navigateTo = (view: View) => {
+    setCurrentView(view);
+    setSelectedGuide(null);
+    setSelectedArticle(null);
   };
 
   const handleSelectArticle = (article: Article) => {
@@ -133,271 +65,318 @@ const App: React.FC = () => {
     setCurrentView('artikel-detail');
   };
 
-  const navigateTo = (view: View) => {
-    setCurrentView(view);
-    setSelectedGuide(null);
-    setSelectedArticle(null);
-    setIsMobileMenuOpen(false);
+  const handleSelectGuide = (guide: NicheCategory) => {
+    setSelectedGuide(guide);
+    setCurrentView('niche-detail');
   };
 
-  const navLinks = [
-    { id: 'home', label: 'Dashboard', icon: LayoutDashboard },
-    { id: 'trending', label: 'Koopgidsen', icon: BookOpen },
-    { id: 'koopgidsen', label: 'Producten', icon: ShoppingCart },
-    { id: 'redactie', label: 'Redactie', icon: Newspaper },
-  ];
+  const handleModalToShops = () => {
+    setCurrentView('home');
+    setSelectedArticle(null);
+    setTimeout(() => {
+      const shopSection = document.getElementById('shops-section');
+      if (shopSection) {
+        shopSection.scrollIntoView({ behavior: 'smooth' });
+      }
+    }, 100);
+  };
+
+  const triggerCookieSettings = () => {
+    localStorage.removeItem('kiesjeshop-cookie-consent');
+    setCookieBannerKey(prev => prev + 1);
+  };
+
+  const scrollToTop = () => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
 
   return (
-    <div className="min-h-screen bg-[#FFF3E0] font-sans selection:bg-orange-200">
+    <div className="min-h-screen bg-[#F8FAFC] font-sans selection:bg-indigo-100">
       
       {/* HEADER */}
-      <nav className="bg-white/95 backdrop-blur-md border-b border-orange-100 sticky top-0 z-50 transition-all duration-300">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
-          <div 
-            className="flex items-center gap-2 cursor-pointer group" 
-            onClick={() => navigateTo('home')}
-          >
-            <div className="bg-orange-500 p-2 rounded-xl group-hover:rotate-6 transition-transform shadow-lg shadow-orange-500/20">
-              <ShoppingBag className="w-6 h-6 text-white" />
-            </div>
-            <span className="text-2xl font-black text-slate-900 tracking-tighter">
-              Kiesjeshop<span className="text-orange-500">.nl</span>
-            </span>
-          </div>
-          
-          {/* Desktop Nav */}
-          <div className="hidden md:flex items-center gap-6 text-[10px] font-black uppercase tracking-widest text-slate-500">
-            {navLinks.map((link) => (
-              <button 
-                key={link.id}
-                onClick={() => navigateTo(link.id as View)} 
-                className={`hover:text-orange-500 transition-colors flex items-center gap-2 py-2 px-1 border-b-2 transition-all ${
-                  (currentView === link.id || (link.id === 'redactie' && currentView === 'artikel-detail') || (link.id === 'trending' && currentView === 'niche-detail')) ? 'text-orange-600 border-orange-500' : 'border-transparent'
-                }`}
-              >
-                <link.icon className="w-4 h-4" /> {link.label}
-              </button>
-            ))}
-            <button 
-              onClick={() => setShowAiAdvisor(true)} 
-              className="bg-slate-900 text-white px-6 py-2.5 rounded-full hover:bg-orange-500 transition-all shadow-xl shadow-slate-900/10 flex items-center gap-2 active:scale-95"
+      <nav className="bg-white/90 backdrop-blur-2xl sticky top-0 z-50 border-b border-slate-100 h-20">
+        <div className="max-w-7xl mx-auto px-6 h-full flex items-center justify-between">
+          <div className="flex items-center gap-12">
+            <div 
+              className="flex items-center gap-2 cursor-pointer group" 
+              onClick={() => navigateTo('home')}
             >
-              <Sparkles className="w-4 h-4" /> AI Advies
+              <div className="bg-slate-950 p-2 rounded-lg group-hover:bg-indigo-600 transition-colors">
+                <ShoppingBag className="w-5 h-5 text-white" />
+              </div>
+              <span className="text-xl font-black text-slate-950 tracking-tighter">
+                Kiesjeshop<span className="text-slate-400">.nl</span>
+              </span>
+            </div>
+
+            <div className="hidden md:flex items-center gap-6">
+               <button 
+                 onClick={() => navigateTo('home')}
+                 className={`flex items-center gap-2 px-4 py-2 rounded-xl text-[10px] font-black uppercase tracking-[0.3em] transition-all ${currentView === 'home' ? 'bg-indigo-600/10 text-indigo-600' : 'text-slate-400 hover:text-slate-900'}`}
+               >
+                 <Cpu className="w-3.5 h-3.5" /> Intelligence
+               </button>
+               <button onClick={() => navigateTo('koopgidsen')} className={`px-4 py-2 text-[10px] font-black uppercase tracking-[0.3em] transition-colors ${currentView === 'koopgidsen' ? 'text-indigo-600' : 'text-slate-400 hover:text-slate-900'}`}>Koopgidsen</button>
+               <button onClick={() => navigateTo('redactie')} className={`px-4 py-2 text-[10px] font-black uppercase tracking-[0.3em] transition-colors ${currentView === 'redactie' ? 'text-indigo-600' : 'text-slate-400 hover:text-slate-900'}`}>Redactie</button>
+            </div>
+          </div>
+
+          <div className="flex items-center gap-4">
+            <button 
+              onClick={() => setShowAiAdvisor(true)}
+              className="hidden md:flex items-center gap-2 bg-slate-950 text-white px-6 py-2.5 rounded-xl text-[10px] font-black uppercase tracking-widest hover:bg-indigo-600 transition-all shadow-xl active:scale-95"
+            >
+              <Cpu className="w-4 h-4 text-indigo-400" /> Consultant
+            </button>
+            <button className="md:hidden p-2 text-slate-900" onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}>
+              {isMobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
             </button>
           </div>
-
-          {/* Mobile Menu Button */}
-          <button 
-            className="md:hidden p-2 text-slate-900"
-            onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-          >
-            {isMobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
-          </button>
         </div>
-
-        {/* Mobile Menu Overlay */}
-        {isMobileMenuOpen && (
-          <div className="md:hidden absolute top-20 left-0 w-full bg-white border-b border-orange-100 shadow-2xl animate-in slide-in-from-top-4 duration-300 z-40">
-            <div className="p-6 flex flex-col gap-4">
-              {navLinks.map((link) => (
-                <button 
-                  key={link.id}
-                  onClick={() => navigateTo(link.id as View)}
-                  className={`flex items-center gap-4 p-4 rounded-2xl font-black text-sm uppercase tracking-widest transition-colors ${
-                    currentView === link.id ? 'bg-orange-50 text-orange-600' : 'text-slate-600 hover:bg-slate-50'
-                  }`}
-                >
-                  <link.icon className="w-5 h-5" /> {link.label}
-                </button>
-              ))}
-              <button 
-                onClick={() => setShowAiAdvisor(true)}
-                className="flex items-center justify-center gap-4 p-4 rounded-2xl bg-slate-900 text-white font-black text-sm uppercase tracking-widest"
-              >
-                <Sparkles className="w-5 h-5 text-orange-400" /> AI Advies
-              </button>
-            </div>
-          </div>
-        )}
       </nav>
 
-      {/* VIEW LOGIC */}
-      <main className="min-h-[70vh]">
+      {/* TRENDING TICKER */}
+      <div className="bg-slate-900 py-3 overflow-hidden whitespace-nowrap border-b border-white/5">
+        <div className="flex items-center animate-scroll gap-12 text-[9px] font-black uppercase tracking-[0.3em]">
+           <span className="text-emerald-400 flex items-center gap-2"><Zap className="w-3 h-3" /> Trending: Apple AirPods Pro 2 goedkoopst bij Amazon</span>
+           <span className="text-indigo-400 flex items-center gap-2"><TrendingUp className="w-3 h-3" /> bol.com 7-daagse gestart</span>
+           <span className="text-orange-400 flex items-center gap-2"><Globe className="w-3 h-3" /> Coolblue service-score gestegen</span>
+           <span className="text-emerald-400 flex items-center gap-2"><Zap className="w-3 h-3" /> Sony XM5 Prijscheck voltooid</span>
+           <span className="text-white opacity-40">++ Real-time Market Access Enabled ++</span>
+        </div>
+      </div>
+
+      <main className="max-w-7xl mx-auto px-6 py-12">
         {currentView === 'home' && (
-          <div className="animate-in fade-in duration-700">
+          <div className="animate-in fade-in duration-1000">
             {/* HERO SECTION */}
-            <div className="bg-gradient-to-b from-white to-[#FFF3E0] py-16 sm:py-24 px-4 overflow-hidden relative">
-              <div className="absolute top-20 right-0 w-96 h-96 bg-orange-200 rounded-full blur-3xl opacity-20 -mr-48"></div>
-              <div className="max-w-7xl mx-auto relative z-10 text-center lg:text-left grid lg:grid-cols-2 gap-12 items-center">
-                <div>
-                  <div className="inline-flex items-center gap-2 bg-orange-100 text-orange-700 px-4 py-1.5 rounded-full text-[10px] font-black uppercase tracking-[0.2em] mb-6">
-                    ⚡️ Real-time Prijsintelligentie 2025
+            <div className="grid lg:grid-cols-12 gap-8 mb-24">
+              <div className="lg:col-span-7 intelligence-card p-12 md:p-24 relative overflow-hidden group border border-slate-100/50">
+                <div className="relative z-10">
+                  <div className="flex items-center gap-3 text-indigo-600 font-black text-[10px] uppercase tracking-[0.4em] mb-12">
+                    <Sparkles className="w-4 h-4 animate-pulse" /> Platform 2025
                   </div>
-                  <h1 className="text-5xl sm:text-7xl font-black text-slate-900 leading-[0.95] tracking-tighter mb-8">
-                    Betaal je nog steeds <br/>
-                    <span className="text-orange-500">te veel voor gemak?</span>
+                  <h1 className="text-6xl md:text-[9.2rem] font-black text-slate-950 leading-[0.82] tracking-tighter mb-16">
+                    Vergelijk.<br/>
+                    Bespaar.<br/>
+                    <span className="text-intelligence">Geniet.</span>
                   </h1>
-                  <p className="text-xl text-slate-600 mb-10 max-w-xl font-medium leading-relaxed">
-                    Online shoppen is vermoeiend door prijsstunts en vage service. 
-                    Kiesjeshop.nl filtert de ruis en brengt de beste deals van <strong>bol</strong>, <strong>Amazon</strong> en <strong>Coolblue</strong> direct naar je scherm.
+                  <p className="text-xl text-slate-500 font-medium max-w-lg mb-12 leading-relaxed">
+                    De onafhankelijke gids die <span className="text-blue-500 font-bold underline underline-offset-8">bol</span>, <span className="text-yellow-600 font-bold underline underline-offset-8">Amazon</span> en <span className="text-orange-500 font-bold underline underline-offset-8">Coolblue</span> voor jou ontleedt.
                   </p>
-                  <div className="flex flex-wrap gap-4 justify-center lg:justify-start">
-                    <button 
-                       onClick={() => navigateTo('trending')}
-                       className="px-8 py-4 bg-slate-900 text-white rounded-2xl font-black text-xs uppercase tracking-widest shadow-xl hover:bg-orange-500 transition-all active:scale-95"
-                    >
-                      Bekijk Koopgidsen
-                    </button>
-                    <button 
-                       onClick={() => setShowAiAdvisor(true)}
-                       className="px-8 py-4 bg-white text-slate-900 border border-slate-200 rounded-2xl font-black text-xs uppercase tracking-widest hover:border-orange-500 transition-all shadow-sm"
-                    >
-                      Vraag onze AI
+                  
+                  <button onClick={() => setIsAffiliateOpen(true)} className="flex items-center gap-2 text-[10px] font-black uppercase tracking-widest text-slate-400 hover:text-indigo-600 transition-colors mb-16">
+                    <ShieldCheck className="w-3.5 h-3.5" /> 100% Onafhankelijk & Transparant
+                  </button>
+
+                  <div className="flex flex-wrap gap-5">
+                    <button onClick={() => setShowAiAdvisor(true)} className="bg-slate-950 text-white px-12 py-5 rounded-[2rem] font-black text-[11px] uppercase tracking-[0.3em] hover:bg-indigo-600 transition-all shadow-2xl active:scale-95">
+                      Vraag de AI Consultant
                     </button>
                   </div>
                 </div>
-                <div className="hidden lg:block relative">
-                   <div className="bg-white p-8 rounded-[3rem] shadow-2xl border border-orange-100 transform rotate-2 hover:rotate-0 transition-transform duration-500">
-                      <ComparisonTable />
-                   </div>
-                </div>
               </div>
-            </div>
 
-            {/* SHOP GRID SECTION */}
-            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20" id="shop-grid">
-              <div className="flex flex-col md:flex-row md:items-end justify-between mb-12 gap-4">
-                <div>
-                   <h2 className="text-3xl sm:text-4xl font-black text-slate-900 tracking-tighter">De Grote Drie Ontleed.</h2>
-                   <p className="text-slate-500 font-medium text-lg">Wie wint het vandaag op service, prijs en snelheid?</p>
-                </div>
-              </div>
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-                {SHOPS.map((shop) => (
-                  <ShopCard key={shop.id} shop={shop} />
-                ))}
-              </div>
-            </div>
-
-            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 bg-white rounded-[4rem] shadow-sm mb-20 border border-orange-50/50">
-              <AiAdvisor />
-            </div>
-
-            <section className="bg-slate-900 py-24 text-white overflow-hidden relative">
-              <div className="absolute top-0 right-0 w-64 h-64 bg-orange-500/10 rounded-full blur-[120px] -mr-32 -mt-32"></div>
-              <div className="max-w-4xl mx-auto px-6 relative z-10">
-                <span className="text-orange-500 font-black text-[10px] uppercase tracking-widest mb-4 block">Kiesjeshop Intelligence</span>
-                <h2 className="text-4xl font-black text-white mb-8 tracking-tighter leading-tight">De impact van prijselasticiteit op uw dagelijkse aankopen</h2>
-                <div className="prose prose-invert prose-lg max-w-none text-slate-400 leading-relaxed font-medium">
-                  <p>
-                    Online shoppen is in 2025 een spel van data geworden. Grote spelers zoals <strong>bol</strong>, <strong>Amazon</strong> en <strong>Coolblue</strong> gebruiken geavanceerde algoritmes om prijzen real-time aan te passen. 
-                    Wij helpen u begrijpen wanneer u waar moet toeslaan.
+              <div className="lg:col-span-5 flex flex-col gap-8">
+                <div className="bg-slate-950 rounded-[3.5rem] p-12 flex flex-col items-center justify-center text-center relative overflow-hidden h-[360px] shadow-2xl border border-white/5">
+                  <div className="bg-indigo-500/10 p-5 rounded-3xl mb-8 border border-indigo-500/20">
+                    <Cpu className="w-10 h-10 text-indigo-400" />
+                  </div>
+                  <h2 className="text-3xl font-black text-white mb-4 tracking-tighter">AI Advisor</h2>
+                  <p className="text-slate-400 text-sm font-medium mb-10 max-w-[240px]">
+                    Krijg direct antwoord op jouw specifieke shopping-vraag.
                   </p>
+                  <button 
+                    onClick={() => setShowAiAdvisor(true)}
+                    className="bg-white text-slate-950 w-full py-5 rounded-2xl font-black text-[10px] uppercase tracking-widest hover:bg-indigo-50 transition-all"
+                  >
+                    Start Chat
+                  </button>
+                </div>
+
+                <div className="bg-indigo-600 rounded-[3.5rem] p-12 flex flex-col justify-between h-[360px] text-white shadow-2xl relative overflow-hidden group border border-white/10">
+                   <LiveMarketTicker />
                 </div>
               </div>
-            </section>
+            </div>
+
+            {/* MARKET PULSE OVERVIEW */}
+            <div className="mb-24">
+               <div className="flex items-center gap-4 mb-10">
+                  <div className="h-px flex-grow bg-slate-200"></div>
+                  <span className="text-[10px] font-black uppercase tracking-[0.4em] text-slate-400 px-6">Live Market Analysis</span>
+                  <div className="h-px flex-grow bg-slate-200"></div>
+               </div>
+               <MarketPulseDashboard />
+            </div>
+
+            {/* DE GROTE 3 */}
+            <div id="shops-section" className="mb-32">
+               <div className="mb-16 text-center">
+                  <h2 className="text-5xl md:text-7xl font-black text-slate-950 tracking-tighter mb-4">De Grote 3<span className="text-indigo-600">.</span></h2>
+                  <p className="text-slate-500 font-medium text-xl max-w-2xl mx-auto leading-relaxed">De giganten van de Benelux vergeleken op service, prijs en betrouwbaarheid.</p>
+               </div>
+               <div className="grid grid-cols-1 md:grid-cols-3 gap-10">
+                  {SHOPS.map(shop => (
+                    <ShopCard key={shop.id} shop={shop} />
+                  ))}
+               </div>
+               <div className="mt-24">
+                  <ComparisonTable />
+               </div>
+            </div>
+
+            {/* PRODUCT SHOWCASE */}
+            <div className="mb-32">
+               <div className="mb-16">
+                  <h2 className="text-5xl font-black text-slate-950 tracking-tighter mb-4">Directe Vergelijking<span className="text-indigo-600">.</span></h2>
+                  <p className="text-slate-500 font-medium text-xl max-w-xl">Top-tier producten direct geanalyseerd op prijs en levertijd bij de Grote 3.</p>
+               </div>
+               <ProductShowcase />
+            </div>
+
+            {/* KOOPGIDSEN PREVIEW */}
+            <div className="mb-32 bg-white rounded-[4rem] p-12 md:p-24 border border-slate-100 shadow-sm">
+               <div className="flex flex-col md:flex-row justify-between items-end mb-16 gap-8">
+                  <div>
+                    <h2 className="text-5xl font-black text-slate-950 tracking-tighter mb-4">Beste Koop 2025<span className="text-indigo-600">.</span></h2>
+                    <p className="text-slate-500 font-medium text-xl max-w-xl">Onze redactie heeft de 8 meest complexe categorieën voor je uitgezocht.</p>
+                  </div>
+                  <button onClick={() => navigateTo('koopgidsen')} className="flex items-center gap-4 bg-slate-100 text-slate-900 px-10 py-5 rounded-2xl font-black text-[10px] uppercase tracking-widest hover:bg-indigo-600 hover:text-white transition-all">
+                    Alle Gidsen <ArrowRight className="w-5 h-5" />
+                  </button>
+               </div>
+               <NicheGuides onSelectGuide={handleSelectGuide} limit={4} />
+            </div>
+
+            {/* REDACTIE PREVIEW */}
+            <div className="mb-32">
+               <div className="flex flex-col md:flex-row justify-between items-end mb-16 gap-8">
+                  <div>
+                    <h2 className="text-5xl font-black text-slate-950 tracking-tighter mb-4">Latest Intelligence<span className="text-indigo-600">.</span></h2>
+                    <p className="text-slate-500 font-medium text-xl max-w-xl">Diepgaande analyses van de nieuwste tech-trends en winkel-psychologie.</p>
+                  </div>
+                  <button onClick={() => navigateTo('redactie')} className="flex items-center gap-4 bg-slate-950 text-white px-10 py-5 rounded-2xl font-black text-[10px] uppercase tracking-widest hover:bg-indigo-600 transition-all">
+                    Naar Redactie <ArrowRight className="w-5 h-5" />
+                  </button>
+               </div>
+               <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                  {ARTICLES.slice(0, 2).map(article => (
+                    <div key={article.id} onClick={() => handleSelectArticle(article)} className="group cursor-pointer bg-white rounded-[3rem] overflow-hidden border border-slate-100 shadow-sm hover:shadow-2xl transition-all h-[400px] relative">
+                        <img src={article.image} alt={article.title} className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" />
+                        <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/40 to-transparent"></div>
+                        <div className="absolute bottom-10 left-10 right-10">
+                           <span className="text-[10px] font-black uppercase tracking-widest text-indigo-400 mb-4 block">{article.category}</span>
+                           <h3 className="text-3xl font-black text-white tracking-tighter group-hover:text-indigo-300 transition-colors">{article.title}</h3>
+                        </div>
+                    </div>
+                  ))}
+               </div>
+            </div>
 
             <ReviewSection />
             <FaqSection />
           </div>
         )}
 
-        {currentView === 'redactie' && (
-          <div className="py-20 animate-in slide-in-from-bottom-4 duration-500">
-            <div className="max-w-7xl mx-auto px-4 mb-12 flex flex-col items-center text-center">
-               <span className="text-orange-500 font-black text-[10px] uppercase tracking-widest mb-4 block">Diepgang & Reviews</span>
-               <h1 className="text-5xl md:text-6xl font-black text-slate-900 tracking-tighter mb-4">Redactie Feed.</h1>
-               <p className="text-xl text-slate-600 font-medium max-w-2xl">Onafhankelijke reviews en koopadvies van onze experts.</p>
-            </div>
-            <BlogSection onSelectArticle={handleSelectArticle} />
-          </div>
-        )}
-
         {currentView === 'koopgidsen' && (
-          <div className="py-20 animate-in slide-in-from-bottom-4 duration-500">
-            <div className="max-w-7xl mx-auto px-4 mb-12 flex flex-col items-center text-center">
-               <span className="text-orange-500 font-black text-[10px] uppercase tracking-widest mb-4 block">Prijsvergelijking</span>
-               <h1 className="text-5xl md:text-6xl font-black text-slate-900 tracking-tighter mb-4">Producten & Deals.</h1>
-               <p className="text-xl text-slate-600 font-medium max-w-2xl">Directe vergelijkingen van de meest gezochte producten van dit moment.</p>
-            </div>
-            <ProductShowcase />
-            <div className="mt-20">
-              <ComparisonTable />
-            </div>
+          <div className="animate-in fade-in duration-700">
+             <div className="mb-16">
+                <h2 className="text-5xl md:text-7xl font-black text-slate-950 tracking-tighter mb-4">Koopgidsen<span className="text-indigo-600">.</span></h2>
+                <p className="text-slate-500 font-medium text-xl">8 Specialistische categorieën waar de verschillen tussen shops het grootst zijn.</p>
+             </div>
+             <NicheGuides onSelectGuide={handleSelectGuide} />
           </div>
         )}
 
-        {currentView === 'trending' && (
-          <div className="py-20 animate-in slide-in-from-bottom-4 duration-500">
-            <div className="max-w-7xl mx-auto px-4 mb-12 flex flex-col items-center text-center">
-               <span className="text-orange-500 font-black text-[10px] uppercase tracking-widest mb-4 block">Niches & Trends</span>
-               <h1 className="text-5xl md:text-6xl font-black text-slate-900 tracking-tighter mb-4">Koopgidsen 2025.</h1>
-               <p className="text-xl text-slate-600 font-medium max-w-2xl">De 8 belangrijkste categorieën van dit jaar volledig geanalyseerd.</p>
-            </div>
-            <NicheGuides onSelectGuide={handleSelectGuide} />
-          </div>
+        {currentView === 'redactie' && (
+           <div className="animate-in fade-in duration-700">
+             <BlogSection onSelectArticle={handleSelectArticle} />
+           </div>
         )}
 
-        {currentView === 'niche-detail' && selectedGuide && (
-          <NicheDetail guide={selectedGuide} onBack={() => navigateTo('trending')} />
-        )}
-
-        {currentView === 'artikel-detail' && selectedArticle && (
-          <ArticleModal article={selectedArticle} onClose={() => navigateTo('redactie')} inline={true} />
-        )}
+        {currentView === 'niche-detail' && selectedGuide && <NicheDetail guide={selectedGuide} onBack={() => navigateTo('home')} />}
+        {currentView === 'artikel-detail' && selectedArticle && <ArticleModal article={selectedArticle} onClose={() => navigateTo('redactie')} onNavigateToShops={handleModalToShops} inline={true} />}
       </main>
 
+      {/* SCROLL TO TOP */}
+      {showScrollTop && (
+        <button 
+          onClick={scrollToTop}
+          className="fixed bottom-10 right-10 z-[90] p-4 bg-slate-950 text-white rounded-full shadow-2xl hover:bg-indigo-600 transition-all animate-in fade-in zoom-in"
+        >
+          <ArrowUp className="w-6 h-6" />
+        </button>
+      )}
+
       {/* FOOTER */}
-      <footer className="bg-slate-900 text-white py-20 mt-20 relative">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-12 mb-16">
-            <div className="col-span-1 md:col-span-2">
-              <div className="flex items-center gap-2 mb-6">
-                <ShoppingBag className="w-8 h-8 text-orange-500" />
-                <span className="text-3xl font-black tracking-tighter text-white">Kiesjeshop<span className="text-orange-500">.nl</span></span>
+      <footer className="bg-slate-950 text-white pt-32 pb-16 border-t border-white/5">
+        <div className="max-w-7xl mx-auto px-6">
+          <div className="grid grid-cols-1 md:grid-cols-12 gap-16 mb-24">
+            <div className="md:col-span-5">
+              <div className="flex items-center gap-3 mb-10">
+                <div className="bg-indigo-600 p-2 rounded-lg"><ShoppingBag className="w-6 h-6 text-white" /></div>
+                <span className="text-3xl font-black tracking-tighter">Kiesjeshop<span className="text-slate-600">.nl</span></span>
               </div>
-              <p className="text-slate-400 max-w-sm mb-8 font-medium leading-relaxed">
-                De #1 onafhankelijke shopping guide van Nederland.
+              <p className="text-slate-500 max-w-sm font-medium leading-relaxed text-lg mb-12">
+                Intelligence driven platform voor shop-analyse. Wij filteren de ruis, jij kiest de kwaliteit.
               </p>
             </div>
-            <div>
-              <h4 className="font-black text-[10px] uppercase tracking-[0.3em] text-orange-500 mb-8">Menu</h4>
-              <ul className="space-y-4 text-sm font-bold">
-                <li><button onClick={() => navigateTo('home')} className="hover:text-orange-500 transition-colors">Dashboard</button></li>
-                <li><button onClick={() => navigateTo('trending')} className="hover:text-orange-500 transition-colors">Koopgidsen</button></li>
-                <li><button onClick={() => navigateTo('koopgidsen')} className="hover:text-orange-500 transition-colors">Producten</button></li>
-                <li><button onClick={() => navigateTo('redactie')} className="hover:text-orange-500 transition-colors">Redactie</button></li>
+
+            <div className="md:col-span-2">
+              <h4 className="text-[10px] font-black uppercase tracking-[0.4em] text-indigo-400 mb-10">Platform</h4>
+              <ul className="space-y-6 text-slate-400 font-bold text-sm">
+                <li><button onClick={() => navigateTo('home')} className="hover:text-white transition-colors">Intelligence</button></li>
+                <li><button onClick={() => navigateTo('koopgidsen')} className="hover:text-white transition-colors">Koopgidsen</button></li>
+                <li><button onClick={() => navigateTo('redactie')} className="hover:text-white transition-colors">Redactie</button></li>
               </ul>
             </div>
-            <div>
-              <h4 className="font-black text-[10px] uppercase tracking-[0.3em] text-orange-500 mb-8">Informatie</h4>
-              <ul className="space-y-4 text-sm font-bold">
-                <li><button onClick={() => setIsAboutOpen(true)} className="hover:text-orange-500 transition-colors">Over Ons</button></li>
-                <li><button onClick={() => setIsPrivacyOpen(true)} className="hover:text-orange-500 transition-colors">Privacy</button></li>
-                <li><button onClick={() => setIsTermsOpen(true)} className="hover:text-orange-500 transition-colors">Voorwaarden</button></li>
+
+            <div className="md:col-span-2">
+              <h4 className="text-[10px] font-black uppercase tracking-[0.4em] text-indigo-400 mb-10">Bedrijf</h4>
+              <ul className="space-y-6 text-slate-400 font-bold text-sm">
+                <li><button onClick={() => setIsAboutOpen(true)} className="hover:text-white transition-colors">Over ons</button></li>
+                <li><a href="mailto:info@kiesjeshop.nl" className="hover:text-white transition-colors">Contact</a></li>
+                <li><button onClick={() => setIsAffiliateOpen(true)} className="hover:text-white transition-colors flex items-center gap-2"><Info className="w-3.5 h-3.5" /> Affiliates</button></li>
               </ul>
+            </div>
+
+            <div className="md:col-span-3">
+              <h4 className="text-[10px] font-black uppercase tracking-[0.4em] text-indigo-400 mb-10">Juridisch & AVG</h4>
+              <ul className="space-y-6 text-slate-400 font-bold text-sm mb-12">
+                <li><button onClick={() => setIsPrivacyOpen(true)} className="hover:text-white transition-colors flex items-center gap-2"><ShieldCheck className="w-4 h-4 text-indigo-500" /> Privacybeleid</button></li>
+                <li><button onClick={() => setIsTermsOpen(true)} className="hover:text-white transition-colors flex items-center gap-2"><ChevronRight className="w-3 h-3" /> Voorwaarden</button></li>
+                <li><button onClick={triggerCookieSettings} className="hover:text-white transition-colors flex items-center gap-2"><Cookie className="w-4 h-4 text-indigo-500" /> Cookie instellingen</button></li>
+              </ul>
+              <div className="p-6 bg-white/5 rounded-[2rem] border border-white/10">
+                <div className="flex items-center gap-3 text-xs font-black uppercase tracking-widest text-slate-400 mb-4">
+                   <MapPin className="w-4 h-4 text-indigo-500" /> Regio
+                </div>
+                <p className="text-sm text-slate-500 font-bold">Amstelveen, Nederland</p>
+                <p className="text-[10px] text-slate-600 mt-2 italic">Onafhankelijk Expert Advies</p>
+              </div>
             </div>
           </div>
-          
-          <div className="pt-8 border-t border-slate-800 text-center">
-             <p className="text-[10px] font-black uppercase tracking-[0.4em] text-slate-500 mb-4 px-4">
-                Affiliate Disclaimer: Wij ontvangen een kleine commissie bij aankopen via onze links bij bol, Amazon of Coolblue.
-             </p>
-             <p className="text-slate-600 text-xs">© 2025 Kiesjeshop.nl</p>
+
+          <div className="pt-12 border-t border-white/5 flex flex-col md:flex-row justify-between items-center gap-8">
+            <p className="text-slate-600 text-[10px] font-black uppercase tracking-[0.5em]">
+              © 2025 Kiesjeshop.nl — Intelligent Comparison Platform
+            </p>
+            <div className="flex items-center gap-8 text-[10px] font-black uppercase tracking-[0.3em] text-slate-600">
+              <span className="flex items-center gap-2"><div className="w-2 h-2 bg-emerald-500 rounded-full animate-pulse shadow-[0_0_10px_rgba(16,185,129,0.5)]"></div> Network Active</span>
+            </div>
           </div>
         </div>
       </footer>
 
-      {/* MODALS & OVERLAYS */}
-      <FloatingAiButton visible={!showAiAdvisor} onClick={() => setShowAiAdvisor(true)} />
-      
+      {/* AI OVERLAY */}
       {showAiAdvisor && (
         <div className="fixed inset-0 z-[100] flex items-center justify-center p-4">
-          <div className="absolute inset-0 bg-slate-900/80 backdrop-blur-sm" onClick={() => setShowAiAdvisor(false)}></div>
-          <div className="relative w-full max-w-4xl max-h-[90vh] overflow-y-auto rounded-[3rem] shadow-2xl">
+          <div className="absolute inset-0 bg-slate-950/95 backdrop-blur-2xl" onClick={() => setShowAiAdvisor(false)}></div>
+          <div className="relative w-full max-w-5xl max-h-[90vh] overflow-hidden rounded-[4rem] shadow-2xl border border-white/10">
              <AiAdvisor />
-             <button onClick={() => setShowAiAdvisor(false)} className="absolute top-6 right-6 p-2 bg-white/10 text-white rounded-full">
-                <X className="w-5 h-5" />
+             <button onClick={() => setShowAiAdvisor(false)} className="absolute top-10 right-10 p-4 bg-white/10 text-white rounded-full hover:bg-white/20 transition-all border border-white/10">
+                <X className="w-6 h-6" />
              </button>
           </div>
         </div>
@@ -406,8 +385,8 @@ const App: React.FC = () => {
       <TermsModal isOpen={isTermsOpen} onClose={() => setIsTermsOpen(false)} />
       <PrivacyModal isOpen={isPrivacyOpen} onClose={() => setIsPrivacyOpen(false)} />
       <AboutModal isOpen={isAboutOpen} onClose={() => setIsAboutOpen(false)} />
-      
-      <CookieBanner />
+      <AffiliateModal isOpen={isAffiliateOpen} onClose={() => setIsAffiliateOpen(false)} />
+      <CookieBanner key={cookieBannerKey} />
     </div>
   );
 };
