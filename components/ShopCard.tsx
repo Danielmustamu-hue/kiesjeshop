@@ -12,33 +12,40 @@ export const ShopCard: React.FC<ShopCardProps> = ({ shop }) => {
   return (
     <div className="intelligence-card overflow-hidden border border-slate-100/50 hover:translate-y-[-8px] transition-all duration-700 group flex flex-col h-full relative">
       
-      {/* Visual Header */}
-      <div className={`h-48 flex flex-col items-center justify-center p-8 relative overflow-hidden ${shop.logoBg}`}>
-         <div className="absolute inset-0 bg-gradient-to-br from-white/10 to-transparent opacity-50"></div>
+      {/* Visual Header as Link */}
+      <a 
+        href={shop.ctaLink} 
+        target="_blank" 
+        rel="nofollow noopener noreferrer"
+        className={`h-48 flex flex-col items-center justify-center p-8 relative overflow-hidden transition-opacity hover:opacity-90 ${shop.logoBg}`}
+      >
+         <div className="absolute inset-0 bg-gradient-to-br from-black/10 to-transparent opacity-50"></div>
          
          {/* Live Badge */}
-         <div className="absolute top-4 right-4 bg-white/20 backdrop-blur-md px-3 py-1 rounded-full border border-white/30 flex items-center gap-1.5">
+         <div className="absolute top-4 right-4 bg-white/20 backdrop-blur-md px-3 py-1 rounded-full border border-white/30 flex items-center gap-1.5 z-20">
             <div className="w-1.5 h-1.5 bg-emerald-400 rounded-full animate-pulse"></div>
             <span className="text-[8px] font-black text-white uppercase tracking-widest">Live Status</span>
          </div>
 
-         {shop.id === 'bol' && (
-             <div className="text-6xl font-black text-blue-700 tracking-tighter relative z-10">bol</div>
-         )}
-         {shop.id === 'amazon' && (
-             <div className="flex flex-col items-center relative z-10">
-                <div className="text-4xl font-black text-white tracking-tight leading-none uppercase">amazon<span className="text-yellow-500">.nl</span></div>
-                <div className="w-full h-1 bg-yellow-500 rounded-full mt-2 animate-pulse"></div>
-             </div>
-         )}
-         {shop.id === 'coolblue' && (
-             <div className="text-5xl font-black text-white tracking-tight relative z-10">Coolblue</div>
-         )}
+         <div className="relative z-10 transition-transform duration-500 group-hover:scale-110">
+           {shop.id === 'bol' && (
+               <div className="text-6xl font-black text-white tracking-tighter drop-shadow-sm">bol</div>
+           )}
+           {shop.id === 'amazon' && (
+               <div className="flex flex-col items-center">
+                  <div className="text-4xl font-black text-white tracking-tight leading-none uppercase">amazon<span className="text-yellow-500">.nl</span></div>
+                  <div className="w-full h-1 bg-yellow-500 rounded-full mt-2 animate-pulse"></div>
+               </div>
+           )}
+           {shop.id === 'coolblue' && (
+               <div className="text-5xl font-black text-orange-500 tracking-tight drop-shadow-sm">Coolblue</div>
+           )}
+         </div>
 
          <div className="mt-6 bg-white/90 backdrop-blur-md px-4 py-2 rounded-2xl border border-white/50 relative z-10 shadow-lg">
             <StarRating score={shop.serviceScore} />
          </div>
-      </div>
+      </a>
 
       {/* Content Area */}
       <div className="p-10 flex flex-col flex-grow">

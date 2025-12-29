@@ -1,6 +1,6 @@
 
 import React, { useState, useEffect } from 'react';
-import { ShoppingBag, Sparkles, Menu, X, Globe, Cpu, MapPin, ShieldCheck, ChevronRight, Mail, LayoutGrid, BarChart3, TrendingUp, Cookie, Info, ArrowRight, Zap, Search, Bell, ArrowUp } from 'lucide-react';
+import { ShoppingBag, Sparkles, Menu, X, Globe, Cpu, MapPin, ShieldCheck, ChevronRight, Mail, LayoutGrid, BarChart3, TrendingUp, Cookie, Info, ArrowRight, Zap, Search, Bell, ArrowUp, Loader2, CheckCircle2 } from 'lucide-react';
 
 // Components
 import { AiAdvisor } from './components/AiAdvisor';
@@ -20,19 +20,29 @@ import { ShopCard } from './components/ShopCard';
 import { LiveMarketTicker } from './components/LiveMarketTicker';
 import { MarketPulseDashboard } from './components/MarketPulseDashboard';
 import { ProductShowcase } from './components/ProductShowcase';
+import { VersusTool } from './components/VersusTool';
+import { CommandPalette } from './components/CommandPalette';
+import { FloatingAiButton } from './components/FloatingAiButton';
+import { ExitIntentModal } from './components/ExitIntentModal';
+import { SectionNav } from './components/SectionNav';
 
-// Data
+// Config & Data
+import { API_CONFIG } from './config';
 import { SHOPS } from './constants';
 import { NICHE_GUIDES, NicheCategory } from './data/niches';
 import { ARTICLES, Article } from './data/articles';
 
-type View = 'home' | 'koopgidsen' | 'redactie' | 'niche-detail' | 'artikel-detail';
+type View = 'home' | 'koopgidsen' | 'redactie' | 'niche-detail' | 'artikel-detail' | 'ai-advisor';
 
 const App: React.FC = () => {
   const [currentView, setCurrentView] = useState<View>('home');
   const [selectedGuide, setSelectedGuide] = useState<NicheCategory | null>(null);
   const [selectedArticle, setSelectedArticle] = useState<Article | null>(null);
   const [showAiAdvisor, setShowAiAdvisor] = useState(false);
+  const [isSearchOpen, setIsSearchOpen] = useState(false);
+  const [showExitIntent, setShowExitIntent] = useState(false);
+  const [hasShownExitIntent, setHasShownExitIntent] = useState(false);
+  
   const [isTermsOpen, setIsTermsOpen] = useState(false);
   const [isPrivacyOpen, setIsPrivacyOpen] = useState(false);
   const [isAboutOpen, setIsAboutOpen] = useState(false);
@@ -40,6 +50,10 @@ const App: React.FC = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [showScrollTop, setShowScrollTop] = useState(false);
   const [cookieBannerKey, setCookieBannerKey] = useState(0);
+
+  // Newsletter states
+  const [newsletterEmail, setNewsletterEmail] = useState('');
+  const [newsletterStatus, setNewsletterStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle');
 
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -50,14 +64,79 @@ const App: React.FC = () => {
     const handleScroll = () => {
       setShowScrollTop(window.scrollY > 1000);
     };
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
 
-  const navigateTo = (view: View) => {
+    const handleMouseOut = (e: MouseEvent) => {
+      if (e.clientY <= 0 && !hasShownExitIntent && !showAiAdvisor) {
+        setShowExitIntent(true);
+        setHasShownExitIntent(true);
+      }
+    };
+
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
+        e.preventDefault();
+        setIsSearchOpen(true);
+      }
+    };
+
+    window.addEventListener('scroll', handleScroll);
+    window.addEventListener('keydown', handleKeyDown);
+    document.addEventListener('mouseleave', handleMouseOut);
+    
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+      window.removeEventListener('keydown', handleKeyDown);
+      document.removeEventListener('mouseleave', handleMouseOut);
+    };
+  }, [hasShownExitIntent, showAiAdvisor]);
+
+  const handleNewsletterSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!newsletterEmail) return;
+    
+    setNewsletterStatus('loading');
+
+    try {
+      const response = await fetch(API_CONFIG.NEWSLETTER_ENDPOINT, {
+        method: 'POST',
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          email: newsletterEmail,
+          source: 'Homepage Newsletter Footer',
+          timestamp: new Date().toISOString()
+        })
+      });
+
+      if (response.ok) {
+        setNewsletterStatus('success');
+        setNewsletterEmail('');
+      } else {
+        throw new Error('Server response was not ok');
+      }
+    } catch (err) {
+      console.error('Newsletter error:', err);
+      setNewsletterStatus('error');
+    }
+  };
+
+  const navigateTo = (view: View, item?: any) => {
     setCurrentView(view);
-    setSelectedGuide(null);
-    setSelectedArticle(null);
+    setIsSearchOpen(false);
+    
+    if (view === 'niche-detail' && item) {
+      setSelectedGuide(item);
+    } else if (view === 'artikel-detail' && item) {
+      setSelectedArticle(item);
+    } else if (view === 'ai-advisor') {
+      setShowAiAdvisor(true);
+      setCurrentView('home'); 
+    } else {
+      setSelectedGuide(null);
+      setSelectedArticle(null);
+    }
   };
 
   const handleSelectArticle = (article: Article) => {
@@ -93,7 +172,6 @@ const App: React.FC = () => {
   return (
     <div className="min-h-screen bg-[#F8FAFC] font-sans selection:bg-indigo-100">
       
-      {/* HEADER */}
       <nav className="bg-white/90 backdrop-blur-2xl sticky top-0 z-50 border-b border-slate-100 h-20">
         <div className="max-w-7xl mx-auto px-6 h-full flex items-center justify-between">
           <div className="flex items-center gap-12">
@@ -122,9 +200,17 @@ const App: React.FC = () => {
           </div>
 
           <div className="flex items-center gap-4">
+            <div 
+              className="hidden sm:flex items-center bg-slate-50 border border-slate-200 px-4 py-2 rounded-xl group hover:border-indigo-300 transition-all cursor-text relative pr-12" 
+              onClick={() => setIsSearchOpen(true)}
+            >
+               <Search className="w-4 h-4 text-slate-400 group-hover:text-indigo-500 transition-colors" />
+               <span className="text-[9px] font-black uppercase tracking-widest text-slate-400 ml-3">Vraag AI...</span>
+               <div className="absolute right-2 px-1.5 py-0.5 bg-white border border-slate-200 rounded text-[8px] font-black text-slate-300">⌘K</div>
+            </div>
             <button 
               onClick={() => setShowAiAdvisor(true)}
-              className="hidden md:flex items-center gap-2 bg-slate-950 text-white px-6 py-2.5 rounded-xl text-[10px] font-black uppercase tracking-widest hover:bg-indigo-600 transition-all shadow-xl active:scale-95"
+              className="flex items-center gap-2 bg-slate-950 text-white px-6 py-2.5 rounded-xl text-[10px] font-black uppercase tracking-widest hover:bg-indigo-600 transition-all shadow-xl active:scale-95"
             >
               <Cpu className="w-4 h-4 text-indigo-400" /> Consultant
             </button>
@@ -135,7 +221,42 @@ const App: React.FC = () => {
         </div>
       </nav>
 
-      {/* TRENDING TICKER */}
+      <CommandPalette 
+        isOpen={isSearchOpen} 
+        onClose={() => setIsSearchOpen(false)} 
+        onNavigate={navigateTo} 
+      />
+
+      <FloatingAiButton 
+        visible={currentView === 'home' && !showAiAdvisor} 
+        onClick={() => setShowAiAdvisor(true)} 
+      />
+
+      <ExitIntentModal 
+        isOpen={showExitIntent} 
+        onClose={() => setShowExitIntent(false)} 
+        onOpenConsultant={() => setShowAiAdvisor(true)} 
+      />
+
+      {isMobileMenuOpen && (
+        <div className="fixed inset-0 z-[60] bg-white animate-in slide-in-from-right duration-300 md:hidden">
+           <div className="p-6 flex flex-col h-full">
+              <div className="flex justify-between items-center mb-12">
+                <span className="text-xl font-black tracking-tighter">Menu</span>
+                <X className="w-8 h-8" onClick={() => setIsMobileMenuOpen(false)} />
+              </div>
+              <div className="space-y-8 flex-grow">
+                 <button onClick={() => navigateTo('home')} className="block text-4xl font-black tracking-tighter hover:text-indigo-600 transition-colors">Home</button>
+                 <button onClick={() => navigateTo('koopgidsen')} className="block text-4xl font-black tracking-tighter hover:text-indigo-600 transition-colors">Koopgidsen</button>
+                 <button onClick={() => navigateTo('redactie')} className="block text-4xl font-black tracking-tighter hover:text-indigo-600 transition-colors">Redactie</button>
+              </div>
+              <div className="pb-12">
+                 <button onClick={() => setShowAiAdvisor(true)} className="w-full bg-slate-950 text-white py-6 rounded-3xl font-black uppercase tracking-[0.2em] text-xs">Start AI Consultant</button>
+              </div>
+           </div>
+        </div>
+      )}
+
       <div className="bg-slate-900 py-3 overflow-hidden whitespace-nowrap border-b border-white/5">
         <div className="flex items-center animate-scroll gap-12 text-[9px] font-black uppercase tracking-[0.3em]">
            <span className="text-emerald-400 flex items-center gap-2"><Zap className="w-3 h-3" /> Trending: Apple AirPods Pro 2 goedkoopst bij Amazon</span>
@@ -149,8 +270,7 @@ const App: React.FC = () => {
       <main className="max-w-7xl mx-auto px-6 py-12">
         {currentView === 'home' && (
           <div className="animate-in fade-in duration-1000">
-            {/* HERO SECTION */}
-            <div className="grid lg:grid-cols-12 gap-8 mb-24">
+            <div className="grid lg:grid-cols-12 gap-8 mb-16">
               <div className="lg:col-span-7 intelligence-card p-12 md:p-24 relative overflow-hidden group border border-slate-100/50">
                 <div className="relative z-10">
                   <div className="flex items-center gap-3 text-indigo-600 font-black text-[10px] uppercase tracking-[0.4em] mb-12">
@@ -200,8 +320,9 @@ const App: React.FC = () => {
               </div>
             </div>
 
-            {/* MARKET PULSE OVERVIEW */}
-            <div className="mb-24">
+            <SectionNav />
+
+            <div id="market-pulse" className="py-24">
                <div className="flex items-center gap-4 mb-10">
                   <div className="h-px flex-grow bg-slate-200"></div>
                   <span className="text-[10px] font-black uppercase tracking-[0.4em] text-slate-400 px-6">Live Market Analysis</span>
@@ -210,8 +331,24 @@ const App: React.FC = () => {
                <MarketPulseDashboard />
             </div>
 
-            {/* DE GROTE 3 */}
-            <div id="shops-section" className="mb-32">
+            <div id="compare" className="py-24">
+               <div className="mb-16">
+                  <h2 className="text-5xl font-black text-slate-950 tracking-tighter mb-4">Directe Vergelijking<span className="text-indigo-600">.</span></h2>
+                  <p className="text-slate-500 font-medium text-xl max-w-xl">Top-tier producten direct geanalyseerd op prijs en levertijd bij de Grote 3.</p>
+               </div>
+               <ProductShowcase />
+            </div>
+
+            <div id="duel" className="py-24">
+               <div className="flex items-center gap-4 mb-10">
+                  <div className="h-px flex-grow bg-slate-200"></div>
+                  <span className="text-[10px] font-black uppercase tracking-[0.4em] text-slate-400 px-6">Interactive Comparison</span>
+                  <div className="h-px flex-grow bg-slate-200"></div>
+               </div>
+               <VersusTool />
+            </div>
+
+            <div id="shops-section" className="py-24">
                <div className="mb-16 text-center">
                   <h2 className="text-5xl md:text-7xl font-black text-slate-950 tracking-tighter mb-4">De Grote 3<span className="text-indigo-600">.</span></h2>
                   <p className="text-slate-500 font-medium text-xl max-w-2xl mx-auto leading-relaxed">De giganten van de Benelux vergeleken op service, prijs en betrouwbaarheid.</p>
@@ -226,17 +363,7 @@ const App: React.FC = () => {
                </div>
             </div>
 
-            {/* PRODUCT SHOWCASE */}
-            <div className="mb-32">
-               <div className="mb-16">
-                  <h2 className="text-5xl font-black text-slate-950 tracking-tighter mb-4">Directe Vergelijking<span className="text-indigo-600">.</span></h2>
-                  <p className="text-slate-500 font-medium text-xl max-w-xl">Top-tier producten direct geanalyseerd op prijs en levertijd bij de Grote 3.</p>
-               </div>
-               <ProductShowcase />
-            </div>
-
-            {/* KOOPGIDSEN PREVIEW */}
-            <div className="mb-32 bg-white rounded-[4rem] p-12 md:p-24 border border-slate-100 shadow-sm">
+            <div id="gidsen" className="py-24 bg-white rounded-[4rem] p-12 md:p-24 border border-slate-100 shadow-sm">
                <div className="flex flex-col md:flex-row justify-between items-end mb-16 gap-8">
                   <div>
                     <h2 className="text-5xl font-black text-slate-950 tracking-tighter mb-4">Beste Koop 2025<span className="text-indigo-600">.</span></h2>
@@ -249,8 +376,7 @@ const App: React.FC = () => {
                <NicheGuides onSelectGuide={handleSelectGuide} limit={4} />
             </div>
 
-            {/* REDACTIE PREVIEW */}
-            <div className="mb-32">
+            <div id="redactie" className="py-24">
                <div className="flex flex-col md:flex-row justify-between items-end mb-16 gap-8">
                   <div>
                     <h2 className="text-5xl font-black text-slate-950 tracking-tighter mb-4">Latest Intelligence<span className="text-indigo-600">.</span></h2>
@@ -274,8 +400,49 @@ const App: React.FC = () => {
                </div>
             </div>
 
+            <div className="py-24 bg-slate-950 rounded-[4rem] p-12 md:p-24 text-center border border-white/5 relative overflow-hidden">
+                <div className="absolute top-0 right-0 p-20 opacity-10">
+                    <Bell className="w-64 h-64 text-indigo-400" />
+                </div>
+                <div className="relative z-10">
+                   {newsletterStatus === 'success' ? (
+                     <div className="animate-in zoom-in duration-500">
+                        <div className="w-24 h-24 bg-indigo-600/20 text-indigo-400 rounded-full flex items-center justify-center mx-auto mb-8 border border-indigo-400/30">
+                           <CheckCircle2 className="w-12 h-12" />
+                        </div>
+                        <h2 className="text-5xl font-black text-white tracking-tighter mb-4">Je bent verbonden!</h2>
+                        <p className="text-slate-400 text-xl font-medium max-w-xl mx-auto">De Intelligence Update is onderweg naar je inbox.</p>
+                     </div>
+                   ) : (
+                     <>
+                        <h2 className="text-5xl font-black text-white tracking-tighter mb-6">Mis Geen Deal<span className="text-indigo-400">.</span></h2>
+                        <p className="text-slate-400 text-xl font-medium max-w-xl mx-auto mb-12">Schrijf je in voor de Intelligence Update en ontvang prijs-alerts direct in je inbox.</p>
+                        <form onSubmit={handleNewsletterSubmit} className="flex flex-col sm:flex-row gap-4 max-w-md mx-auto">
+                           <input 
+                             required
+                             type="email" 
+                             placeholder="Email adres..." 
+                             className={`flex-grow px-8 py-5 bg-white/5 border rounded-2xl text-white outline-none focus:ring-2 focus:ring-indigo-500 transition-all ${newsletterStatus === 'error' ? 'border-rose-500' : 'border-white/10'}`}
+                             value={newsletterEmail}
+                             onChange={(e) => setNewsletterEmail(e.target.value)}
+                           />
+                           <button 
+                             disabled={newsletterStatus === 'loading'}
+                             className="bg-indigo-600 text-white px-10 py-5 rounded-2xl font-black uppercase tracking-widest text-[10px] hover:bg-indigo-700 transition-all flex items-center justify-center gap-2 min-w-[140px]"
+                           >
+                             {newsletterStatus === 'loading' ? <Loader2 className="w-4 h-4 animate-spin" /> : 'Aanmelden'}
+                           </button>
+                        </form>
+                        {newsletterStatus === 'error' && <p className="mt-4 text-rose-400 text-xs font-bold uppercase tracking-widest">Er ging iets mis. Probeer het later opnieuw.</p>}
+                     </>
+                   )}
+                </div>
+            </div>
+
             <ReviewSection />
-            <FaqSection />
+            <div id="faq">
+               <FaqSection />
+            </div>
           </div>
         )}
 
@@ -299,7 +466,6 @@ const App: React.FC = () => {
         {currentView === 'artikel-detail' && selectedArticle && <ArticleModal article={selectedArticle} onClose={() => navigateTo('redactie')} onNavigateToShops={handleModalToShops} inline={true} />}
       </main>
 
-      {/* SCROLL TO TOP */}
       {showScrollTop && (
         <button 
           onClick={scrollToTop}
@@ -309,7 +475,6 @@ const App: React.FC = () => {
         </button>
       )}
 
-      {/* FOOTER */}
       <footer className="bg-slate-950 text-white pt-32 pb-16 border-t border-white/5">
         <div className="max-w-7xl mx-auto px-6">
           <div className="grid grid-cols-1 md:grid-cols-12 gap-16 mb-24">
@@ -369,7 +534,6 @@ const App: React.FC = () => {
         </div>
       </footer>
 
-      {/* AI OVERLAY */}
       {showAiAdvisor && (
         <div className="fixed inset-0 z-[100] flex items-center justify-center p-4">
           <div className="absolute inset-0 bg-slate-950/95 backdrop-blur-2xl" onClick={() => setShowAiAdvisor(false)}></div>
