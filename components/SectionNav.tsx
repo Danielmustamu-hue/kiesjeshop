@@ -30,19 +30,21 @@ export const SectionNav: React.FC = () => {
   };
 
   return (
-    <div className="flex justify-center mb-24 animate-in fade-in slide-in-from-bottom-4 duration-1000 delay-500">
-      <div className="inline-flex items-center p-2 bg-white rounded-[2rem] shadow-xl shadow-slate-200/50 border border-slate-100">
-        {links.map((link) => (
-          <a
-            key={link.href}
-            href={link.href}
-            onClick={(e) => scrollToSection(e, link.href)}
-            className="flex items-center gap-2 px-6 py-3 rounded-2xl text-[10px] font-black uppercase tracking-widest text-slate-400 hover:text-indigo-600 hover:bg-slate-50 transition-all whitespace-nowrap"
-          >
-            {link.icon}
-            {link.name}
-          </a>
-        ))}
+    <div className="flex justify-center mb-16 md:mb-24 animate-in fade-in slide-in-from-bottom-4 duration-1000 delay-500 w-full overflow-hidden">
+      <div className="flex items-center p-1.5 md:p-2 bg-white rounded-2xl md:rounded-[2rem] shadow-xl shadow-slate-200/50 border border-slate-100 max-w-full overflow-x-auto scrollbar-hide">
+        <div className="flex items-center">
+          {links.map((link) => (
+            <a
+              key={link.href}
+              href={link.href}
+              onClick={(e) => scrollToSection(e, link.href)}
+              className="flex items-center gap-2 px-4 md:px-6 py-2.5 md:py-3 rounded-xl md:rounded-2xl text-[9px] md:text-[10px] font-black uppercase tracking-widest text-slate-400 hover:text-indigo-600 hover:bg-slate-50 transition-all whitespace-nowrap"
+            >
+              {link.icon}
+              {link.name}
+            </a>
+          ))}
+        </div>
       </div>
     </div>
   );
