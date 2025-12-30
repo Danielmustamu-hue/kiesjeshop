@@ -13,9 +13,9 @@ export const AiAdvisor: React.FC = () => {
   const getSearchLink = (type: string, query: string) => {
     const encoded = encodeURIComponent(query);
     switch (type.toLowerCase()) {
-      case 'bol': return `https://partner.bol.com/click/click?p=2&t=url&s=1491898&f=TXL&url=https%3A%2F%2Fwww.bol.com%2Fnl%2Fnl%2Fs%2F${encoded}%2F&name=${encoded}`;
+      case 'bol': return `https://partner.bol.com/click/click?p=2&t=url&s=1491898&f=TXL&url=https%3A%2F%2Fwww.bol.com%2Fnl%2Fnl%2Fs%2F${encoded}%2F&name=Advisor&subid=Algemeen-AI-Hulp`;
       case 'coolblue': return `https://www.awin1.com/cread.php?awinmid=85161&awinaffid=2694054&ued=https%3A%2F%2Fwww.coolblue.nl%2Fzoeken%3Fquery%3D${encoded}`;
-      case 'amazon': return `https://www.amazon.nl/s?k=${encoded}&tag=kiesjeshop-21`;
+      case 'amazon': return `https://amzn.to/4oOzyrm`; // Protocol link
       default: return '#';
     }
   };
@@ -29,7 +29,11 @@ export const AiAdvisor: React.FC = () => {
 
     try {
       const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
-      const promptText = `Jij bent de ultra-efficiënte shopping expert van Kiesjeshop.nl. GEBRUIK ZO MIN MOGELIJK WOORDEN. Wees extreem kortaf maar feitelijk. Maximaal 20 woorden. Vraag: "${query}" Eindig met: SEARCH_ACTION: [ShopNaam]|[Zoekterm]`;
+      const promptText = `Jij bent de shopping expert van Kiesjeshop.nl. 
+      Vraag: "${query}" 
+      Geef een feitelijk advies van maximaal 25 woorden. 
+      Eindig je antwoord ALTIJD exact in dit formaat: SEARCH_ACTION: [ShopId]|[Zoekterm]
+      Toegestane ShopIds: bol, amazon, coolblue. Gebruik GEEN andere namen.`;
       
       const response = await ai.models.generateContent({
         model: 'gemini-3-flash-preview',
@@ -37,15 +41,22 @@ export const AiAdvisor: React.FC = () => {
       });
       
       const fullText = response.text || "";
-      const actionMatch = fullText.match(/SEARCH_ACTION:\s*(bol|coolblue|amazon)\s*\|\s*(.*)/i);
+      
+      // Stap 1: Altijd de tekst strippen vanaf "SEARCH_ACTION" om technische codes in de UI te voorkomen
       let cleanAdvice = fullText;
+      if (fullText.toUpperCase().includes('SEARCH_ACTION:')) {
+        cleanAdvice = fullText.split(/SEARCH_ACTION:/i)[0].trim();
+      }
+
+      // Stap 2: De marker extraheren voor de knoppen
+      const actionMatch = fullText.match(/SEARCH_ACTION:\s*(bol|coolblue|amazon)\s*\|\s*(.*)/i);
       if (actionMatch) {
-        cleanAdvice = fullText.split('SEARCH_ACTION:')[0].trim();
         setSearchLinks([{ shopId: actionMatch[1].toLowerCase(), query: actionMatch[2].trim() }]);
       }
+      
       setAdvice(cleanAdvice);
     } catch (err: any) {
-      setAdvice("Error bij het verwerken van uw aanvraag.");
+      setAdvice("Excuses, mijn neurale systeem heeft even een storing. Probeer het opnieuw.");
     } finally {
       setLoading(false);
     }
