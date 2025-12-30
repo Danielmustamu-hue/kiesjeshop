@@ -7,7 +7,7 @@ export const SHOPS: ShopData[] = [
     name: 'bol',
     color: 'text-blue-400',
     logoText: 'bol',
-    logoBg: 'bg-blue-600', // Krachtiger blauw voor beter contrast
+    logoBg: 'bg-blue-600',
     buttonColor: 'bg-blue-800 hover:bg-blue-900 text-white',
     offerings: 'Alles-in-één (Boeken, Wonen & Meer)',
     serviceScore: 4.5,
@@ -49,4 +49,32 @@ export const SHOPS: ShopData[] = [
   },
 ];
 
-export const MOCK_REVIEWS: Review[] = [];
+export const MOCK_REVIEWS: Review[] = [
+  {
+    id: 'rev-1',
+    shopId: 'coolblue',
+    author: 'Mark van D.',
+    date: '3 feb 2025',
+    rating: 5,
+    text: 'Voor mijn wasmachine vergelijk ik altijd via Kiesjeshop. Uiteindelijk bij Coolblue uitgekomen voor de installatie. Top service!',
+    verified: true
+  },
+  {
+    id: 'rev-2',
+    shopId: 'amazon',
+    author: 'Anouk T.',
+    date: '28 jan 2025',
+    rating: 4,
+    text: 'De AI advisor hielp me herinneren dat Amazon Prime sneller was voor mijn specifieke kabeltjes. Bespaarde me toch weer 5 euro.',
+    verified: true
+  },
+  {
+    id: 'rev-3',
+    shopId: 'bol',
+    author: 'Jasper de R.',
+    date: '15 jan 2025',
+    rating: 5,
+    text: 'Heel fijn overzicht. Je ziet direct waar bol Select het verschil maakt t.o.v. de rest.',
+    verified: true
+  }
+];

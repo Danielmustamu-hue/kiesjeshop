@@ -4,24 +4,42 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
+    
+    <!-- Kleur van de browser-adresbalk op mobiel -->
     <meta name="theme-color" content="#0F172A" />
-    <title>Kiesjeshop.nl | Real-time Prijsvergelijking bol, Amazon & Coolblue</title>
-    <meta name="description" content="Kiesjeshop.nl gebruikt AI om de beste deals bij bol, Amazon en Coolblue te vinden. Onafhankelijk advies en real-time prijschecks voor de Nederlandse markt." />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <title>Kiesjeshop.nl | Vergelijk, Kies & Bespaar bij bol, Amazon & Coolblue</title>
     
-    <!-- Canonical URL om SEO-waarde te concentreren op het hoofddomein -->
-    <link rel="canonical" href="https://kiesjeshop.nl/" />
+    <!-- SEO Meta Tags -->
+    <meta name="description" content="Kiesjeshop.nl: De onafhankelijke prijsvergelijker voor tech & lifestyle. Vergelijk bol, Amazon en Coolblue real-time. Vind de beste koop met onze AI-advisor." />
+    <meta name="keywords" content="prijsvergelijker, bol.com aanbiedingen, amazon deals, coolblue service, beste koop 2025, besparen op tech" />
+    
+    <!-- Favicon & App Icons -->
+    <link rel="icon" type="image/svg+xml" href="/public/favicon.svg" />
+    <link rel="apple-touch-icon" href="/public/favicon.svg" />
+    <link rel="mask-icon" href="/public/favicon.svg" color="#4F46E5" />
 
-    <!-- Geo-targeting voor Nederland -->
-    <meta name="geo.region" content="NL" />
-    <meta name="geo.placename" content="Nederland" />
-    <meta name="content-language" content="nl" />
-    
-    <!-- OpenGraph / Social -->
-    <meta property="og:type" content="website" />
-    <meta property="og:url" content="https://kiesjeshop.nl/" />
-    <meta property="og:title" content="Kiesjeshop.nl | Slimmer Vergelijken" />
-    <meta property="og:description" content="Vergelijk bol, Amazon en Coolblue op basis van real-time data uit Nederland." />
-    <meta property="og:image" content="https://images.unsplash.com/photo-1557821552-17105176677c?q=80&w=1200" />
+    <!-- Schema.org JSON-LD -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Organization",
+      "name": "Kiesjeshop.nl",
+      "url": "https://kiesjeshop.nl",
+      "logo": "https://kiesjeshop.nl/public/favicon.svg",
+      "description": "Intelligent vergelijkingsplatform voor bol, Amazon en Coolblue.",
+      "address": {
+        "@type": "PostalAddress",
+        "addressLocality": "Amstelveen",
+        "addressCountry": "NL"
+      }
+    }
+    </script>
+
+    <!-- Pre-connect voor snelheid -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preconnect" href="https://images.unsplash.com">
 
     <script type="importmap">
 {
@@ -38,14 +56,6 @@
   }
 }
 </script>
-    
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-L2T8T5EJ5C"></script>
-    <script>
-      window.dataLayer = window.dataLayer || [];
-      function gtag(){dataLayer.push(arguments);}
-      gtag('js', new Date());
-      gtag('config', 'G-L2T8T5EJ5C', { 'anonymize_ip': true });
-    </script>
 
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
@@ -62,6 +72,9 @@
             borderRadius: {
               '4xl': '2rem',
               '5xl': '3.5rem'
+            },
+            screens: {
+              'xs': '480px',
             }
           }
         }
@@ -88,21 +101,10 @@
       .intelligence-card {
         background: white;
         border-radius: 2rem;
-      }
-      @media (min-width: 768px) {
-        .intelligence-card {
-          border-radius: 3.5rem;
-        }
-      }
-      .intelligence-card {
         box-shadow: 0 25px 50px -12px rgba(15, 23, 42, 0.04);
       }
-      .animate-spin-slow {
-        animation: spin 3s linear infinite;
-      }
-      @keyframes spin {
-        from { transform: rotate(0deg); }
-        to { transform: rotate(360deg); }
+      @media (min-width: 768px) {
+        .intelligence-card { border-radius: 3.5rem; }
       }
       .animate-scroll {
         display: inline-block;
@@ -112,30 +114,11 @@
         0% { transform: translateX(100%); }
         100% { transform: translateX(-100%); }
       }
-      .mask-fade-bottom {
-        mask-image: linear-gradient(to bottom, black 50%, transparent 100%);
-      }
-      .scrollbar-hide::-webkit-scrollbar {
-        display: none;
-      }
-      .scrollbar-hide {
-        -ms-overflow-style: none;
-        scrollbar-width: none;
-      }
-      /* Custom Scrollbar */
-      ::-webkit-scrollbar {
-        width: 8px;
-      }
-      ::-webkit-scrollbar-track {
-        background: #f1f1f1;
-      }
-      ::-webkit-scrollbar-thumb {
-        background: #0F172A;
-        border-radius: 10px;
-      }
-      ::-webkit-scrollbar-thumb:hover {
-        background: #4F46E5;
-      }
+      .scrollbar-hide::-webkit-scrollbar { display: none; }
+      ::-webkit-scrollbar { width: 8px; }
+      ::-webkit-scrollbar-track { background: #f1f1f1; }
+      ::-webkit-scrollbar-thumb { background: #0F172A; border-radius: 10px; }
+      ::-webkit-scrollbar-thumb:hover { background: #4F46E5; }
     </style>
   </head>
   <body>

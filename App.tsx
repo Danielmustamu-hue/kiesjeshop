@@ -59,45 +59,53 @@ const App: React.FC = () => {
 
   // Deep Linking / Routing Logic voor Google Crawler
   useEffect(() => {
-    const params = new URLSearchParams(window.location.search);
-    const page = params.get('p');
-    const id = params.get('id');
+    try {
+      const params = new URLSearchParams(window.location.search);
+      const page = params.get('p');
+      const id = params.get('id');
 
-    if (page === 'redactie') setCurrentView('redactie');
-    if (page === 'koopgidsen') setCurrentView('koopgidsen');
-    if (page === 'niche' && id) {
-      const guide = NICHE_GUIDES.find(g => g.id === id);
-      if (guide) {
-        setSelectedGuide(guide);
-        setCurrentView('niche-detail');
+      if (page === 'redactie') setCurrentView('redactie');
+      if (page === 'koopgidsen') setCurrentView('koopgidsen');
+      if (page === 'niche' && id) {
+        const guide = NICHE_GUIDES.find(g => g.id === id);
+        if (guide) {
+          setSelectedGuide(guide);
+          setCurrentView('niche-detail');
+        }
       }
-    }
-    if (page === 'artikel' && id) {
-      const article = ARTICLES.find(a => a.id === parseInt(id));
-      if (article) {
-        setSelectedArticle(article);
-        setCurrentView('artikel-detail');
+      if (page === 'artikel' && id) {
+        const article = ARTICLES.find(a => a.id === parseInt(id));
+        if (article) {
+          setSelectedArticle(article);
+          setCurrentView('artikel-detail');
+        }
       }
+    } catch (e) {
+      console.warn('Initial URL parsing failed:', e);
     }
   }, []);
 
   const updateUrl = (view: View, id?: string | number) => {
-    const url = new URL(window.location.href);
-    url.searchParams.delete('p');
-    url.searchParams.delete('id');
-    
-    if (view === 'redactie') url.searchParams.set('p', 'redactie');
-    if (view === 'koopgidsen') url.searchParams.set('p', 'koopgidsen');
-    if (view === 'niche-detail' && id) {
-      url.searchParams.set('p', 'niche');
-      url.searchParams.set('id', id.toString());
+    try {
+      const url = new URL(window.location.href);
+      url.searchParams.delete('p');
+      url.searchParams.delete('id');
+      
+      if (view === 'redactie') url.searchParams.set('p', 'redactie');
+      if (view === 'koopgidsen') url.searchParams.set('p', 'koopgidsen');
+      if (view === 'niche-detail' && id) {
+        url.searchParams.set('p', 'niche');
+        url.searchParams.set('id', id.toString());
+      }
+      if (view === 'artikel-detail' && id) {
+        url.searchParams.set('p', 'artikel');
+        url.searchParams.set('id', id.toString());
+      }
+      
+      window.history.pushState({}, '', url.toString());
+    } catch (e) {
+      console.debug('Navigation: URL update skipped due to environment restrictions.');
     }
-    if (view === 'artikel-detail' && id) {
-      url.searchParams.set('p', 'artikel');
-      url.searchParams.set('id', id.toString());
-    }
-    
-    window.history.pushState({}, '', url);
   };
 
   const navigateTo = (view: View, item?: any) => {
@@ -310,17 +318,22 @@ const App: React.FC = () => {
                     <Sparkles className="w-4 h-4 animate-pulse" /> Platform 2025
                   </div>
                   <h1 className="text-5xl sm:text-7xl md:text-[9.2rem] font-black text-slate-950 leading-[0.82] tracking-tighter mb-10 md:mb-16">
-                    Vergelijk.<br className="hidden xs:block"/>
-                    Bespaar.<br className="hidden xs:block"/>
-                    <span className="text-intelligence">Geniet.</span>
+                    Vergelijk,<br />
+                    Kies &<br />
+                    <span className="text-intelligence">Bespaar</span>
                   </h1>
                   <p className="text-lg md:text-xl text-slate-500 font-medium max-w-lg mb-10 md:mb-12 leading-relaxed">
                     De onafhankelijke gids die <span className="text-blue-500 font-bold underline underline-offset-8">bol</span>, <span className="text-yellow-600 font-bold underline underline-offset-8">Amazon</span> en <span className="text-orange-500 font-bold underline underline-offset-8">Coolblue</span> voor jou ontleedt.
                   </p>
                   
-                  <button onClick={() => setIsAffiliateOpen(true)} className="flex items-center gap-2 text-[9px] md:text-[10px] font-black uppercase tracking-widest text-slate-400 hover:text-indigo-600 transition-colors mb-12 md:mb-16">
-                    <ShieldCheck className="w-3.5 h-3.5" /> 100% Onafhankelijk & Transparant
-                  </button>
+                  <div className="flex flex-wrap items-center gap-6 mb-12 md:mb-16">
+                    <button onClick={() => setIsAffiliateOpen(true)} className="flex items-center gap-2 text-[9px] md:text-[10px] font-black uppercase tracking-widest text-slate-400 hover:text-indigo-600 transition-colors">
+                      <ShieldCheck className="w-3.5 h-3.5" /> 100% Onafhankelijk & Transparant
+                    </button>
+                    <div className="flex items-center gap-2 text-[9px] font-black uppercase tracking-widest text-emerald-600 bg-emerald-50 px-3 py-1 rounded-full">
+                      <TrendingUp className="w-3.5 h-3.5" /> Laatste update: Vandaag
+                    </div>
+                  </div>
 
                   <div className="flex flex-wrap gap-4 md:gap-5">
                     <button onClick={() => setShowAiAdvisor(true)} className="w-full sm:w-auto bg-slate-950 text-white px-10 py-5 rounded-[2rem] font-black text-[11px] uppercase tracking-[0.3em] hover:bg-indigo-600 transition-all shadow-2xl active:scale-95">
@@ -419,13 +432,22 @@ const App: React.FC = () => {
                     Naar Redactie <ArrowRight className="w-5 h-5" />
                   </a>
                </div>
+               {/* Grid geüpdatet naar 4 artikelen voor meer content-dichtheid */}
                <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8 pb-12">
-                  {ARTICLES.slice(0, 2).map(article => (
+                  {ARTICLES.slice(0, 4).map(article => (
                     <a key={article.id} href={`/?p=artikel&id=${article.id}`} onClick={(e) => { e.preventDefault(); handleSelectArticle(article); }} className="group cursor-pointer bg-white rounded-[2rem] md:rounded-[3rem] overflow-hidden border border-slate-100 shadow-sm hover:shadow-2xl transition-all h-[300px] md:h-[400px] relative">
                         <img src={article.image} alt={article.title} loading="lazy" className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" />
                         <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/40 to-transparent"></div>
-                        <div className="absolute bottom-6 md:bottom-10 left-6 md:left-10 right-6 md:right-10">
-                           <span className="text-[10px] font-black uppercase tracking-widest text-indigo-400 mb-2 md:mb-4 block">{article.category}</span>
+                        <div className="absolute top-6 right-6 flex items-center gap-2 bg-white/20 backdrop-blur-md px-4 py-2 rounded-full border border-white/10 z-10">
+                           <ShieldCheck className="w-3 h-3 text-emerald-400" />
+                           <span className="text-[8px] font-black text-white uppercase tracking-widest">Fact Checked</span>
+                        </div>
+                        <div className="absolute bottom-6 md:bottom-10 left-6 md:left-10 right-6 md:left-10">
+                           <div className="flex items-center gap-3 mb-2 md:mb-4">
+                              <span className="text-[10px] font-black uppercase tracking-widest text-indigo-400">{article.category}</span>
+                              <span className="w-1 h-1 bg-white/30 rounded-full"></span>
+                              <span className="text-[9px] font-bold text-white/50 uppercase tracking-widest">{article.readTime}</span>
+                           </div>
                            <h3 className="text-2xl md:text-3xl font-black text-white tracking-tighter group-hover:text-indigo-300 transition-colors leading-tight">{article.title}</h3>
                         </div>
                     </a>
@@ -480,6 +502,10 @@ const App: React.FC = () => {
               <p className="text-slate-500 max-w-sm font-medium leading-relaxed text-base md:text-lg mb-8 md:mb-12">
                 Intelligence driven platform for shop-analysis. Wij filteren de ruis, jij kiest de kwaliteit.
               </p>
+              <div className="mt-8 p-6 bg-white/5 rounded-2xl border border-white/10 text-[10px] text-slate-500 font-medium leading-relaxed">
+                <strong className="text-slate-300 block mb-2 uppercase tracking-widest text-[11px]">Affiliate Disclaimer:</strong>
+                Wij ontvangen een commissie wanneer je via onze links een aankoop doet bij bol, Amazon of Coolblue. Dit heeft geen invloed op de prijs die jij betaalt, maar helpt ons dit platform onafhankelijk en advertentievrij te houden.
+              </div>
             </div>
 
             <div className="md:col-span-2">

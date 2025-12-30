@@ -1,4 +1,5 @@
-import React from 'react';
+
+import React, { useEffect } from 'react';
 import { HelpCircle } from 'lucide-react';
 
 export const FaqSection: React.FC = () => {
@@ -20,6 +21,31 @@ export const FaqSection: React.FC = () => {
       answer: "Met bol Select betaal je geen verzendkosten voor een vast bedrag per jaar. Amazon Prime biedt gratis verzending, maar geeft je ook toegang tot Prime Video (films en series) en Prime Gaming, wat het een zeer complete deal maakt."
     }
   ];
+
+  useEffect(() => {
+    // Inject FAQ Schema JSON-LD
+    const schema = {
+      "@context": "https://schema.org",
+      "@type": "FAQPage",
+      "mainEntity": faqs.map(faq => ({
+        "@type": "Question",
+        "name": faq.question,
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": faq.answer
+        }
+      }))
+    };
+
+    const script = document.createElement('script');
+    script.type = 'application/ld+json';
+    script.innerHTML = JSON.stringify(schema);
+    document.head.appendChild(script);
+
+    return () => {
+      document.head.removeChild(script);
+    };
+  }, []);
 
   return (
     <div className="max-w-4xl mx-auto px-4 sm:px-6 mb-24">

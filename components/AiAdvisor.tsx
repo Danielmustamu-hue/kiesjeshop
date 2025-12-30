@@ -28,12 +28,17 @@ export const AiAdvisor: React.FC = () => {
     setSearchLinks([]);
 
     try {
+      // Create new GoogleGenAI instance right before the call as per guidelines.
       const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
       const promptText = `Jij bent de ultra-efficiënte shopping expert van Kiesjeshop.nl. GEBRUIK ZO MIN MOGELIJK WOORDEN. Wees extreem kortaf maar feitelijk. Maximaal 20 woorden. Vraag: "${query}" Eindig met: SEARCH_ACTION: [ShopNaam]|[Zoekterm]`;
+      
+      // Using direct string for contents as per guidelines.
       const response = await ai.models.generateContent({
         model: 'gemini-3-flash-preview',
-        contents: [{ parts: [{ text: promptText }] }], 
+        contents: promptText, 
       });
+      
+      // text is a property, not a method.
       const fullText = response.text || "";
       const actionMatch = fullText.match(/SEARCH_ACTION:\s*(bol|coolblue|amazon)\s*\|\s*(.*)/i);
       let cleanAdvice = fullText;

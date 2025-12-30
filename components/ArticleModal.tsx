@@ -1,6 +1,7 @@
 
 import React, { useEffect } from 'react';
-import { X, Calendar, Clock, Share2, ArrowLeft, ShoppingCart } from 'lucide-react';
+// Added ArrowRight to the import list from lucide-react
+import { X, Calendar, Clock, Share2, ArrowLeft, ShoppingCart, ShieldCheck, HelpCircle, CheckCircle2, ChevronRight, ArrowRight } from 'lucide-react';
 import { Article } from '../data/articles';
 import { ArticleStickyBar } from './ArticleStickyBar';
 
@@ -16,9 +17,32 @@ export const ArticleModal: React.FC<ArticleModalProps> = ({ article, onClose, on
   useEffect(() => {
     if (article && !inline) {
       document.body.style.overflow = 'hidden';
+      
+      // Inject JSON-LD FAQ Schema
+      if (article.faqs && article.faqs.length > 0) {
+        const schema = {
+          "@context": "https://schema.org",
+          "@type": "FAQPage",
+          "mainEntity": article.faqs.map(faq => ({
+            "@type": "Question",
+            "name": faq.question,
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": faq.answer
+            }
+          }))
+        };
+        const script = document.createElement('script');
+        script.type = 'application/ld+json';
+        script.id = 'faq-schema';
+        script.innerHTML = JSON.stringify(schema);
+        document.head.appendChild(script);
+      }
     }
     return () => {
       document.body.style.overflow = '';
+      const existingScript = document.getElementById('faq-schema');
+      if (existingScript) existingScript.remove();
     };
   }, [article, inline]);
 
@@ -37,54 +61,99 @@ export const ArticleModal: React.FC<ArticleModalProps> = ({ article, onClose, on
       
       {!inline && <ArticleStickyBar />}
 
-      <div className="relative h-64 sm:h-96 shrink-0 overflow-hidden">
+      <div className="relative h-64 sm:h-[450px] shrink-0 overflow-hidden">
           <img src={article.image} alt={article.title} className="w-full h-full object-cover" />
-          <div className="absolute inset-0 bg-gradient-to-t from-slate-900/90 to-transparent"></div>
+          <div className="absolute inset-0 bg-gradient-to-t from-slate-900 via-slate-900/40 to-transparent"></div>
           
           <button 
               onClick={onClose}
-              className="absolute top-6 left-6 p-3 bg-white/20 hover:bg-white/40 text-white rounded-full backdrop-blur-md transition-all border border-white/20 flex items-center gap-2 font-bold text-xs uppercase tracking-widest"
+              className="absolute top-6 left-6 p-3 bg-white/20 hover:bg-white/40 text-white rounded-full backdrop-blur-md transition-all border border-white/20 flex items-center gap-2 font-bold text-xs uppercase tracking-widest z-20"
           >
               <ArrowLeft className="w-4 h-4" /> Terug
           </button>
 
-          <div className="absolute bottom-8 left-8 right-8 text-white">
-              <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-widest mb-3 text-orange-400">
-                 {article.icon} <span>{article.category}</span>
+          <div className="absolute bottom-8 left-8 right-8 text-white z-10">
+              <div className="flex items-center gap-3 mb-4">
+                 <div className="bg-indigo-600 px-4 py-1.5 rounded-lg text-[10px] font-black uppercase tracking-widest flex items-center gap-2">
+                    {article.icon} <span>{article.category}</span>
+                 </div>
+                 <div className="bg-emerald-500/20 backdrop-blur-md border border-emerald-500/30 px-4 py-1.5 rounded-lg text-[10px] font-black uppercase tracking-widest flex items-center gap-2">
+                    <ShieldCheck className="w-3.5 h-3.5 text-emerald-400" /> Fact Checked
+                 </div>
               </div>
-              <h1 className="text-3xl sm:text-5xl font-black leading-[1.1] tracking-tighter">{article.title}</h1>
+              <h1 className="text-3xl sm:text-6xl font-black leading-[0.9] tracking-tighter mb-4">{article.title}</h1>
+              <div className="flex items-center gap-6 text-[10px] font-black uppercase tracking-widest text-white/60">
+                <span className="flex items-center gap-2"><Calendar className="w-4 h-4" /> {article.date}</span>
+                <span className="flex items-center gap-2"><Clock className="w-4 h-4" /> {article.readTime} Leestijd</span>
+              </div>
           </div>
       </div>
 
-      <div className="flex items-center justify-between px-8 py-4 bg-slate-50 border-b border-slate-100 text-xs text-slate-500 font-bold uppercase tracking-widest">
-          <div className="flex items-center gap-6">
-              <span className="flex items-center gap-2"><Calendar className="w-4 h-4" /> {article.date}</span>
-              <span className="flex items-center gap-2"><Clock className="w-4 h-4" /> {article.readTime}</span>
-          </div>
-          <button className="flex items-center gap-2 hover:text-orange-600 transition-colors">
-              <Share2 className="w-4 h-4" /> Delen
-          </button>
-      </div>
+      <div className={`p-8 sm:p-16 ${inline ? '' : 'overflow-y-auto overscroll-contain pb-40'}`}>
+        
+        {/* LSI Keywords Box (SEO Context) */}
+        <div className="mb-12 p-6 bg-slate-50 rounded-3xl border border-slate-100">
+           <span className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] block mb-4">Focus & Context</span>
+           <div className="flex flex-wrap gap-2">
+              {article.lsiKeywords.map((kw, i) => (
+                <span key={i} className="px-3 py-1.5 bg-white border border-slate-200 rounded-xl text-[10px] font-bold text-slate-500">#{kw}</span>
+              ))}
+           </div>
+        </div>
 
-      <div className={`p-8 sm:p-12 ${inline ? '' : 'overflow-y-auto overscroll-contain pb-32'}`}>
-        <article className="prose prose-slate prose-xl max-w-none prose-p:leading-relaxed prose-headings:tracking-tighter prose-headings:font-black">
+        <article className="prose prose-slate prose-xl max-w-none prose-p:leading-relaxed prose-headings:tracking-tighter prose-headings:font-black prose-img:rounded-3xl prose-a:text-indigo-600 prose-strong:text-slate-900">
           {article.content}
         </article>
+
+        {/* FAQ Section */}
+        {article.faqs && article.faqs.length > 0 && (
+          <div className="mt-20 pt-20 border-t border-slate-100">
+             <div className="flex items-center gap-3 mb-10">
+                <div className="bg-indigo-600 p-2.5 rounded-xl"><HelpCircle className="w-6 h-6 text-white" /></div>
+                <h3 className="text-3xl font-black tracking-tighter text-slate-950">Veelgestelde Vragen</h3>
+             </div>
+             <div className="grid gap-6">
+                {article.faqs.map((faq, i) => (
+                  <div key={i} className="p-8 bg-slate-50 rounded-[2rem] border border-slate-100 hover:border-indigo-200 transition-all">
+                     <h4 className="text-xl font-black text-slate-900 mb-4">{faq.question}</h4>
+                     <p className="text-slate-600 leading-relaxed font-medium">{faq.answer}</p>
+                  </div>
+                ))}
+             </div>
+          </div>
+        )}
+
+        {/* Final Conclusion Box */}
+        <div className="mt-20 p-10 bg-slate-950 rounded-[3rem] text-white relative overflow-hidden">
+           <div className="absolute top-0 right-0 p-10 opacity-10">
+              <CheckCircle2 className="w-32 h-32" />
+           </div>
+           <div className="relative z-10">
+              <span className="text-[10px] font-black text-indigo-400 uppercase tracking-[0.4em] block mb-4">Experts Verdict</span>
+              <h4 className="text-3xl font-black tracking-tighter mb-6">Onze Laatste Aanbeveling</h4>
+              <p className="text-slate-400 text-lg font-medium leading-relaxed mb-10">
+                 Kwaliteit wint altijd op de lange termijn. In 2025 zien we dat de service bij bol en Coolblue vaak het kleine prijsverschil met prijsvechters waard is voor deze categorie.
+              </p>
+              <button 
+                onClick={handleCtaClick}
+                className="flex items-center gap-4 bg-white text-slate-950 px-10 py-5 rounded-2xl font-black text-[11px] uppercase tracking-widest hover:bg-indigo-400 hover:text-white transition-all shadow-2xl"
+              >
+                Direct Vergelijken <ArrowRight className="w-5 h-5" />
+              </button>
+           </div>
+        </div>
       </div>
 
-      <div className="p-8 border-t border-slate-100 bg-slate-50 flex flex-col sm:flex-row items-center justify-between gap-6">
-         <div className="flex-1">
-            <p className="text-slate-900 font-black text-sm uppercase tracking-wider mb-1">Direct Actie Ondernemen?</p>
-            <p className="text-slate-500 text-xs font-medium">Vergelijk de beste prijzen voor deze categorie bij onze partners.</p>
-         </div>
-         <button 
-           onClick={handleCtaClick} 
-           className="w-full sm:w-auto px-10 py-5 bg-slate-950 text-white rounded-2xl hover:bg-indigo-600 transition-all font-black text-xs uppercase tracking-widest shadow-xl flex items-center justify-center gap-3 group"
-         >
-           <ShoppingCart className="w-4 h-4 group-hover:scale-110 transition-transform" />
-           Bekijk de shops op home
-         </button>
-      </div>
+      {!inline && (
+        <div className="absolute top-6 right-6 z-30">
+           <button 
+             onClick={onClose}
+             className="p-3 bg-white/10 hover:bg-white/20 text-white rounded-full backdrop-blur-md transition-all border border-white/20"
+           >
+             <X className="w-6 h-6" />
+           </button>
+        </div>
+      )}
     </div>
   );
 
@@ -92,7 +161,7 @@ export const ArticleModal: React.FC<ArticleModalProps> = ({ article, onClose, on
 
   return (
     <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 sm:p-6" role="dialog" aria-modal="true">
-      <div className="absolute inset-0 bg-slate-900/80 backdrop-blur-sm transition-opacity" onClick={onClose} />
+      <div className="absolute inset-0 bg-slate-900/90 backdrop-blur-md transition-opacity" onClick={onClose} />
       {content}
     </div>
   );

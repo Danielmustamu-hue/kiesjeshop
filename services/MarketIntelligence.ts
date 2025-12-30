@@ -49,7 +49,8 @@ const finalizeUrl = (rawUrl: string, shop: string, message: string): string => {
 
 export const fetchLiveMarketData = async (): Promise<{signals: MarketSignal[], sources: {uri: string, title: string}[]}> => {
   try {
-    const ai = new GoogleGenAI({ apiKey: process.env.API_KEY || '' });
+    // Initializing with the process.env.API_KEY directly as per guidelines.
+    const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
     
     const prompt = `
       Zoek naar 5 ACTUELE en VERIFIEERBARE tech deals van VANDAAG UITSLUITEND op de NEDERLANDSE markt (.nl).
@@ -68,15 +69,17 @@ export const fetchLiveMarketData = async (): Promise<{signals: MarketSignal[], s
       ]
     `;
 
+    // Using the recommended format for generateContent with text prompt.
     const response = await ai.models.generateContent({
       model: "gemini-3-flash-preview",
-      contents: [{ parts: [{ text: prompt }] }],
+      contents: prompt,
       config: {
         tools: [{ googleSearch: {} }],
         temperature: 0, 
       },
     });
 
+    // Accessing text property directly as it is not a method in the new SDK.
     const text = response.text || "[]";
     const jsonMatch = text.match(/\[.*\]/s);
     let signals: MarketSignal[] = [];
