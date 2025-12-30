@@ -2,73 +2,60 @@
 import React from 'react';
 import { ShopData } from '../types';
 import { StarRating } from './StarRating';
-import { Truck, CheckCircle, Package, HeartHandshake, ArrowRight, Clock } from 'lucide-react';
+import { Truck, CheckCircle, Package, ArrowRight, Clock } from 'lucide-react';
 
 interface ShopCardProps {
   shop: ShopData;
 }
 
 export const ShopCard: React.FC<ShopCardProps> = ({ shop }) => {
+  // Gebruik de specifieke partner links uit de prompt
+  const finalCtaLink = shop.id === 'bol' 
+    ? 'https://partner.bol.com/click/click?p=2&t=url&s=1491898&f=TXL&url=https%3A%2F%2Fwww.bol.com%2Fnl%2Fnl%2F&name=De%20winkel%20van%20ons%20allemaal&subid=Algemeen-AI-Hulp'
+    : shop.id === 'amazon' 
+      ? 'https://amzn.to/4oOzyrm' 
+      : shop.ctaLink;
+
   return (
     <div className="intelligence-card overflow-hidden border border-slate-100/50 hover:translate-y-[-8px] transition-all duration-700 group flex flex-col h-full relative">
-      
-      {/* Visual Header as Link */}
       <a 
-        href={shop.ctaLink} 
+        href={finalCtaLink} 
         target="_blank" 
         rel="nofollow noopener noreferrer"
         className={`h-48 flex flex-col items-center justify-center p-8 relative overflow-hidden transition-opacity hover:opacity-90 ${shop.logoBg}`}
       >
          <div className="absolute inset-0 bg-gradient-to-br from-black/10 to-transparent opacity-50"></div>
-         
-         {/* Live Badge */}
          <div className="absolute top-4 right-4 bg-white/20 backdrop-blur-md px-3 py-1 rounded-full border border-white/30 flex items-center gap-1.5 z-20">
             <div className="w-1.5 h-1.5 bg-emerald-400 rounded-full animate-pulse"></div>
             <span className="text-[8px] font-black text-white uppercase tracking-widest">Live Status</span>
          </div>
-
          <div className="relative z-10 transition-transform duration-500 group-hover:scale-110">
-           {shop.id === 'bol' && (
-               <div className="text-6xl font-black text-white tracking-tighter drop-shadow-sm">bol</div>
-           )}
-           {shop.id === 'amazon' && (
-               <div className="flex flex-col items-center">
-                  <div className="text-4xl font-black text-white tracking-tight leading-none uppercase">amazon<span className="text-yellow-500">.nl</span></div>
-                  <div className="w-full h-1 bg-yellow-500 rounded-full mt-2 animate-pulse"></div>
-               </div>
-           )}
-           {shop.id === 'coolblue' && (
-               <div className="text-5xl font-black text-orange-500 tracking-tight drop-shadow-sm">Coolblue</div>
-           )}
+           {shop.id === 'bol' && <div className="text-6xl font-black text-white tracking-tighter">bol</div>}
+           {shop.id === 'amazon' && <div className="text-4xl font-black text-white tracking-tight leading-none uppercase">amazon<span className="text-yellow-500">.nl</span></div>}
+           {shop.id === 'coolblue' && <div className="text-5xl font-black text-orange-500 tracking-tight">Coolblue</div>}
          </div>
-
          <div className="mt-6 bg-white/90 backdrop-blur-md px-4 py-2 rounded-2xl border border-white/50 relative z-10 shadow-lg">
             <StarRating score={shop.serviceScore} />
          </div>
       </a>
 
-      {/* Content Area */}
       <div className="p-10 flex flex-col flex-grow">
         <div className="flex items-center justify-between mb-8">
            <div className="flex items-center gap-3">
-              <div className="bg-slate-100 p-2.5 rounded-xl">
-                 <Package className="w-5 h-5 text-slate-900" />
-              </div>
+              <div className="bg-slate-100 p-2.5 rounded-xl"><Package className="w-5 h-5 text-slate-900" /></div>
               <div>
                  <span className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400 block">Focus</span>
                  <p className="text-sm font-bold text-slate-900">{shop.offerings}</p>
               </div>
            </div>
-           <div className="text-right">
-              <div className="flex items-center gap-1.5 text-[9px] font-black text-slate-300 uppercase tracking-widest">
-                 <Clock className="w-3 h-3" /> 4m ago
-              </div>
+           <div className="flex items-center gap-1.5 text-[9px] font-black text-slate-300 uppercase tracking-widest">
+              <Clock className="w-3 h-3" /> 2m ago
            </div>
         </div>
 
         <div className="space-y-6 mb-10">
           <div className="flex items-start gap-4">
-             <div className="w-1.5 h-1.5 bg-indigo-600 rounded-full mt-2 shrink-0"></div>
+             <div className="w-1.5 h-1.5 bg-orange-600 rounded-full mt-2 shrink-0"></div>
              <p className="text-sm font-medium text-slate-600 leading-relaxed">{shop.usp}</p>
           </div>
           <div className="flex items-start gap-4">
@@ -85,12 +72,11 @@ export const ShopCard: React.FC<ShopCardProps> = ({ shop }) => {
                </div>
              ))}
           </div>
-          
           <a 
-            href={shop.ctaLink} 
+            href={finalCtaLink} 
             target="_blank"
             rel="nofollow noopener noreferrer"
-            className={`flex items-center justify-between w-full p-5 rounded-2xl font-black text-[11px] uppercase tracking-widest transition-all active:scale-95 shadow-xl hover:shadow-2xl ${shop.buttonColor}`}
+            className={`flex items-center justify-between w-full p-5 rounded-2xl font-black text-[11px] uppercase tracking-widest transition-all shadow-xl hover:shadow-2xl ${shop.buttonColor}`}
           >
             <span>{shop.ctaText || `Bezoek ${shop.name}`}</span>
             <ArrowRight className="w-5 h-5" />

@@ -24,7 +24,7 @@ export const ExitIntentModal: React.FC<ExitIntentModalProps> = ({ isOpen, onClos
         </button>
 
         <div className="p-12 md:p-16 text-center">
-          <div className="bg-indigo-600 w-20 h-20 rounded-[2.5rem] flex items-center justify-center mx-auto mb-10 shadow-2xl shadow-indigo-600/30">
+          <div className="bg-orange-600 w-20 h-20 rounded-[2.5rem] flex items-center justify-center mx-auto mb-10 shadow-2xl shadow-orange-600/30">
             <Cpu className="w-10 h-10 text-white" />
           </div>
           
@@ -33,7 +33,7 @@ export const ExitIntentModal: React.FC<ExitIntentModalProps> = ({ isOpen, onClos
           </h2>
           
           <p className="text-slate-500 font-medium text-lg leading-relaxed mb-12">
-            Laat onze <span className="text-indigo-600 font-black">AI Consultant</span> het zware werk doen. Vertel wat je zoekt en wij analyseren direct bol, Amazon en Coolblue voor je.
+            Laat onze <span className="text-orange-600 font-black">AI Consultant</span> het zware werk doen. Vertel wat je zoekt en wij analyseren direct bol, Amazon en Coolblue voor je.
           </p>
 
           <div className="flex flex-col gap-4">
@@ -42,9 +42,9 @@ export const ExitIntentModal: React.FC<ExitIntentModalProps> = ({ isOpen, onClos
                 onOpenConsultant();
                 onClose();
               }}
-              className="w-full bg-slate-950 text-white py-6 rounded-[2rem] font-black text-xs uppercase tracking-[0.3em] hover:bg-indigo-600 transition-all shadow-xl flex items-center justify-center gap-3 active:scale-95"
+              className="w-full bg-slate-950 text-white py-6 rounded-[2rem] font-black text-xs uppercase tracking-[0.3em] hover:bg-orange-600 transition-all shadow-xl flex items-center justify-center gap-3 active:scale-95"
             >
-              <Sparkles className="w-5 h-5 text-indigo-400" /> Start Gratis Consult
+              <Sparkles className="w-5 h-5 text-orange-400" /> Start Gratis Consult
             </button>
             
             <button 

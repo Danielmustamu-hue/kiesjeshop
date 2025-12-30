@@ -1,6 +1,12 @@
 
 import { ShopData, Review } from './types';
 
+export const AFFILIATE_LINKS = {
+  bol: 'https://partner.bol.com/click/click?p=2&t=url&s=1491898&f=TXL&url=https%3A%2F%2Fwww.bol.com%2Fnl%2Fnl%2F&name=De%20winkel%20van%20ons%20allemaal&subid=Algemeen-AI-Hulp',
+  amazon: 'https://amzn.to/4oOzyrm',
+  coolblue: 'https://www.awin1.com/cread.php?awinmid=85161&awinaffid=2694054&ued=https%3A%2F%2Fwww.coolblue.nl%2F'
+};
+
 export const SHOPS: ShopData[] = [
   {
     id: 'bol',
@@ -13,7 +19,7 @@ export const SHOPS: ShopData[] = [
     serviceScore: 4.5,
     delivery: 'Select: Vaak morgen of zondag in huis',
     usp: 'Vertrouwd Nederlands & makkelijk retour',
-    ctaLink: 'https://partner.bol.com/click/click?p=2&t=url&s=1491898&f=TXL&url=https%3A%2F%2Fwww.bol.com%2Fnl%2Fnl%2F&name=De%20winkel%20van%20ons%20allemaal&subid=Algemeen-AI-Hulp',
+    ctaLink: AFFILIATE_LINKS.bol,
     ctaText: 'Bekijk dagaanbieding',
     pros: ['Grootste assortiment van NL', '30 dagen bedenktijd', 'Gratis verzending met Select'],
   },
@@ -28,7 +34,7 @@ export const SHOPS: ShopData[] = [
     serviceScore: 5,
     delivery: 'VandaagNog® & eigen installatie',
     usp: 'Beste service & advies (Winnaar)',
-    ctaLink: 'https://www.awin1.com/cread.php?awinmid=85161&awinaffid=2694054&ued=https%3A%2F%2Fwww.coolblue.nl%2F', 
+    ctaLink: AFFILIATE_LINKS.coolblue, 
     ctaText: 'Check huidige voorraad',
     pros: ['Gratis installatie witgoed', 'Vandaag besteld, morgen in huis', 'Fysieke winkels voor advies'],
   },
@@ -43,7 +49,7 @@ export const SHOPS: ShopData[] = [
     serviceScore: 4,
     delivery: 'Prime: Snelle, gratis levering',
     usp: 'Vaak de allerlaagste prijs',
-    ctaLink: 'https://amzn.to/4oOzyrm',
+    ctaLink: AFFILIATE_LINKS.amazon,
     ctaText: 'Pak de laagste prijs',
     pros: ['Scherpste prijzen (Prijsvechter)', 'Gratis bezorging met Prime', 'Internationaal aanbod'],
   },

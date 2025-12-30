@@ -1,3 +1,4 @@
+
 import React, { useEffect } from 'react';
 import { X, Heart, Target, Users } from 'lucide-react';
 
@@ -30,13 +31,13 @@ export const AboutModal: React.FC<AboutModalProps> = ({ isOpen, onClose }) => {
       
       <div className="relative bg-white rounded-2xl shadow-2xl w-full max-w-2xl max-h-[85vh] flex flex-col overflow-hidden animate-in fade-in zoom-in-95 duration-200">
         
-        <div className="relative h-40 bg-indigo-600 overflow-hidden shrink-0">
-            <div className="absolute inset-0 bg-gradient-to-br from-indigo-600 to-purple-700 opacity-90"></div>
+        <div className="relative h-40 bg-orange-600 overflow-hidden shrink-0">
+            <div className="absolute inset-0 bg-gradient-to-br from-orange-600 to-amber-700 opacity-90"></div>
             <div className="absolute -bottom-10 -right-10 w-64 h-64 bg-white/10 rounded-full blur-3xl"></div>
             <div className="relative h-full flex items-center px-8">
                 <div>
                     <h2 className="text-3xl font-bold text-white mb-2">Over Kiesjeshop.nl</h2>
-                    <p className="text-indigo-100">Ons verhaal en onze missie.</p>
+                    <p className="text-orange-100">Ons verhaal en onze missie.</p>
                 </div>
             </div>
             <button 
@@ -57,7 +58,7 @@ export const AboutModal: React.FC<AboutModalProps> = ({ isOpen, onClose }) => {
 
             <div className="grid sm:grid-cols-2 gap-6 my-8">
                 <div className="bg-slate-50 p-4 rounded-xl border border-slate-100">
-                    <Target className="w-8 h-8 text-indigo-500 mb-3" />
+                    <Target className="w-8 h-8 text-orange-500 mb-3" />
                     <h4 className="font-bold text-slate-900 mb-2">Onze Missie</h4>
                     <p className="text-sm">Consumenten helpen de beste keuze te maken door webshops niet alleen op prijs, maar ook op service en levering te vergelijken.</p>
                 </div>
@@ -71,19 +72,7 @@ export const AboutModal: React.FC<AboutModalProps> = ({ isOpen, onClose }) => {
             <h3 className="text-slate-900 font-bold">Wie zijn wij?</h3>
             <p>
               Kiesjeshop.nl is opgericht in 2025 vanuit een frustratie: waarom is het zo moeilijk om te zien of Amazon Prime sneller levert dan bol Select? 
-              Ons kleine team van e-commerce enthousiastelingen test dagelijks de levertijden, klantenservice en retourvoorwaarden van de grote spelers.
-            </p>
-
-            <h3 className="text-slate-900 font-bold mt-6">Hoe wij geld verdienen</h3>
-            <p>
-              Eerlijkheid duurt het langst. Wij ontvangen een kleine commissie als u via onze links iets koopt bij bol, Coolblue of Amazon. 
-              Dit beïnvloedt de prijs voor u niet. Het stelt ons in staat om de hosting te betalen en deze site reclamevrij (geen banners!) te houden.
-            </p>
-
-             <h3 className="text-slate-900 font-bold mt-6">Redactionele Formule</h3>
-            <p>
-              Onze koopgidsen worden geschreven door mensen, ondersteund door data. Wij maken geen gebruik van automatische 'content spinners'. 
-              Elk artikel is gecheckt op feitelijke juistheid op het moment van publiceren.
+              Ons team test dagelijks de levertijden, klantenservice en retourvoorwaarden van de grote spelers.
             </p>
           </div>
         </div>
@@ -92,7 +81,7 @@ export const AboutModal: React.FC<AboutModalProps> = ({ isOpen, onClose }) => {
            <span className="text-xs text-slate-400">Gevestigd te Amstelveen, NL</span>
            <button 
              onClick={onClose}
-             className="px-5 py-2.5 bg-slate-900 text-white rounded-xl hover:bg-slate-800 transition-colors font-semibold text-sm shadow-sm"
+             className="px-5 py-2.5 bg-slate-950 text-white rounded-xl hover:bg-slate-800 transition-colors font-semibold text-sm shadow-sm"
            >
              Sluiten
            </button>

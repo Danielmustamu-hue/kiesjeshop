@@ -3,14 +3,21 @@ import React from 'react';
 import { SHOPS } from '../constants';
 import { ShoppingCart, ArrowRight } from 'lucide-react';
 
-export const ArticleStickyBar: React.FC = () => {
+interface ArticleStickyBarProps {
+  onNavigateToShops?: () => void;
+}
+
+export const ArticleStickyBar: React.FC<ArticleStickyBarProps> = ({ onNavigateToShops }) => {
   return (
     <div className="fixed bottom-8 left-1/2 -translate-x-1/2 z-[80] w-[90%] max-w-2xl animate-in slide-in-from-bottom-12 duration-1000">
       <div className="bg-slate-950/90 backdrop-blur-2xl rounded-full p-2 border border-white/10 shadow-[0_32px_64px_-16px_rgba(0,0,0,0.5)] flex items-center justify-between">
-        <div className="flex items-center gap-2 ml-6">
-           <ShoppingCart className="w-4 h-4 text-indigo-400" />
+        <button 
+          onClick={onNavigateToShops}
+          className="flex items-center gap-2 ml-6 hover:text-orange-400 transition-colors"
+        >
+           <ShoppingCart className="w-4 h-4 text-orange-400" />
            <span className="text-[10px] font-black text-white uppercase tracking-[0.2em] hidden sm:block">Direct Vergelijken</span>
-        </div>
+        </button>
         
         <div className="flex items-center gap-2">
           {SHOPS.map(shop => (

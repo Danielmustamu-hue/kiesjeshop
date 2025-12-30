@@ -1,7 +1,6 @@
 
 import React, { useEffect } from 'react';
-// Added ArrowRight to the import list from lucide-react
-import { X, Calendar, Clock, Share2, ArrowLeft, ShoppingCart, ShieldCheck, HelpCircle, CheckCircle2, ChevronRight, ArrowRight } from 'lucide-react';
+import { X, Calendar, Clock, ArrowLeft, ShieldCheck, HelpCircle, CheckCircle2, ArrowRight } from 'lucide-react';
 import { Article } from '../data/articles';
 import { ArticleStickyBar } from './ArticleStickyBar';
 
@@ -18,7 +17,6 @@ export const ArticleModal: React.FC<ArticleModalProps> = ({ article, onClose, on
     if (article && !inline) {
       document.body.style.overflow = 'hidden';
       
-      // Inject JSON-LD FAQ Schema
       if (article.faqs && article.faqs.length > 0) {
         const schema = {
           "@context": "https://schema.org",
@@ -59,7 +57,7 @@ export const ArticleModal: React.FC<ArticleModalProps> = ({ article, onClose, on
   const content = (
     <div className={`bg-white rounded-2xl shadow-2xl w-full max-w-4xl flex flex-col overflow-hidden animate-in fade-in ${inline ? 'mx-auto relative' : 'max-h-[90vh] zoom-in-95 duration-200'}`}>
       
-      {!inline && <ArticleStickyBar />}
+      {!inline && <ArticleStickyBar onNavigateToShops={handleCtaClick} />}
 
       <div className="relative h-64 sm:h-[450px] shrink-0 overflow-hidden">
           <img src={article.image} alt={article.title} className="w-full h-full object-cover" />
@@ -74,7 +72,7 @@ export const ArticleModal: React.FC<ArticleModalProps> = ({ article, onClose, on
 
           <div className="absolute bottom-8 left-8 right-8 text-white z-10">
               <div className="flex items-center gap-3 mb-4">
-                 <div className="bg-indigo-600 px-4 py-1.5 rounded-lg text-[10px] font-black uppercase tracking-widest flex items-center gap-2">
+                 <div className="bg-orange-600 px-4 py-1.5 rounded-lg text-[10px] font-black uppercase tracking-widest flex items-center gap-2">
                     {article.icon} <span>{article.category}</span>
                  </div>
                  <div className="bg-emerald-500/20 backdrop-blur-md border border-emerald-500/30 px-4 py-1.5 rounded-lg text-[10px] font-black uppercase tracking-widest flex items-center gap-2">
@@ -91,9 +89,8 @@ export const ArticleModal: React.FC<ArticleModalProps> = ({ article, onClose, on
 
       <div className={`p-8 sm:p-16 ${inline ? '' : 'overflow-y-auto overscroll-contain pb-40'}`}>
         
-        {/* LSI Keywords Box (SEO Context) */}
         <div className="mb-12 p-6 bg-slate-50 rounded-3xl border border-slate-100">
-           <span className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] block mb-4">Focus & Context</span>
+           <span className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] block mb-4">Focus & Context (LSI)</span>
            <div className="flex flex-wrap gap-2">
               {article.lsiKeywords.map((kw, i) => (
                 <span key={i} className="px-3 py-1.5 bg-white border border-slate-200 rounded-xl text-[10px] font-bold text-slate-500">#{kw}</span>
@@ -101,20 +98,19 @@ export const ArticleModal: React.FC<ArticleModalProps> = ({ article, onClose, on
            </div>
         </div>
 
-        <article className="prose prose-slate prose-xl max-w-none prose-p:leading-relaxed prose-headings:tracking-tighter prose-headings:font-black prose-img:rounded-3xl prose-a:text-indigo-600 prose-strong:text-slate-900">
+        <article className="prose prose-slate prose-xl max-w-none prose-p:leading-relaxed prose-headings:tracking-tighter prose-headings:font-black prose-img:rounded-3xl prose-a:text-orange-600 prose-strong:text-slate-900">
           {article.content}
         </article>
 
-        {/* FAQ Section */}
         {article.faqs && article.faqs.length > 0 && (
           <div className="mt-20 pt-20 border-t border-slate-100">
              <div className="flex items-center gap-3 mb-10">
-                <div className="bg-indigo-600 p-2.5 rounded-xl"><HelpCircle className="w-6 h-6 text-white" /></div>
+                <div className="bg-orange-600 p-2.5 rounded-xl"><HelpCircle className="w-6 h-6 text-white" /></div>
                 <h3 className="text-3xl font-black tracking-tighter text-slate-950">Veelgestelde Vragen</h3>
              </div>
              <div className="grid gap-6">
                 {article.faqs.map((faq, i) => (
-                  <div key={i} className="p-8 bg-slate-50 rounded-[2rem] border border-slate-100 hover:border-indigo-200 transition-all">
+                  <div key={i} className="p-8 bg-slate-50 rounded-[2rem] border border-slate-100 hover:border-orange-200 transition-all">
                      <h4 className="text-xl font-black text-slate-900 mb-4">{faq.question}</h4>
                      <p className="text-slate-600 leading-relaxed font-medium">{faq.answer}</p>
                   </div>
@@ -123,20 +119,19 @@ export const ArticleModal: React.FC<ArticleModalProps> = ({ article, onClose, on
           </div>
         )}
 
-        {/* Final Conclusion Box */}
         <div className="mt-20 p-10 bg-slate-950 rounded-[3rem] text-white relative overflow-hidden">
            <div className="absolute top-0 right-0 p-10 opacity-10">
               <CheckCircle2 className="w-32 h-32" />
            </div>
            <div className="relative z-10">
-              <span className="text-[10px] font-black text-indigo-400 uppercase tracking-[0.4em] block mb-4">Experts Verdict</span>
+              <span className="text-[10px] font-black text-orange-400 uppercase tracking-[0.4em] block mb-4">Experts Verdict</span>
               <h4 className="text-3xl font-black tracking-tighter mb-6">Onze Laatste Aanbeveling</h4>
               <p className="text-slate-400 text-lg font-medium leading-relaxed mb-10">
                  Kwaliteit wint altijd op de lange termijn. In 2025 zien we dat de service bij bol en Coolblue vaak het kleine prijsverschil met prijsvechters waard is voor deze categorie.
               </p>
               <button 
                 onClick={handleCtaClick}
-                className="flex items-center gap-4 bg-white text-slate-950 px-10 py-5 rounded-2xl font-black text-[11px] uppercase tracking-widest hover:bg-indigo-400 hover:text-white transition-all shadow-2xl"
+                className="flex items-center gap-4 bg-white text-slate-950 px-10 py-5 rounded-2xl font-black text-[11px] uppercase tracking-widest hover:bg-orange-600 hover:text-white transition-all shadow-2xl"
               >
                 Direct Vergelijken <ArrowRight className="w-5 h-5" />
               </button>
