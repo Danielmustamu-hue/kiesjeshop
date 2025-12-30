@@ -3,10 +3,11 @@
 <html lang="nl">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0, viewport-fit=cover" />
     
     <!-- Brand Color UI -->
-    <meta name="theme-color" content="#EA580C" />
+    <meta name="theme-color" content="#0F172A" />
+    <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     
     <title>Kiesjeshop.nl | De Slimste Prijsvergelijker van bol, Amazon & Coolblue</title>
@@ -94,6 +95,9 @@
         0% { transform: translateX(100%); }
         100% { transform: translateX(-100%); }
       }
+      /* Hide scrollbar for mobile */
+      .scrollbar-hide::-webkit-scrollbar { display: none; }
+      .scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
     </style>
   </head>
   <body>
