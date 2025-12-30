@@ -20,7 +20,7 @@ export const SHOPS: ShopData[] = [
     delivery: 'Select: Vaak morgen of zondag in huis',
     usp: 'Vertrouwd Nederlands & makkelijk retour',
     ctaLink: AFFILIATE_LINKS.bol,
-    ctaText: 'Bekijk dagaanbieding',
+    ctaText: 'Bekijk dagaanbieding bij bol',
     pros: ['Grootste assortiment van NL', '30 dagen bedenktijd', 'Gratis verzending met Select'],
   },
   {
@@ -35,7 +35,7 @@ export const SHOPS: ShopData[] = [
     delivery: 'VandaagNog® & eigen installatie',
     usp: 'Beste service & advies (Winnaar)',
     ctaLink: AFFILIATE_LINKS.coolblue, 
-    ctaText: 'Check huidige voorraad',
+    ctaText: 'Check voorraad bij Coolblue',
     pros: ['Gratis installatie witgoed', 'Vandaag besteld, morgen in huis', 'Fysieke winkels voor advies'],
   },
   {
@@ -50,7 +50,7 @@ export const SHOPS: ShopData[] = [
     delivery: 'Prime: Snelle, gratis levering',
     usp: 'Vaak de allerlaagste prijs',
     ctaLink: AFFILIATE_LINKS.amazon,
-    ctaText: 'Pak de laagste prijs',
+    ctaText: 'Pak laagste prijs bij Amazon',
     pros: ['Scherpste prijzen (Prijsvechter)', 'Gratis bezorging met Prime', 'Internationaal aanbod'],
   },
 ];

@@ -3,28 +3,29 @@ import React from 'react';
 import { ShopData } from '../types';
 import { StarRating } from './StarRating';
 import { Truck, CheckCircle, Package, ArrowRight, Clock } from 'lucide-react';
+import { AFFILIATE_LINKS } from '../constants';
 
 interface ShopCardProps {
   shop: ShopData;
 }
 
 export const ShopCard: React.FC<ShopCardProps> = ({ shop }) => {
-  // Gebruik de specifieke partner links uit de prompt
+  // Gebruik de strikt geverifieerde affiliate links
   const finalCtaLink = shop.id === 'bol' 
-    ? 'https://partner.bol.com/click/click?p=2&t=url&s=1491898&f=TXL&url=https%3A%2F%2Fwww.bol.com%2Fnl%2Fnl%2F&name=De%20winkel%20van%20ons%20allemaal&subid=Algemeen-AI-Hulp'
+    ? AFFILIATE_LINKS.bol
     : shop.id === 'amazon' 
-      ? 'https://amzn.to/4oOzyrm' 
+      ? AFFILIATE_LINKS.amazon
       : shop.ctaLink;
 
   return (
-    <div className="intelligence-card overflow-hidden border border-slate-100/50 hover:translate-y-[-8px] transition-all duration-700 group flex flex-col h-full relative">
+    <div className="intelligence-card overflow-hidden border border-slate-100/50 hover:translate-y-[-8px] transition-all duration-700 group flex flex-col h-full relative bg-white">
       <a 
         href={finalCtaLink} 
         target="_blank" 
         rel="nofollow noopener noreferrer"
-        className={`h-48 flex flex-col items-center justify-center p-8 relative overflow-hidden transition-opacity hover:opacity-90 ${shop.logoBg}`}
+        className={`h-48 flex flex-col items-center justify-center p-8 relative overflow-hidden transition-opacity hover:opacity-95 ${shop.logoBg}`}
       >
-         <div className="absolute inset-0 bg-gradient-to-br from-black/10 to-transparent opacity-50"></div>
+         <div className="absolute inset-0 bg-gradient-to-br from-black/20 to-transparent opacity-60"></div>
          <div className="absolute top-4 right-4 bg-white/20 backdrop-blur-md px-3 py-1 rounded-full border border-white/30 flex items-center gap-1.5 z-20">
             <div className="w-1.5 h-1.5 bg-emerald-400 rounded-full animate-pulse"></div>
             <span className="text-[8px] font-black text-white uppercase tracking-widest">Live Status</span>
@@ -76,7 +77,7 @@ export const ShopCard: React.FC<ShopCardProps> = ({ shop }) => {
             href={finalCtaLink} 
             target="_blank"
             rel="nofollow noopener noreferrer"
-            className={`flex items-center justify-between w-full p-5 rounded-2xl font-black text-[11px] uppercase tracking-widest transition-all shadow-xl hover:shadow-2xl ${shop.buttonColor}`}
+            className={`flex items-center justify-between w-full p-5 rounded-2xl font-black text-[11px] uppercase tracking-widest transition-all shadow-xl hover:shadow-2xl hover:scale-[1.02] active:scale-95 ${shop.buttonColor}`}
           >
             <span>{shop.ctaText || `Bezoek ${shop.name}`}</span>
             <ArrowRight className="w-5 h-5" />
