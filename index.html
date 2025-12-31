@@ -28,28 +28,6 @@
     <meta property="og:url" content="https://www.kiesjeshop.nl/" />
     <meta property="og:site_name" content="Kiesjeshop.nl" />
 
-    <!-- Google AI Overview & Schema Optimization -->
-    <script type="application/ld+json">
-    {
-      "@context": "https://schema.org",
-      "@type": "Organization",
-      "name": "Kiesjeshop.nl",
-      "alternateName": "Kiesjeshop",
-      "url": "https://www.kiesjeshop.nl",
-      "logo": "https://www.kiesjeshop.nl/public/favicon.svg",
-      "contactPoint": {
-        "@type": "ContactPoint",
-        "email": "info@kiesjeshop.nl",
-        "contactType": "customer service"
-      },
-      "sameAs": [
-        "https://www.facebook.com/kiesjeshop",
-        "https://www.instagram.com/kiesjeshop"
-      ],
-      "description": "Kiesjeshop.nl is een onafhankelijk vergelijkingsplatform voor de Nederlandse e-commerce markt, gespecialiseerd in real-time data-analyse van bol, Amazon en Coolblue."
-    }
-    </script>
-
     <script type="importmap">
 {
   "imports": {
@@ -90,73 +68,157 @@
     
     <style>
       @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap');
+      
       body {
         margin: 0;
         font-family: 'Inter', sans-serif;
         -webkit-font-smoothing: antialiased;
-        background-color: #FDFCFB;
+        background-color: #ffffff;
         color: #0F172A;
         scroll-behavior: smooth;
+        overflow-x: hidden;
       }
+      
+      /* Fluid Animated Mesh Background */
+      .mesh-bg {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100vh;
+        z-index: -2;
+        background-color: #ffffff;
+        overflow: hidden;
+        transition: opacity 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+      }
+
+      .mesh-blob {
+        position: absolute;
+        width: 80vmax;
+        height: 80vmax;
+        filter: blur(80px);
+        border-radius: 50%;
+        opacity: 0.5;
+        z-index: -1;
+        animation: mesh-float 25s infinite alternate ease-in-out;
+      }
+
+      .blob-1 {
+        background: radial-gradient(circle, hsla(342, 100%, 75%, 0.8) 0%, transparent 70%);
+        top: -20%;
+        left: -20%;
+      }
+
+      .blob-2 {
+        background: radial-gradient(circle, hsla(24, 100%, 75%, 0.8) 0%, transparent 70%);
+        top: -10%;
+        right: -20%;
+        animation-delay: -5s;
+        animation-duration: 30s;
+      }
+
+      .blob-3 {
+        background: radial-gradient(circle, hsla(342, 100%, 85%, 0.6) 0%, transparent 70%);
+        bottom: -30%;
+        left: 10%;
+        animation-delay: -10s;
+      }
+
+      .blob-4 {
+        background: radial-gradient(circle, hsla(24, 100%, 85%, 0.6) 0%, transparent 70%);
+        bottom: -20%;
+        right: -10%;
+        animation-delay: -15s;
+      }
+
+      @keyframes mesh-float {
+        0% { transform: translate(0, 0) rotate(0deg) scale(1); }
+        33% { transform: translate(10%, 15%) rotate(10deg) scale(1.1); }
+        66% { transform: translate(-5%, 20%) rotate(-15deg) scale(0.9); }
+        100% { transform: translate(5%, -5%) rotate(5deg) scale(1); }
+      }
+
+      /* Noise Texture Overlay for that premium paper feel */
+      .noise-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        z-index: -1;
+        opacity: 0.04;
+        pointer-events: none;
+        background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+      }
+
       .brand-gradient {
         background: linear-gradient(135deg, #FF3D77 0%, #EA580C 100%);
       }
+      
       .brand-text-gradient {
         background: linear-gradient(135deg, #FF3D77 0%, #EA580C 100%);
         -webkit-background-clip: text;
         -webkit-text-fill-color: transparent;
       }
-      .intelligence-card {
-        background: white;
-        border-radius: 2rem;
-        box-shadow: 0 25px 50px -12px rgba(255, 61, 119, 0.08);
+
+      .hero-glow {
+        text-shadow: 0 0 40px rgba(255, 255, 255, 0.4);
       }
+
+      .intelligence-card {
+        background: rgba(255, 255, 255, 0.5);
+        backdrop-filter: blur(40px);
+        -webkit-backdrop-filter: blur(40px);
+        border: 1px solid rgba(255, 255, 255, 0.4);
+        border-radius: 2rem;
+        box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.05);
+      }
+      
       @media (min-width: 768px) {
         .intelligence-card { border-radius: 3.5rem; }
       }
+
       .animate-scroll {
         display: inline-block;
         animation: scroll 40s linear infinite;
       }
+
       @keyframes scroll {
         0% { transform: translateX(100%); }
         100% { transform: translateX(-100%); }
       }
-      .glass-morphism {
-        background: rgba(255, 255, 255, 0.7);
-        backdrop-filter: blur(20px);
-        -webkit-backdrop-filter: blur(20px);
-        border: 1px solid rgba(255, 255, 255, 0.4);
-      }
-      
-      /* AI Pulse Animation */
-      @keyframes ai-pulse {
-        0% { box-shadow: 0 0 0 0 rgba(255, 61, 119, 0.4); }
-        70% { box-shadow: 0 0 0 15px rgba(255, 61, 119, 0); }
-        100% { box-shadow: 0 0 0 0 rgba(255, 61, 119, 0); }
-      }
-      .ai-btn-pulse {
-        animation: ai-pulse 2s infinite;
-      }
 
-      /* Custom Scrollbar */
-      ::-webkit-scrollbar {
-        width: 8px;
-      }
-      ::-webkit-scrollbar-track {
-        background: #f8fafc;
-      }
+      ::-webkit-scrollbar { width: 8px; }
+      ::-webkit-scrollbar-track { background: transparent; }
       ::-webkit-scrollbar-thumb {
         background: #e2e8f0;
         border-radius: 10px;
       }
-      ::-webkit-scrollbar-thumb:hover {
-        background: #cbd5e1;
-      }
     </style>
   </head>
   <body>
+    <div class="mesh-bg" id="dynamic-bg">
+      <div class="mesh-blob blob-1"></div>
+      <div class="mesh-blob blob-2"></div>
+      <div class="mesh-blob blob-3"></div>
+      <div class="mesh-blob blob-4"></div>
+    </div>
+    <div class="noise-overlay"></div>
     <div id="root"></div>
     <script type="module" src="/index.tsx"></script>
+    <script>
+      window.addEventListener('scroll', () => {
+        const bg = document.getElementById('dynamic-bg');
+        if (bg) {
+          const scrollPos = window.scrollY;
+          const fadeStart = 0; 
+          const fadeEnd = 800;   
+          
+          let opacity = 1 - (scrollPos - fadeStart) / (fadeEnd - fadeStart);
+          opacity = Math.max(0, Math.min(1, opacity));
+          bg.style.opacity = opacity;
+        }
+      });
+    </script>
   </body>
 </html>
