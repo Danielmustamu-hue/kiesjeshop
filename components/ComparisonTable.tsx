@@ -6,7 +6,7 @@ export const ComparisonTable: React.FC = () => {
   return (
     <div className="mb-32">
       <div className="text-center mb-16">
-        <h2 className="text-5xl font-black text-slate-950 tracking-tighter mb-4">Benchmarks<span className="text-orange-600">.</span></h2>
+        <h2 className="text-5xl font-black text-slate-950 tracking-tighter mb-4">Benchmarks<span className="brand-text-gradient">.</span></h2>
         <p className="text-slate-400 font-bold text-xs uppercase tracking-[0.2em]">Technische specificaties van de Big 3.</p>
       </div>
 
@@ -17,7 +17,7 @@ export const ComparisonTable: React.FC = () => {
               <tr>
                 <th className="px-8 py-8 w-1/3">Feature</th>
                 <th className="px-4 py-8 text-center text-blue-500">bol</th>
-                <th className="px-4 py-8 text-center text-orange-500">Coolblue</th>
+                <th className="px-4 py-8 text-center text-brand-orange">Coolblue</th>
                 <th className="px-4 py-8 text-center text-yellow-600">Amazon</th>
               </tr>
             </thead>
@@ -37,7 +37,7 @@ export const ComparisonTable: React.FC = () => {
               <tr className="border-b border-slate-50">
                 <td className="px-8 py-8">Service Focus</td>
                 <td className="px-4 py-8 text-center">Allround</td>
-                <td className="px-4 py-8 text-center text-orange-600 uppercase tracking-widest text-[10px]">Premium Expert</td>
+                <td className="px-4 py-8 text-center text-brand-pink uppercase tracking-widest text-[10px]">Premium Expert</td>
                 <td className="px-4 py-8 text-center">Prijs-vechter</td>
               </tr>
               <tr>

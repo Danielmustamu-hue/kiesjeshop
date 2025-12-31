@@ -30,14 +30,14 @@ export const ProductShowcase: React.FC = () => {
           <div key={product.id} className="bg-white rounded-[3.5rem] p-5 shadow-2xl shadow-slate-200/40 border border-slate-50 flex flex-col hover:translate-y-[-10px] transition-all duration-700 group relative">
             
             <div className="absolute z-20 top-10 left-10 flex gap-2">
-              <span className="bg-indigo-600 text-white text-[9px] font-black uppercase tracking-[0.3em] px-5 py-2 rounded-full shadow-lg flex items-center gap-2">
+              <span className="brand-gradient text-white text-[9px] font-black uppercase tracking-[0.3em] px-5 py-2 rounded-full shadow-lg flex items-center gap-2">
                 <Sparkles className="w-3 h-3" /> Beste Keuze
               </span>
             </div>
 
             <button 
               onClick={() => setSelectedProductForAlert(product)}
-              className="absolute z-20 top-10 right-10 bg-white/90 backdrop-blur-md p-3 rounded-2xl border border-slate-100 shadow-xl hover:bg-indigo-600 hover:text-white transition-all group/bell"
+              className="absolute z-20 top-10 right-10 bg-white/90 backdrop-blur-md p-3 rounded-2xl border border-slate-100 shadow-xl hover:bg-brand-pink hover:text-white transition-all group/bell"
             >
               <Bell className="w-5 h-5 group-hover/bell:animate-bounce" />
             </button>
@@ -71,13 +71,13 @@ export const ProductShowcase: React.FC = () => {
                       href={offer.link}
                       target="_blank"
                       rel="nofollow noopener noreferrer"
-                      className="flex items-center justify-between p-5 rounded-[2rem] bg-slate-50 border border-slate-100 hover:bg-white hover:border-indigo-600/20 hover:shadow-xl transition-all group/offer"
+                      className="flex items-center justify-between p-5 rounded-[2rem] bg-slate-50 border border-slate-100 hover:bg-white hover:border-brand-pink/20 hover:shadow-xl transition-all group/offer"
                     >
                       <div>
                         <span className={`text-[10px] font-black uppercase tracking-[0.2em] block mb-1 ${shop.color}`}>{shop.name}</span>
                         <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">{offer.deliveryText}</span>
                       </div>
-                      <div className="w-10 h-10 rounded-full bg-white border border-slate-100 flex items-center justify-center group-hover/offer:bg-indigo-600 group-hover/offer:text-white transition-all">
+                      <div className="w-10 h-10 rounded-full bg-white border border-slate-100 flex items-center justify-center group-hover/offer:brand-gradient group-hover/offer:text-white transition-all">
                         <ArrowRight className="w-5 h-5" />
                       </div>
                     </a>

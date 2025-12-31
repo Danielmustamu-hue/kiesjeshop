@@ -1,6 +1,6 @@
 
 import React, { useState, useEffect, useCallback } from 'react';
-import { ShoppingBag, Sparkles, X, Cpu, Search, Loader2 } from 'lucide-react';
+import { ShoppingBag, Sparkles, X, Cpu, Search, Menu, ArrowRight, Zap, ArrowUpRight, Clock, Star, TrendingUp, ChevronRight, Globe, ShieldCheck, BarChart3, PieChart, CheckCircle2, Shield, RefreshCcw, Info, LayoutGrid, ArrowLeftRight, MessageSquare } from 'lucide-react';
 
 // Components
 import { AiAdvisor } from './components/AiAdvisor';
@@ -16,24 +16,24 @@ import { AboutModal } from './components/AboutModal';
 import { AffiliateModal } from './components/AffiliateModal';
 import { ArticleModal } from './components/ArticleModal';
 import { CookieBanner } from './components/CookieBanner';
-import { ShopCard } from './components/ShopCard';
-import { LiveMarketTicker } from './components/LiveMarketTicker';
 import { MarketPulseDashboard } from './components/MarketPulseDashboard';
 import { ProductShowcase } from './components/ProductShowcase';
 import { VersusTool } from './components/VersusTool';
 import { CommandPalette } from './components/CommandPalette';
-import { FloatingAiButton } from './components/FloatingAiButton';
-import { ExitIntentModal } from './components/ExitIntentModal';
 import { SectionNav } from './components/SectionNav';
 import { SeoContent } from './components/SeoContent';
+import { AboutPage } from './components/AboutPage';
+import { TheBigThree } from './components/TheBigThree';
+import { FloatingAiButton } from './components/FloatingAiButton';
+import { ScrollToTop } from './components/ScrollToTop';
 
 // Services & Data
 import { fetchLiveMarketData, MarketSignal } from './services/MarketIntelligence';
-import { SHOPS } from './constants';
+import { SHOPS, AFFILIATE_LINKS } from './constants';
 import { NicheCategory } from './data/niches';
 import { Article } from './data/articles';
 
-type View = 'home' | 'koopgidsen' | 'redactie' | 'niche-detail' | 'artikel-detail' | 'ai-advisor';
+type View = 'home' | 'koopgidsen' | 'redactie' | 'niche-detail' | 'artikel-detail' | 'ai-advisor' | 'over-ons' | 'de-grote-drie';
 
 const App: React.FC = () => {
   const [currentView, setCurrentView] = useState<View>('home');
@@ -41,249 +41,366 @@ const App: React.FC = () => {
   const [selectedArticle, setSelectedArticle] = useState<Article | null>(null);
   const [showAiAdvisor, setShowAiAdvisor] = useState(false);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
-  const [showExitIntent, setShowExitIntent] = useState(false);
-  const [hasShownExitIntent, setHasShownExitIntent] = useState(false);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   
   const [isTermsOpen, setIsTermsOpen] = useState(false);
   const [isPrivacyOpen, setIsPrivacyOpen] = useState(false);
   const [isAboutOpen, setIsAboutOpen] = useState(false);
   const [isAffiliateOpen, setIsAffiliateOpen] = useState(false);
-  const [showScrollTop, setShowScrollTop] = useState(false);
 
   const [marketSignals, setMarketSignals] = useState<MarketSignal[]>([]);
-  const [marketSources, setMarketSources] = useState<{uri: string, title: string}[]>([]);
   const [isMarketLoading, setIsMarketLoading] = useState(true);
-  const [lastMarketUpdate, setLastMarketUpdate] = useState<string | null>(null);
 
   const navigateTo = (view: View, item?: any) => {
     setCurrentView(view);
     setIsSearchOpen(false);
+    setIsMobileMenuOpen(false);
     if (view === 'niche-detail' && item) setSelectedGuide(item);
     else if (view === 'artikel-detail' && item) setSelectedArticle(item);
     else if (view === 'home') { setSelectedGuide(null); setSelectedArticle(null); }
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
-  const handleModalToShops = () => {
-    navigateTo('home');
-    setTimeout(() => {
-      const el = document.getElementById('shops-section');
-      if (el) el.scrollIntoView({ behavior: 'smooth' });
-    }, 100);
-  };
-
   const loadMarketData = useCallback(async () => {
     setIsMarketLoading(true);
-    const { signals, sources } = await fetchLiveMarketData();
+    const { signals } = await fetchLiveMarketData();
     if (signals && signals.length > 0) {
       setMarketSignals(signals);
-      setMarketSources(sources);
-      setLastMarketUpdate(new Date().toLocaleTimeString('nl-NL', { hour: '2-digit', minute: '2-digit' }));
     }
     setIsMarketLoading(false);
   }, []);
 
   useEffect(() => {
     loadMarketData();
-    const handleScroll = () => setShowScrollTop(window.scrollY > 1000);
-    const handleMouseOut = (e: MouseEvent) => {
-      if (e.clientY <= 0 && !hasShownExitIntent) { setShowExitIntent(true); setHasShownExitIntent(true); }
-    };
-    window.addEventListener('scroll', handleScroll);
-    document.addEventListener('mouseleave', handleMouseOut);
-    return () => {
-      window.removeEventListener('scroll', handleScroll);
-      document.removeEventListener('mouseleave', handleMouseOut);
-    };
-  }, [hasShownExitIntent, loadMarketData]);
+  }, [loadMarketData]);
+
+  const getLinkView = (label: string): View => {
+    switch(label) {
+      case 'De Grote 3': return 'de-grote-drie';
+      case 'Koopgidsen': return 'koopgidsen';
+      case 'Redactie': return 'redactie';
+      case 'Over Ons': return 'over-ons';
+      default: return 'home';
+    }
+  };
+
+  const getShopLink = (shop: string) => {
+    const s = shop.toLowerCase();
+    if (s.includes('bol')) return AFFILIATE_LINKS.bol;
+    if (s.includes('amazon')) return AFFILIATE_LINKS.amazon;
+    if (s.includes('coolblue')) return AFFILIATE_LINKS.coolblue;
+    return AFFILIATE_LINKS.bol;
+  };
 
   return (
-    <div className="min-h-screen bg-[#F8FAFC] font-sans selection:bg-orange-100">
+    <div className="min-h-screen bg-white font-sans selection:bg-pink-100 text-slate-900">
       
-      <header role="banner" className="bg-white/90 backdrop-blur-2xl sticky top-0 z-50 border-b border-slate-100 h-20">
-        <nav role="navigation" aria-label="Hoofdmenu" className="max-w-7xl mx-auto px-4 md:px-6 h-full flex items-center justify-between">
-          <div className="flex items-center gap-6 md:gap-12">
-            <a href="/" onClick={(e) => { e.preventDefault(); navigateTo('home'); }} className="flex items-center gap-2 cursor-pointer group" aria-label="Kiesjeshop Home">
-              <div className="bg-slate-950 p-2 rounded-lg group-hover:bg-orange-600 transition-colors">
+      {/* Top Intelligence Ticker with CTA Links */}
+      <div className="bg-slate-50 border-b border-slate-100 py-2.5 overflow-hidden whitespace-nowrap relative z-[60] group/ticker">
+        <div className="flex animate-scroll items-center gap-12 group-hover/ticker:[animation-play-state:paused]">
+           <div className="flex items-center gap-2">
+              <div className="w-1.5 h-1.5 bg-emerald-500 rounded-full animate-pulse"></div>
+              <span className="text-[9px] font-black text-slate-400 uppercase tracking-[0.3em]">LIVE MARKET SYNC 2025:</span>
+           </div>
+           {marketSignals.length > 0 ? marketSignals.map((s, i) => (
+             <a 
+               key={i} 
+               href={s.url || getShopLink(s.shop)} 
+               target="_blank" 
+               rel="nofollow noopener" 
+               className="flex items-center gap-3 hover:scale-105 transition-transform"
+             >
+                <span className={`text-[10px] font-black uppercase tracking-widest ${s.shop === 'bol' ? 'text-blue-600' : s.shop === 'coolblue' ? 'text-orange-600' : 'text-yellow-600'}`}>{s.shop}</span>
+                <span className="text-[10px] font-bold text-slate-500 hover:text-brand-pink transition-colors">{s.message}</span>
+                <ArrowUpRight className="w-3 h-3 text-slate-300" />
+             </a>
+           )) : (
+             <span className="text-[10px] font-bold text-slate-300 italic">Verbinden met bol, Amazon & Coolblue intelligence...</span>
+           )}
+        </div>
+      </div>
+
+      <header role="banner" className="bg-white/80 backdrop-blur-2xl sticky top-0 z-50 border-b border-slate-100 h-20">
+        <nav role="navigation" className="max-w-7xl mx-auto px-4 md:px-6 h-full flex items-center justify-between">
+          <div className="flex items-center gap-8 lg:gap-12">
+            <a href="/" onClick={(e) => { e.preventDefault(); navigateTo('home'); }} className="flex items-center gap-2 group">
+              <div className="brand-gradient p-2 rounded-xl group-hover:scale-110 transition-transform shadow-md shadow-brand-pink/20">
                 <ShoppingBag className="w-5 h-5 text-white" />
               </div>
-              <div className="flex flex-col -gap-1">
-                <span className="text-lg md:text-xl font-black text-slate-950 tracking-tighter leading-none">Kiesjeshop<span className="text-slate-400">.nl</span></span>
-                <span className="text-[7px] font-black uppercase tracking-[0.2em] text-emerald-600">Market Intelligence</span>
+              <div className="flex flex-col">
+                <span className="text-lg md:text-xl font-black text-slate-900 tracking-tighter leading-none uppercase">Kiesjeshop<span className="brand-text-gradient">.nl</span></span>
+                <span className="text-[8px] font-black uppercase tracking-[0.15em] text-slate-400">Expert Comparison</span>
               </div>
             </a>
-            <div className="hidden md:flex items-center gap-4">
-               <a href="/" onClick={(e) => { e.preventDefault(); navigateTo('home'); }} className={`px-4 py-2 text-[10px] font-black uppercase tracking-[0.3em] transition-colors ${currentView === 'home' ? 'text-orange-600' : 'text-slate-400 hover:text-slate-900'}`} aria-current={currentView === 'home' ? 'page' : undefined}>Intelligence</a>
-               <a href="/koopgidsen" onClick={(e) => { e.preventDefault(); navigateTo('koopgidsen'); }} className={`px-4 py-2 text-[10px] font-black uppercase tracking-[0.3em] transition-colors ${currentView === 'koopgidsen' ? 'text-orange-600' : 'text-slate-400 hover:text-slate-900'}`} aria-current={currentView === 'koopgidsen' ? 'page' : undefined}>Koopgidsen</a>
-               <a href="/redactie" onClick={(e) => { e.preventDefault(); navigateTo('redactie'); }} className={`px-4 py-2 text-[10px] font-black uppercase tracking-[0.3em] transition-colors ${currentView === 'redactie' ? 'text-orange-600' : 'text-slate-400 hover:text-slate-900'}`} aria-current={currentView === 'redactie' ? 'page' : undefined}>Redactie</a>
+
+            <div className="hidden lg:flex items-center gap-6">
+               {['De Grote 3', 'Koopgidsen', 'Redactie', 'Over Ons'].map((link) => (
+                 <a 
+                   key={link} 
+                   href={`/${link.toLowerCase().replace(' ', '-')}`} 
+                   onClick={(e) => { e.preventDefault(); navigateTo(getLinkView(link)); }}
+                   className={`px-1 py-2 text-[10px] font-black uppercase tracking-widest transition-all ${
+                     currentView === getLinkView(link) ? 'text-brand-pink border-b-2 border-brand-pink' : 'text-slate-400 hover:text-slate-900'
+                   }`}
+                 >
+                   {link}
+                 </a>
+               ))}
             </div>
           </div>
-          <div className="flex items-center gap-4">
-            <button onClick={() => setIsSearchOpen(true)} className="hidden sm:flex items-center bg-slate-50 border border-slate-200 px-4 py-2 rounded-xl group hover:border-orange-300 transition-all shadow-sm" aria-label="Zoeken">
-               <Search className="w-4 h-4 text-slate-400 group-hover:text-orange-500" />
-               <span className="text-[9px] font-black uppercase tracking-widest text-slate-400 ml-3">Vraag AI...</span>
+
+          <div className="flex items-center gap-2 md:gap-4">
+            <button onClick={() => setIsSearchOpen(true)} className="p-2 text-slate-400 hover:text-brand-pink">
+               <Search className="w-5 h-5" />
             </button>
-            <button onClick={() => setShowAiAdvisor(true)} className="bg-slate-950 text-white px-6 py-2.5 rounded-xl text-[10px] font-black uppercase tracking-widest hover:bg-orange-600 transition-all shadow-xl active:scale-95">Advisor</button>
+            <button onClick={() => setShowAiAdvisor(true)} className="bg-slate-900 text-white px-5 md:px-8 py-3 rounded-xl text-[10px] font-black uppercase tracking-widest shadow-lg hover:bg-brand-pink active:scale-95 transition-all">Advisor</button>
+            <button onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)} className="lg:hidden p-2 text-slate-600">
+              <Menu className="w-6 h-6" />
+            </button>
           </div>
         </nav>
+        
+        {isMobileMenuOpen && (
+          <div className="lg:hidden bg-white border-b border-slate-100 p-6 flex flex-col gap-4 animate-in slide-in-from-top-4 duration-300 shadow-xl relative z-40">
+             {['De Grote 3', 'Koopgidsen', 'Redactie', 'Over Ons'].map((link) => (
+               <button 
+                 key={link} 
+                 onClick={() => navigateTo(getLinkView(link))}
+                 className="text-left py-4 text-xs font-black uppercase tracking-[0.2em] text-slate-600 border-b border-slate-50 last:border-0"
+               >
+                 {link}
+               </button>
+             ))}
+          </div>
+        )}
       </header>
 
-      <CommandPalette isOpen={isSearchOpen} onClose={() => setIsSearchOpen(false)} onNavigate={navigateTo} />
-      <FloatingAiButton visible={currentView === 'home' && !showAiAdvisor} onClick={() => setShowAiAdvisor(true)} />
-      <ExitIntentModal isOpen={showExitIntent} onClose={() => setShowExitIntent(false)} onOpenConsultant={() => setShowAiAdvisor(true)} />
-
-      <main id="main-content">
+      <main>
         {currentView === 'home' && (
-          <div className="animate-in fade-in duration-1000 max-w-7xl mx-auto px-4 md:px-6 py-12">
-            {/* Hero Section */}
-            <section className="grid grid-cols-12 gap-8 mb-16">
-              <div className="col-span-12 lg:col-span-7 intelligence-card p-12 md:p-24 relative overflow-hidden group border border-slate-100/50 min-h-[600px] flex flex-col justify-center">
-                <div className="absolute top-0 right-0 w-2/3 h-full opacity-10 group-hover:opacity-20 transition-opacity pointer-events-none">
-                  <img src="https://images.unsplash.com/photo-1556910103-1c02745aae4d?auto=format&fit=crop&q=80&w=1200" alt="Lifestyle Interior" className="w-full h-full object-cover rounded-l-[5rem]" />
-                  <div className="absolute inset-0 bg-gradient-to-l from-white via-white/50 to-transparent"></div>
-                </div>
-                <div className="relative z-10">
-                  <div className="flex items-center gap-3 text-orange-600 font-black text-[10px] uppercase tracking-[0.4em] mb-12">
-                    <Sparkles className="w-4 h-4 animate-pulse" /> Platform 2025
+          <div className="animate-in fade-in duration-700">
+            
+            {/* CLEAN CONVERSION HERO */}
+            <section className="max-w-7xl mx-auto px-4 md:px-6 pt-6 pb-12">
+              <div className="grid grid-cols-1 md:grid-cols-12 gap-6 lg:gap-8">
+                <div className="md:col-span-12 lg:col-span-8 bg-slate-50 rounded-[2.5rem] md:rounded-[3.5rem] p-8 md:p-16 lg:p-24 relative overflow-hidden flex flex-col justify-center border border-slate-100 min-h-[500px] md:min-h-[600px] shadow-sm group">
+                  <div className="absolute inset-0 z-0">
+                    <img 
+                      src="https://images.unsplash.com/photo-1491933382434-500287f9b54b?auto=format&fit=crop&q=80&w=1600" 
+                      alt="Premium Tech Selection" 
+                      className="w-full h-full object-cover opacity-50 mix-blend-multiply group-hover:scale-105 transition-transform duration-[8000ms]" 
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-r from-white via-white/80 to-transparent"></div>
                   </div>
-                  <h1 className="text-5xl md:text-[7rem] font-black text-slate-950 leading-[0.85] tracking-tighter mb-16">
-                    Vergelijk,<br />Kies &<br /><span className="text-intelligence text-8xl md:text-[10rem]">Bespaar</span>
-                  </h1>
-                  
-                  <p className="text-xl md:text-2xl text-slate-600 font-semibold max-w-xl mb-12 leading-relaxed">
-                    De onafhankelijke gids die <br className="hidden md:block" />
-                    <span className="inline-block px-4 py-1.5 bg-[#0055CC] text-white rounded-xl shadow-[0_10px_30px_rgba(0,85,204,0.3)] transform hover:-rotate-2 transition-transform cursor-default">bol</span> 
-                    <span className="mx-2 text-slate-300">/</span> 
-                    <span className="inline-block px-4 py-1.5 bg-[#232F3E] text-[#FF9900] rounded-xl shadow-[0_10px_30px_rgba(35,47,62,0.3)] transform hover:rotate-2 transition-transform cursor-default">Amazon</span> 
-                    <span className="mx-2 text-slate-300">/</span> 
-                    <span className="inline-block px-4 py-1.5 bg-[#0090E3] text-white rounded-xl shadow-[0_10px_30px_rgba(0,144,227,0.3)] transform hover:-rotate-1 transition-transform italic cursor-default">Coolblue</span> 
-                    <br className="hidden md:block" /> voor jou ontleedt.
-                  </p>
 
-                  <button onClick={() => setShowAiAdvisor(true)} className="bg-slate-950 text-white px-12 py-5 rounded-full font-black text-xs uppercase tracking-[0.3em] hover:bg-orange-600 transition-all shadow-2xl active:scale-95">
-                    Vraag de AI Advisor
-                  </button>
+                  <div className="relative z-10 max-w-xl">
+                    <div className="inline-flex items-center gap-2 bg-white/90 backdrop-blur-md px-4 py-2 rounded-full text-[9px] font-black uppercase tracking-[0.3em] mb-6 text-slate-900 border border-slate-200 shadow-sm">
+                      <Star className="w-3.5 h-3.5 fill-brand-pink text-brand-pink" /> Independent Advisor 2025
+                    </div>
+                    
+                    <h1 className="text-4xl md:text-7xl lg:text-8xl font-black text-slate-900 leading-[0.95] tracking-tighter mb-8">
+                      Vergelijk.<br />Bespaar.<br />
+                      <span className="brand-text-gradient underline decoration-slate-200 underline-offset-8 uppercase">Direct.</span>
+                    </h1>
+
+                    <p className="text-lg md:text-xl font-bold text-slate-600 leading-relaxed mb-10 max-w-lg">
+                      De slimste manier om prijzen en service bij <span className="text-blue-600">bol</span>, <span className="text-orange-600">Coolblue</span> & <span className="text-amber-600">Amazon</span> objectief te analyseren.
+                    </p>
+
+                    <div className="flex flex-wrap gap-4">
+                      <button onClick={() => setShowAiAdvisor(true)} className="brand-gradient text-white px-8 md:px-10 py-5 rounded-2xl font-black text-[11px] uppercase tracking-[0.2em] hover:brightness-110 transition-all shadow-xl shadow-brand-pink/20 flex items-center gap-3">
+                        Vraag Advies <Sparkles className="w-5 h-5" />
+                      </button>
+                      <button onClick={() => navigateTo('de-grote-drie')} className="bg-white text-slate-900 border border-slate-200 px-8 md:px-10 py-5 rounded-2xl font-black text-[11px] uppercase tracking-[0.2em] hover:bg-slate-50 transition-all shadow-md">
+                        De Grote 3
+                      </button>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="md:col-span-12 lg:col-span-4 flex flex-col gap-6 lg:gap-8">
+                  <div className="bg-white rounded-[2.5rem] p-8 flex flex-col justify-center border border-slate-100 shadow-sm h-1/2 min-h-[250px] relative overflow-hidden group">
+                    <div className="absolute top-0 right-0 p-8 opacity-5 group-hover:scale-110 transition-transform"><TrendingUp className="w-40 h-40 text-slate-900" /></div>
+                    <div className="bg-pink-50 p-4 rounded-2xl w-fit mb-4 border border-pink-100">
+                      <Zap className="w-6 h-6 text-brand-pink" />
+                    </div>
+                    <h2 className="text-2xl font-black text-slate-900 mb-2 tracking-tight">Market Pulse</h2>
+                    <p className="text-slate-500 text-sm font-medium mb-6 leading-relaxed">AI-gestuurde prijsdetectie bij de Big 3 retailers.</p>
+                    <button onClick={() => { const el = document.getElementById('market-pulse'); if (el) el.scrollIntoView({ behavior: 'smooth' }); }} className="text-brand-pink text-[10px] font-black uppercase tracking-widest flex items-center gap-2 hover:translate-x-2 transition-transform">
+                      Check Feed <ArrowRight className="w-4 h-4" />
+                    </button>
+                  </div>
+
+                  <div className="bg-slate-50 rounded-[2.5rem] p-8 flex flex-col justify-center border border-slate-100 shadow-sm h-1/2 min-h-[250px] group">
+                     <div className="bg-blue-50 p-4 rounded-2xl w-fit mb-4 border border-blue-100">
+                        <Cpu className="w-6 h-6 text-blue-600" />
+                     </div>
+                     <h3 className="text-2xl font-black text-slate-900 tracking-tight mb-2">Shopping Engine</h3>
+                     <p className="text-slate-500 font-medium text-sm mb-6">Objectief oordeel op basis van voorraad en service.</p>
+                     <button onClick={() => setShowAiAdvisor(true)} className="bg-slate-900 text-white w-full py-4 rounded-xl font-black text-[10px] uppercase tracking-widest shadow-lg hover:bg-brand-pink transition-all">Start Consult</button>
+                  </div>
                 </div>
               </div>
-              <div className="col-span-12 lg:col-span-5 flex flex-col gap-8">
-                <div className="bg-orange-600 rounded-[3.5rem] p-12 h-1/2 text-white shadow-2xl relative overflow-hidden group border border-white/10">
-                   <LiveMarketTicker signals={marketSignals} sources={marketSources} loading={isMarketLoading} lastUpdate={lastMarketUpdate} />
-                </div>
-                <div className="bg-slate-950 rounded-[3.5rem] p-12 h-1/2 flex flex-col items-center justify-center text-center relative overflow-hidden shadow-2xl border border-white/5">
-                  <div className="bg-orange-500/10 p-5 rounded-3xl mb-8 border border-orange-500/20">
-                    <Cpu className="w-10 h-10 text-orange-400" />
+            </section>
+
+            {/* EXPERT TRUST GRID */}
+            <section className="bg-white border-y border-slate-100 py-12 mb-12">
+              <div className="max-w-7xl mx-auto px-6 grid grid-cols-2 md:grid-cols-4 gap-8 md:gap-12">
+                {[
+                  { icon: <ShieldCheck className="w-5 h-5 text-emerald-500" />, label: "Geverifieerd", desc: "Live retail API data." },
+                  { icon: <PieChart className="w-5 h-5 text-blue-500" />, label: "Service Score", desc: "NPS weging inbegrepen." },
+                  { icon: <Clock className="w-5 h-5 text-amber-500" />, label: "Update 2025", desc: "Elke 15 min. ververst." },
+                  { icon: <BarChart3 className="w-5 h-5 text-purple-500" />, label: "Onafhankelijk", desc: "Geen gesponsorde deals." }
+                ].map((item, i) => (
+                  <div key={i} className="flex flex-col md:flex-row items-center md:items-start gap-4 text-center md:text-left">
+                    <div className="bg-slate-50 p-3 rounded-xl border border-slate-100">{item.icon}</div>
+                    <div>
+                      <h4 className="text-[10px] font-black uppercase tracking-widest text-slate-900 mb-0.5">{item.label}</h4>
+                      <p className="text-[10px] text-slate-400 font-medium leading-tight">{item.desc}</p>
+                    </div>
                   </div>
-                  <h2 className="text-3xl font-black text-white mb-4 tracking-tighter">AI Consultant</h2>
-                  <p className="text-slate-400 text-sm font-medium mb-10 max-w-[240px]">Krijg direct antwoord op jouw specifieke shopping-vraag.</p>
-                  <button onClick={() => setShowAiAdvisor(true)} className="bg-white text-slate-950 w-full py-5 rounded-2xl font-black text-[10px] uppercase tracking-widest hover:bg-orange-50 transition-colors">Start Chat</button>
-                </div>
+                ))}
               </div>
             </section>
 
             <SectionNav />
 
-            {/* Core Content Blocks */}
-            <div id="market-pulse" className="py-24 scroll-mt-32">
-               <MarketPulseDashboard onRefresh={loadMarketData} isLoading={isMarketLoading} />
-            </div>
-
-            <div id="compare" className="py-24 scroll-mt-32">
-               <div className="mb-16">
-                  <h2 className="text-5xl font-black text-slate-950 tracking-tighter mb-4">Vergelijk Beste Producten<span className="text-orange-600">.</span></h2>
-                  <p className="text-slate-500 font-medium text-xl max-w-xl leading-relaxed">Top-tier producten geanalyseerd op prijs en service bij de Grote 3.</p>
-               </div>
-               <ProductShowcase />
-               <div className="mt-24">
-                  <ComparisonTable />
-               </div>
-            </div>
-
-            <div id="duel" className="py-24 scroll-mt-32">
-               <VersusTool />
-            </div>
-
-            <div id="shops-section" className="py-24 scroll-mt-32">
-               <div className="mb-16 text-center">
-                  <h2 className="text-7xl font-black text-slate-950 tracking-tighter mb-4">De Giganten<span className="text-orange-600">.</span></h2>
-                  <p className="text-slate-500 font-medium text-xl max-w-2xl mx-auto leading-relaxed">Vergeleken op service, prijs en betrouwbaarheid in 2025.</p>
-               </div>
-               <div className="grid grid-cols-1 md:grid-cols-3 gap-10">
-                  {SHOPS.map(shop => (
-                    <ShopCard key={shop.id} shop={shop} />
-                  ))}
+            {/* PULSE SECTION */}
+            <div id="market-pulse" className="py-20 bg-slate-50 border-b border-slate-100 scroll-mt-24">
+               <div className="max-w-7xl mx-auto px-6">
+                 <div className="mb-12 flex flex-col md:flex-row md:items-end justify-between gap-6">
+                    <div>
+                      <span className="brand-text-gradient font-black text-[10px] uppercase tracking-[0.4em] mb-2 block">Intelligence Data</span>
+                      <h2 className="text-3xl md:text-5xl font-black tracking-tighter text-slate-900">Market Intelligence Feed<span className="brand-text-gradient">.</span></h2>
+                    </div>
+                    <button onClick={loadMarketData} className="flex items-center gap-3 px-6 py-4 bg-white border border-slate-200 rounded-2xl text-[10px] font-black uppercase tracking-widest text-slate-400 hover:text-brand-pink transition-all shadow-sm">
+                      <RefreshCcw className={`w-4 h-4 ${isMarketLoading ? 'animate-spin' : ''}`} /> Update Data
+                    </button>
+                 </div>
+                 <MarketPulseDashboard onRefresh={loadMarketData} isLoading={isMarketLoading} />
                </div>
             </div>
-            
-            <SeoContent />
 
-            <div id="gidsen" className="py-24 scroll-mt-32">
-               <NicheGuides onSelectGuide={(g) => navigateTo('niche-detail', g)} limit={4} />
+            {/* DEALS SECTION */}
+            <div id="compare" className="py-24 bg-white scroll-mt-24">
+               <div className="max-w-7xl mx-auto px-6">
+                 <div className="mb-16">
+                    <h2 className="text-3xl md:text-5xl font-black text-slate-900 tracking-tighter mb-4 uppercase">Populaire Vergelijkingen<span className="brand-text-gradient">.</span></h2>
+                    <p className="text-slate-500 font-medium text-lg max-w-2xl leading-relaxed">De meest gezochte producten direct afgezet tegen bol, Coolblue en Amazon.</p>
+                 </div>
+                 <ProductShowcase />
+                 <div className="mt-24">
+                    <ComparisonTable />
+                 </div>
+               </div>
+            </div>
+
+            {/* DUEL TOOL */}
+            <div id="duel" className="py-24 bg-slate-50 border-y border-slate-100 scroll-mt-24">
+               <div className="max-w-7xl mx-auto px-6">
+                 <VersusTool />
+               </div>
+            </div>
+
+            {/* KOOPGIDSEN */}
+            <div id="gidsen" className="py-24 bg-white scroll-mt-24">
+               <div className="max-w-7xl mx-auto px-6">
+                 <NicheGuides onSelectGuide={(g) => navigateTo('niche-detail', g)} limit={4} />
+                 <div className="mt-16 text-center">
+                    <button 
+                      onClick={() => navigateTo('koopgidsen')}
+                      className="inline-flex items-center gap-4 px-12 py-6 bg-slate-900 text-white font-black text-[11px] uppercase tracking-[0.4em] rounded-2xl shadow-xl hover:bg-brand-pink transition-all group"
+                    >
+                      Alle Koopgidsen 2025 <ChevronRight className="w-5 h-5 group-hover:translate-x-2 transition-transform" />
+                    </button>
+                 </div>
+               </div>
             </div>
 
             <ReviewSection />
+            <SeoContent />
             
-            <div id="faq" className="py-24 scroll-mt-32">
-               <FaqSection />
+            <div id="faq" className="py-24 bg-slate-50 border-t border-slate-100 scroll-mt-24">
+               <div className="max-w-7xl mx-auto px-6">
+                  <FaqSection />
+               </div>
             </div>
           </div>
         )}
 
+        {currentView === 'de-grote-drie' && <TheBigThree onNavigate={navigateTo} />}
         {currentView === 'koopgidsen' && <div className="max-w-7xl mx-auto py-12 px-6"><NicheGuides onSelectGuide={(g) => navigateTo('niche-detail', g)} /></div>}
         {currentView === 'redactie' && <div className="max-w-7xl mx-auto py-12 px-6"><BlogSection onSelectArticle={(a) => navigateTo('artikel-detail', a)} /></div>}
         {currentView === 'niche-detail' && selectedGuide && <NicheDetail guide={selectedGuide} onBack={() => navigateTo('koopgidsen')} />}
-        {currentView === 'artikel-detail' && selectedArticle && <ArticleModal article={selectedArticle} onClose={() => navigateTo('redactie')} onNavigateToShops={handleModalToShops} inline={true} />}
+        {currentView === 'artikel-detail' && selectedArticle && <ArticleModal article={selectedArticle} onClose={() => navigateTo('redactie')} onNavigateToShops={() => navigateTo('home')} inline={true} />}
+        {currentView === 'over-ons' && <AboutPage onNavigate={navigateTo} />}
       </main>
 
-      <footer role="contentinfo" className="bg-slate-950 text-white pt-32 pb-16 border-t border-white/5">
+      <footer role="contentinfo" className="bg-white text-slate-900 pt-24 pb-12 border-t border-slate-100">
         <div className="max-w-7xl mx-auto px-6">
-          <div className="grid grid-cols-1 md:grid-cols-12 gap-16 mb-24">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-12 gap-12 md:gap-16 mb-20">
             <div className="md:col-span-5">
-              <div className="flex items-center gap-3 mb-10">
-                <div className="bg-orange-600 p-2 rounded-lg"><ShoppingBag className="w-6 h-6 text-white" /></div>
-                <span className="text-3xl font-black tracking-tighter">Kiesjeshop<span className="text-slate-600">.nl</span></span>
+              <div className="flex items-center gap-3 mb-8">
+                <div className="brand-gradient p-2 rounded-xl"><ShoppingBag className="w-6 h-6 text-white" /></div>
+                <span className="text-2xl font-black tracking-tighter uppercase">Kiesjeshop<span className="text-slate-300">.nl</span></span>
               </div>
-              <p className="text-slate-500 max-w-sm font-medium leading-relaxed text-lg mb-12">
-                Het intelligente vergelijkingsplatform van Nederland. Wij filteren de ruis, jij kiest de kwaliteit.
+              <p className="text-slate-500 max-w-sm font-medium leading-relaxed text-lg mb-10 italic">
+                Onafhankelijk advies op basis van bol, Amazon en Coolblue service intelligence.
               </p>
-              <div className="p-6 bg-white/5 rounded-3xl border border-white/10 text-[10px] text-slate-500 font-medium italic">
-                Affiliate Disclaimer: Kiesjeshop.nl ontvangt een commissie bij aankopen via onze links bij bol, Amazon of Coolblue. Dit heeft geen invloed op de prijs die jij betaalt.
+              <div className="p-8 bg-slate-50 rounded-3xl border border-slate-100 text-[10px] text-slate-400 font-bold uppercase tracking-widest leading-loose">
+                Affiliate Disclaimer: Kiesjeshop.nl ontvangt een commissie bij aankopen via onze links. Dit heeft geen invloed op uw prijs.
               </div>
             </div>
             <div className="md:col-span-2">
-              <h4 className="text-[10px] font-black uppercase tracking-[0.4em] text-orange-400 mb-10">Menu</h4>
-              <ul className="space-y-6 text-slate-400 font-bold text-sm">
-                <li><a href="/" onClick={(e) => { e.preventDefault(); navigateTo('home'); }} className="hover:text-white transition-colors">Home</a></li>
-                <li><a href="/koopgidsen" onClick={(e) => { e.preventDefault(); navigateTo('koopgidsen'); }} className="hover:text-white transition-colors">Koopgidsen</a></li>
-                <li><a href="/redactie" onClick={(e) => { e.preventDefault(); navigateTo('redactie'); }} className="hover:text-white transition-colors">Redactie</a></li>
+              <h4 className="text-[10px] font-black uppercase tracking-[0.4em] text-brand-pink mb-8">Platform</h4>
+              <ul className="space-y-4 text-slate-400 font-bold text-xs uppercase tracking-widest">
+                <li><button onClick={() => navigateTo('home')} className="hover:text-slate-900 transition-colors">Home</button></li>
+                <li><button onClick={() => navigateTo('de-grote-drie')} className="hover:text-slate-900 transition-colors">De Grote 3</button></li>
+                <li><button onClick={() => navigateTo('koopgidsen')} className="hover:text-slate-900 transition-colors">Koopgidsen</button></li>
+                <li><button onClick={() => navigateTo('redactie')} className="hover:text-slate-900 transition-colors">Redactie</button></li>
               </ul>
             </div>
             <div className="md:col-span-2">
-              <h4 className="text-[10px] font-black uppercase tracking-[0.4em] text-orange-400 mb-10">Bedrijf</h4>
-              <ul className="space-y-6 text-slate-400 font-bold text-sm">
-                <li><button onClick={() => setIsAboutOpen(true)} className="hover:text-white transition-colors">Over ons</button></li>
-                <li><button onClick={() => setIsAffiliateOpen(true)} className="hover:text-white transition-colors">Affiliates</button></li>
+              <h4 className="text-[10px] font-black uppercase tracking-[0.4em] text-brand-pink mb-8">Service</h4>
+              <ul className="space-y-4 text-slate-400 font-bold text-xs uppercase tracking-widest">
+                <li><button onClick={() => navigateTo('over-ons')} className="hover:text-slate-900 transition-colors">Over ons</button></li>
+                <li><button onClick={() => setIsAffiliateOpen(true)} className="hover:text-slate-900 transition-colors">Affiliates</button></li>
+                <li><button onClick={() => setIsAboutOpen(true)} className="hover:text-slate-900 transition-colors">Contact</button></li>
               </ul>
             </div>
             <div className="md:col-span-3">
-              <h4 className="text-[10px] font-black uppercase tracking-[0.4em] text-orange-400 mb-10">Juridisch</h4>
-              <ul className="space-y-6 text-slate-400 font-bold text-sm">
-                <li><button onClick={() => setIsPrivacyOpen(true)} className="hover:text-white transition-colors">Privacybeleid</button></li>
-                <li><button onClick={() => setIsTermsOpen(true)} className="hover:text-white transition-colors">Voorwaarden</button></li>
+              <h4 className="text-[10px] font-black uppercase tracking-[0.4em] text-brand-pink mb-8">Legal</h4>
+              <ul className="space-y-4 text-slate-400 font-bold text-xs uppercase tracking-widest">
+                <li><button onClick={() => setIsPrivacyOpen(true)} className="hover:text-slate-900 transition-colors">Privacybeleid</button></li>
+                <li><button onClick={() => setIsTermsOpen(true)} className="hover:text-slate-900 transition-colors">Voorwaarden</button></li>
               </ul>
             </div>
           </div>
-          <p className="text-slate-600 text-[10px] font-black uppercase tracking-[0.5em] text-center pt-12 border-t border-white/5">© 2025 Kiesjeshop.nl — Intelligent Comparison Platform</p>
+          <div className="pt-10 border-t border-slate-50 text-center">
+            <p className="text-slate-300 text-[10px] font-black uppercase tracking-[0.5em]">© 2025 Kiesjeshop.nl — Onafhankelijke Retail Intelligence</p>
+          </div>
         </div>
       </footer>
 
+      {/* Floating UI elements */}
+      {!showAiAdvisor && <FloatingAiButton visible={true} onClick={() => setShowAiAdvisor(true)} />}
+      <ScrollToTop />
+
       {showAiAdvisor && (
-        <div className="fixed inset-0 z-[100] flex items-center justify-center p-4">
-          <div className="absolute inset-0 bg-slate-950/95 backdrop-blur-2xl" onClick={() => setShowAiAdvisor(false)}></div>
-          <div className="relative w-full max-w-5xl h-[90vh] overflow-hidden rounded-[4rem] shadow-2xl border border-white/10 bg-slate-950">
+        <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 animate-in fade-in duration-300">
+          <div className="absolute inset-0 bg-slate-900/40 backdrop-blur-md" onClick={() => setShowAiAdvisor(false)}></div>
+          <div className="relative w-full max-w-5xl h-[90vh] overflow-hidden rounded-[2.5rem] md:rounded-[4rem] shadow-2xl border border-slate-100 bg-white">
              <AiAdvisor />
-             <button onClick={() => setShowAiAdvisor(false)} className="absolute top-10 right-10 p-4 bg-white/10 text-white rounded-full hover:bg-white/20 z-[110]" aria-label="Sluiten"><X className="w-6 h-6" /></button>
+             <button onClick={() => setShowAiAdvisor(false)} className="absolute top-6 md:top-10 right-6 md:right-10 p-3 bg-slate-100 text-slate-400 rounded-full hover:bg-brand-pink hover:text-white z-[110] transition-all"><X className="w-6 h-6" /></button>
           </div>
         </div>
+      )}
+
+      {isSearchOpen && (
+        <CommandPalette 
+          isOpen={isSearchOpen} 
+          onClose={() => setIsSearchOpen(false)} 
+          onNavigate={navigateTo} 
+        />
       )}
 
       <TermsModal isOpen={isTermsOpen} onClose={() => setIsTermsOpen(false)} />

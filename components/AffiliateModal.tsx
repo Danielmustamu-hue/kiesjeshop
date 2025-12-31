@@ -23,7 +23,7 @@ export const AffiliateModal: React.FC<AffiliateModalProps> = ({ isOpen, onClose 
       <div className="relative bg-white rounded-[3rem] shadow-2xl w-full max-w-2xl max-h-[85vh] flex flex-col overflow-hidden animate-in fade-in zoom-in-95 duration-200 border border-slate-100">
         <div className="p-8 border-b border-slate-50 flex items-center justify-between">
           <div className="flex items-center gap-3">
-             <div className="bg-indigo-600 p-2 rounded-xl"><Info className="w-5 h-5 text-white" /></div>
+             <div className="brand-gradient p-2 rounded-xl"><Info className="w-5 h-5 text-white" /></div>
              <h2 className="text-2xl font-black text-slate-900 tracking-tight">Affiliate Verklaring</h2>
           </div>
           <button onClick={onClose} className="p-2 hover:bg-slate-100 rounded-full transition-all"><X className="w-6 h-6 text-slate-400" /></button>
@@ -37,9 +37,9 @@ export const AffiliateModal: React.FC<AffiliateModalProps> = ({ isOpen, onClose 
               Kiesjeshop.nl is een onafhankelijk platform. Wij verkopen zelf geen producten. In plaats daarvan helpen we je de beste keuze te maken tussen giganten als <strong>bol</strong>, <strong>Amazon.nl</strong> en <strong>Coolblue</strong>.
             </p>
 
-            <div className="bg-indigo-50 p-8 rounded-3xl border border-indigo-100 my-8">
-               <h4 className="font-black text-indigo-900 mb-4 flex items-center gap-2"><HelpCircle className="w-5 h-5" /> Hoe verdienen wij geld?</h4>
-               <p className="text-sm text-indigo-800">
+            <div className="bg-pink-50 p-8 rounded-3xl border border-pink-100 my-8">
+               <h4 className="font-black text-brand-pink mb-4 flex items-center gap-2"><HelpCircle className="w-5 h-5" /> Hoe verdienen wij geld?</h4>
+               <p className="text-sm text-brand-pink/80 font-bold">
                  Wanneer je via een link op onze website naar een webshop gaat en daar een aankoop doet, ontvangen wij een kleine commissie (meestal tussen de 1% en 8%) van de webshop.
                </p>
             </div>
@@ -66,7 +66,7 @@ export const AffiliateModal: React.FC<AffiliateModalProps> = ({ isOpen, onClose 
         </div>
 
         <div className="p-8 bg-slate-50 border-t border-slate-100 flex justify-end">
-          <button onClick={onClose} className="bg-slate-950 text-white px-8 py-3 rounded-2xl font-black text-xs uppercase tracking-widest hover:bg-indigo-600 transition-all">Begrepen</button>
+          <button onClick={onClose} className="brand-gradient text-white px-8 py-3 rounded-2xl font-black text-xs uppercase tracking-widest hover:brightness-110 transition-all">Begrepen</button>
         </div>
       </div>
     </div>

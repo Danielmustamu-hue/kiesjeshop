@@ -1,60 +1,64 @@
 
 import React from 'react';
-import { ShieldCheck, Zap, Heart, MousePointerClick } from 'lucide-react';
+import { ShieldCheck, Zap, Heart, MousePointerClick, BarChart3, Search, Scale } from 'lucide-react';
 
 export const ReviewSection: React.FC = () => {
   return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-24">
-      {/* Header Section */}
-      <div className="text-center max-w-3xl mx-auto mb-12">
-        <div className="inline-flex items-center gap-2 bg-orange-100 text-orange-800 px-4 py-1.5 rounded-full text-sm font-semibold mb-4 border border-orange-200">
+    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24 border-t border-slate-50">
+      <div className="text-center max-w-3xl mx-auto mb-20">
+        <div className="inline-flex items-center gap-2 bg-blue-50 text-blue-700 px-4 py-1.5 rounded-full text-[10px] font-black uppercase tracking-[0.2em] mb-4 border border-blue-100">
            <ShieldCheck className="w-4 h-4" />
-           <span>100% Transparant</span>
+           <span>Onafhankelijk & Transparant</span>
         </div>
-        <h2 className="text-3xl md:text-4xl font-extrabold text-slate-900 mb-4">
-          Waarom kiezen via Kiesjeshop.nl?
+        <h2 className="text-4xl md:text-6xl font-black text-slate-900 mb-6 tracking-tighter">
+          Hoe wij de markt scannen<span className="brand-text-gradient">.</span>
         </h2>
-        <p className="text-lg text-slate-600">
-          Geen onzin, gewoon direct weten waar je aan toe bent.
+        <p className="text-lg text-slate-500 font-medium">
+          Bij Kiesjeshop.nl geloven we in data, niet in mooie praatjes. Onze experts analyseren dagelijks de drie grootste retailers van Nederland op basis van drie harde criteria.
         </p>
       </div>
 
-      {/* Trust Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-        
-        {/* Card 1 */}
-        <div className="bg-white rounded-2xl p-8 shadow-lg border border-slate-100 hover:shadow-xl transition-shadow text-center">
-            <div className="w-14 h-14 bg-orange-50 text-orange-600 rounded-full flex items-center justify-center mx-auto mb-6">
-                <Zap className="w-7 h-7" />
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-24">
+        {[
+          {
+            icon: <Scale className="w-8 h-8 text-blue-600" />,
+            title: "1. Prijs-Validatie",
+            desc: "Wij kijken verder dan de 'vanaf' prijs. Onze engine berekent de totale kosten inclusief verzending en eventuele verborgen toeslagen bij bol, Amazon en Coolblue."
+          },
+          {
+            icon: <BarChart3 className="w-8 h-8 text-orange-600" />,
+            title: "2. Service Intelligence",
+            desc: "Een lage prijs is niks waard zonder goede service. We wegen de retourtermijnen, garantie-afhandeling en de gemiddelde NPS-scores van de shops mee in ons advies."
+          },
+          {
+            icon: <Search className="w-8 h-8 text-brand-pink" />,
+            title: "3. Voorraad Analyse",
+            desc: "Onze AI doorzoekt real-time de actuele voorraadstatus. Zo voorkomen we dat je wordt doorverwezen naar producten die pas over weken leverbaar zijn."
+          }
+        ].map((item, i) => (
+          <div key={i} className="bg-slate-50 rounded-[3rem] p-10 relative overflow-hidden group hover:bg-white hover:shadow-2xl transition-all border border-transparent hover:border-slate-100 text-center">
+            <div className="w-16 h-16 bg-white shadow-xl rounded-2xl flex items-center justify-center mx-auto mb-8 group-hover:scale-110 transition-transform">
+              {item.icon}
             </div>
-            <h3 className="text-xl font-bold text-slate-900 mb-3">Bespaar Tijd</h3>
-            <p className="text-slate-600 leading-relaxed">
-                Geen 10 tabbladen meer openen. Wij zetten de belangrijkste verschillen tussen bol, Coolblue en Amazon direct naast elkaar.
-            </p>
-        </div>
+            <h3 className="text-2xl font-black text-slate-900 mb-4 tracking-tight">{item.title}</h3>
+            <p className="text-slate-600 font-medium leading-relaxed">{item.desc}</p>
+          </div>
+        ))}
+      </div>
 
-        {/* Card 2 */}
-        <div className="bg-white rounded-2xl p-8 shadow-lg border border-slate-100 hover:shadow-xl transition-shadow text-center">
-            <div className="w-14 h-14 bg-orange-50 text-orange-600 rounded-full flex items-center justify-center mx-auto mb-6">
-                <Heart className="w-7 h-7" />
-            </div>
-            <h3 className="text-xl font-bold text-slate-900 mb-3">Kies voor zekerheid</h3>
-            <p className="text-slate-600 leading-relaxed">
-                Onze AI-assistent kijkt objectief naar jouw vraag. Zoeken naar service? Dan raden we Coolblue aan. Zoeken naar prijs? Dan vaak Amazon.
+      <div className="bg-slate-950 rounded-[3.5rem] p-8 md:p-16 text-white relative overflow-hidden">
+        <div className="absolute top-0 right-0 p-12 opacity-5"><ShieldCheck className="w-64 h-64" /></div>
+        <div className="max-w-3xl relative z-10">
+          <h4 className="text-3xl font-black mb-6 tracking-tight">Onze Belofte aan de Consument</h4>
+          <div className="space-y-6 text-slate-400 font-medium text-lg leading-relaxed">
+            <p>
+              Kiesjeshop.nl is 100% onafhankelijk. Hoewel we een kleine commissie kunnen ontvangen als u via onze links een aankoop doet (zonder extra kosten voor u), heeft dit **geen enkele invloed** op onze ranking of ons advies. 
             </p>
-        </div>
-
-        {/* Card 3 */}
-        <div className="bg-white rounded-2xl p-8 shadow-lg border border-slate-100 hover:shadow-xl transition-shadow text-center">
-            <div className="w-14 h-14 bg-orange-50 text-orange-600 rounded-full flex items-center justify-center mx-auto mb-6">
-                <MousePointerClick className="w-7 h-7" />
-            </div>
-            <h3 className="text-xl font-bold text-slate-900 mb-3">Veilig Bestellen</h3>
-            <p className="text-slate-600 leading-relaxed">
-                Je bestelt gewoon veilig bij de webshop zelf. Wij sturen je alleen direct naar de juiste pagina.
+            <p>
+              Wij rangschikken producten op basis van wat voor ú de beste deal is, niet op basis van wat ons de hoogste commissie oplevert. Dat is de enige manier om uw vertrouwen — en dat van Google — te behouden.
             </p>
+          </div>
         </div>
-
       </div>
     </div>
   );

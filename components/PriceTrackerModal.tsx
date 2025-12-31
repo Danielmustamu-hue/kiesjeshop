@@ -56,7 +56,7 @@ export const PriceTrackerModal: React.FC<PriceTrackerModalProps> = ({ product, i
       <div className="relative w-full max-w-lg bg-white rounded-[3rem] shadow-2xl border border-slate-100 overflow-hidden animate-in fade-in zoom-in-95 duration-200">
         <div className="p-10">
           <div className="flex justify-between items-start mb-8">
-            <div className="bg-indigo-600 p-3 rounded-2xl">
+            <div className="brand-gradient p-3 rounded-2xl">
               <Bell className="w-6 h-6 text-white" />
             </div>
             <button onClick={onClose} className="p-2 hover:bg-slate-100 rounded-full transition-colors">
@@ -92,7 +92,7 @@ export const PriceTrackerModal: React.FC<PriceTrackerModalProps> = ({ product, i
                     required
                     type="email" 
                     placeholder="E-mailadres" 
-                    className={`w-full pl-14 pr-6 py-5 bg-slate-50 border rounded-2xl outline-none focus:ring-2 focus:ring-indigo-500 transition-all font-medium ${status === 'error' ? 'border-rose-500' : 'border-slate-200'}`}
+                    className={`w-full pl-14 pr-6 py-5 bg-slate-50 border rounded-2xl outline-none focus:ring-2 focus:ring-brand-pink/20 transition-all font-medium ${status === 'error' ? 'border-rose-500' : 'border-slate-200'}`}
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                   />
@@ -103,7 +103,7 @@ export const PriceTrackerModal: React.FC<PriceTrackerModalProps> = ({ product, i
                     required
                     type="number" 
                     placeholder="Doelprijs (bijv. 299)" 
-                    className={`w-full pl-14 pr-6 py-5 bg-slate-50 border rounded-2xl outline-none focus:ring-2 focus:ring-indigo-500 transition-all font-medium ${status === 'error' ? 'border-rose-500' : 'border-slate-200'}`}
+                    className={`w-full pl-14 pr-6 py-5 bg-slate-50 border rounded-2xl outline-none focus:ring-2 focus:ring-brand-pink/20 transition-all font-medium ${status === 'error' ? 'border-rose-500' : 'border-slate-200'}`}
                     value={targetPrice}
                     onChange={(e) => setTargetPrice(e.target.value)}
                   />
@@ -111,7 +111,7 @@ export const PriceTrackerModal: React.FC<PriceTrackerModalProps> = ({ product, i
 
                 <button 
                   disabled={status === 'loading'}
-                  className="w-full py-5 bg-slate-950 text-white rounded-2xl font-black text-[11px] uppercase tracking-widest hover:bg-indigo-600 transition-all shadow-xl flex items-center justify-center gap-3 disabled:opacity-50"
+                  className="w-full py-6 brand-gradient text-white rounded-2xl font-black text-[11px] uppercase tracking-widest hover:brightness-110 transition-all shadow-xl flex items-center justify-center gap-3 disabled:opacity-50"
                 >
                   {status === 'loading' ? <Loader2 className="w-5 h-5 animate-spin" /> : 'Activeer Alert'}
                 </button>

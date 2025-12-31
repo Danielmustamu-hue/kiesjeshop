@@ -12,25 +12,29 @@ export const FloatingAiButton: React.FC<FloatingAiButtonProps> = ({ visible, onC
     <button
       onClick={onClick}
       className={`
-        fixed bottom-10 left-10 z-[80] 
-        flex items-center gap-3 
+        fixed bottom-8 left-8 md:bottom-12 md:left-12 z-[80] 
+        flex items-center gap-4 
         bg-slate-950 text-white 
-        pl-4 pr-6 py-4 rounded-3xl 
-        shadow-[0_20px_50px_rgba(15,23,42,0.3)] 
-        hover:bg-orange-600 hover:scale-105 active:scale-95
+        pl-5 pr-7 py-5 rounded-[2.5rem] 
+        shadow-[0_25px_60px_rgba(15,23,42,0.4)] 
+        hover:bg-brand-pink hover:scale-105 active:scale-95
         transition-all duration-500 ease-in-out
-        border border-white/10 group
+        border border-white/10 group ai-btn-pulse
         ${visible ? 'translate-y-0 opacity-100' : 'translate-y-20 opacity-0 pointer-events-none'}
       `}
       aria-label="Vraag AI Consultant"
     >
       <div className="relative">
-        <Cpu className="w-5 h-5 text-orange-400 group-hover:text-white transition-colors" />
-        <div className="absolute inset-0 bg-orange-400 rounded-full blur-md opacity-20 animate-pulse"></div>
+        <div className="bg-orange-500 p-2.5 rounded-2xl group-hover:bg-white transition-colors">
+           <Cpu className="w-5 h-5 text-white group-hover:text-brand-pink transition-colors" />
+        </div>
+        <div className="absolute -top-1 -right-1">
+          <Sparkles className="w-4 h-4 text-orange-300 animate-bounce" />
+        </div>
       </div>
-      <div className="flex flex-col items-start leading-none">
-        <span className="text-[10px] font-black uppercase tracking-[0.2em]">Consultant</span>
-        <span className="text-[8px] font-bold text-slate-400 group-hover:text-orange-100 uppercase tracking-widest mt-0.5">Vraag advies</span>
+      <div className="flex flex-col items-start leading-tight">
+        <span className="text-[11px] font-black uppercase tracking-[0.2em]">Advisor</span>
+        <span className="text-[8px] font-bold text-slate-400 group-hover:text-white/80 uppercase tracking-widest mt-0.5">Vraag Direct Advies</span>
       </div>
     </button>
   );

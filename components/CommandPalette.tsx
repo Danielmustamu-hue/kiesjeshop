@@ -43,7 +43,7 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({ isOpen, onClose,
       
       <div className="relative w-full max-w-2xl bg-white rounded-[2.5rem] shadow-[0_50px_100px_rgba(15,23,42,0.3)] border border-slate-100 overflow-hidden animate-in fade-in zoom-in-95 duration-200">
         <div className="flex items-center p-6 border-b border-slate-50">
-          <Search className="w-6 h-6 text-indigo-500 mr-4" />
+          <Search className="w-6 h-6 text-brand-pink mr-4" />
           <input 
             autoFocus
             type="text" 
@@ -63,8 +63,8 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({ isOpen, onClose,
         <div className="max-h-[60vh] overflow-y-auto p-4">
           {!query.trim() ? (
             <div className="p-8 text-center">
-              <div className="bg-slate-50 w-16 h-16 rounded-3xl flex items-center justify-center mx-auto mb-6">
-                <History className="w-8 h-8 text-slate-300" />
+              <div className="bg-pink-50 w-16 h-16 rounded-3xl flex items-center justify-center mx-auto mb-6">
+                <History className="w-8 h-8 text-brand-pink/30" />
               </div>
               <p className="text-slate-400 font-bold text-sm uppercase tracking-widest">Wat zoek je vandaag?</p>
               <div className="mt-8 flex flex-wrap justify-center gap-2">
@@ -72,7 +72,7 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({ isOpen, onClose,
                   <button 
                     key={tag}
                     onClick={() => setQuery(tag)}
-                    className="px-4 py-2 bg-slate-50 text-slate-500 rounded-xl text-xs font-bold hover:bg-indigo-50 hover:text-indigo-600 transition-colors"
+                    className="px-4 py-2 bg-slate-50 text-slate-500 rounded-xl text-xs font-bold hover:bg-pink-50 hover:text-brand-pink transition-colors"
                   >
                     {tag}
                   </button>
@@ -81,69 +81,65 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({ isOpen, onClose,
             </div>
           ) : (
             <div className="space-y-8 p-4">
-              {/* Fix: safely check for existence and length of shops array */}
               {results?.shops && results.shops.length > 0 && (
                 <div>
                   <h4 className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400 mb-4 px-2">Webshops</h4>
                   <div className="grid grid-cols-1 gap-2">
                     {results.shops.map(shop => (
-                      <button key={shop.id} onClick={() => { onNavigate('home'); onClose(); }} className="flex items-center justify-between p-4 bg-slate-50 rounded-2xl hover:bg-indigo-50 group transition-all">
+                      <button key={shop.id} onClick={() => { onNavigate('home'); onClose(); }} className="flex items-center justify-between p-4 bg-slate-50 rounded-2xl hover:bg-pink-50 group transition-all">
                         <div className="flex items-center gap-4">
                           <div className={`w-10 h-10 rounded-xl ${shop.logoBg} flex items-center justify-center text-[10px] font-black text-white mix-blend-difference`}>{shop.name[0]}</div>
                           <span className="font-bold text-slate-900">{shop.name}</span>
                         </div>
-                        <ArrowRight className="w-4 h-4 text-slate-300 group-hover:text-indigo-600 group-hover:translate-x-1 transition-all" />
+                        <ArrowRight className="w-4 h-4 text-slate-300 group-hover:text-brand-pink group-hover:translate-x-1 transition-all" />
                       </button>
                     ))}
                   </div>
                 </div>
               )}
 
-              {/* Fix: safely check for existence and length of guides array */}
               {results?.guides && results.guides.length > 0 && (
                 <div>
                   <h4 className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400 mb-4 px-2">Koopgidsen</h4>
                   <div className="grid grid-cols-1 gap-2">
                     {results.guides.map(guide => (
-                      <button key={guide.id} onClick={() => onNavigate('niche-detail', guide)} className="flex items-center justify-between p-4 bg-slate-50 rounded-2xl hover:bg-indigo-50 group transition-all text-left">
+                      <button key={guide.id} onClick={() => onNavigate('niche-detail', guide)} className="flex items-center justify-between p-4 bg-slate-50 rounded-2xl hover:bg-pink-50 group transition-all text-left">
                         <div className="flex items-center gap-4">
                           <div className="w-10 h-10 rounded-xl overflow-hidden"><img src={guide.image} className="w-full h-full object-cover" /></div>
                           <span className="font-bold text-slate-900">{guide.title}</span>
                         </div>
-                        <ArrowRight className="w-4 h-4 text-slate-300 group-hover:text-indigo-600 group-hover:translate-x-1 transition-all" />
+                        <ArrowRight className="w-4 h-4 text-slate-300 group-hover:text-brand-pink group-hover:translate-x-1 transition-all" />
                       </button>
                     ))}
                   </div>
                 </div>
               )}
 
-              {/* Fix: safely check for existence and length of articles array */}
               {results?.articles && results.articles.length > 0 && (
                 <div>
                   <h4 className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400 mb-4 px-2">Redactie</h4>
                   <div className="grid grid-cols-1 gap-2">
                     {results.articles.map(article => (
-                      <button key={article.id} onClick={() => onNavigate('artikel-detail', article)} className="flex items-center justify-between p-4 bg-slate-50 rounded-2xl hover:bg-indigo-50 group transition-all text-left">
+                      <button key={article.id} onClick={() => onNavigate('artikel-detail', article)} className="flex items-center justify-between p-4 bg-slate-50 rounded-2xl hover:bg-pink-50 group transition-all text-left">
                         <div className="flex items-center gap-4">
                           <div className="w-10 h-10 rounded-xl bg-slate-200 flex items-center justify-center text-slate-500 font-bold text-xs"><BookOpen className="w-4 h-4" /></div>
                           <span className="font-bold text-slate-900 line-clamp-1">{article.title}</span>
                         </div>
-                        <ArrowRight className="w-4 h-4 text-slate-300 group-hover:text-indigo-600 group-hover:translate-x-1 transition-all" />
+                        <ArrowRight className="w-4 h-4 text-slate-300 group-hover:text-brand-pink group-hover:translate-x-1 transition-all" />
                       </button>
                     ))}
                   </div>
                 </div>
               )}
 
-              {/* Fix: results can be null, and Object.values might return unknown values without length property */}
               {results && Object.values(results).every(r => Array.isArray(r) && r.length === 0) && (
                 <div className="text-center py-12">
                    <p className="text-slate-400 mb-6">Geen directe resultaten gevonden voor "{query}"</p>
                    <button 
                      onClick={() => onNavigate('ai-advisor', query)}
-                     className="inline-flex items-center gap-3 bg-slate-950 text-white px-8 py-4 rounded-2xl font-black text-[10px] uppercase tracking-widest hover:bg-indigo-600 transition-all"
+                     className="inline-flex items-center gap-3 brand-gradient text-white px-8 py-4 rounded-2xl font-black text-[10px] uppercase tracking-widest hover:brightness-110 transition-all"
                    >
-                     <Cpu className="w-4 h-4 text-indigo-400" /> Vraag de AI Consultant
+                     <Cpu className="w-4 h-4 text-white" /> Vraag de AI Consultant
                    </button>
                 </div>
               )}

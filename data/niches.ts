@@ -16,7 +16,7 @@ export interface NicheCategory {
 export const NICHE_GUIDES: NicheCategory[] = [
   {
     id: "co2-meter",
-    title: "1. Beste CO2-meters 2025 (Getest)",
+    title: "Beste CO2-meters 2025",
     image: "https://images.unsplash.com/photo-1598257006458-087169a1f08d?auto=format&fit=crop&q=80&w=800",
     seoText: "Luchtkwaliteit verbetert concentratie met 40%. Wij vonden de 3 meest nauwkeurige meters van dit jaar.",
     products: [
@@ -39,9 +39,9 @@ export const NICHE_GUIDES: NicheCategory[] = [
   },
   {
     id: "ergonomie",
-    title: "2. Ergonomisch Werken: Rugpijn Voorkomen",
-    image: "https://images.unsplash.com/photo-1497215728101-856f4ea42174?auto=format&fit=crop&q=80&w=800",
-    seoText: "Voorkom RSI-klachten. Deze 3 tools maken je werkdag direct comfortabeler.",
+    title: "Ergonomisch Werken 2025",
+    image: "https://images.unsplash.com/photo-1591485423007-765bde4139ef?auto=format&fit=crop&q=80&w=800",
+    seoText: "Voorkom RSI en rugklachten. Deze 3 tools maken je werkdag direct comfortabeler.",
     products: [
       {
         name: "Logitech MX Vertical",
@@ -62,8 +62,8 @@ export const NICHE_GUIDES: NicheCategory[] = [
   },
   {
     id: "hifi-audio",
-    title: "3. High-End Audio: De Audiofiele Keuze",
-    image: "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?auto=format&fit=crop&q=80&w=800",
+    title: "High-End Audio Gids",
+    image: "https://images.unsplash.com/photo-1618366712010-f4ae9c647dcb?auto=format&fit=crop&q=80&w=800",
     seoText: "Voor wie meer wil horen dan alleen bas. Planar en Open-back specialisten vergeleken.",
     products: [
       {
@@ -85,7 +85,7 @@ export const NICHE_GUIDES: NicheCategory[] = [
   },
   {
     id: "power-stations",
-    title: "4. Portable Power Stations: Nooit meer Zonder",
+    title: "Portable Power Stations",
     image: "https://images.unsplash.com/photo-1621905251189-08b45d6a269e?auto=format&fit=crop&q=80&w=800",
     seoText: "Van kamperen tot noodstroom: dit zijn de 3 beste powerstations van EcoFlow en Bluetti.",
     products: [
@@ -108,7 +108,7 @@ export const NICHE_GUIDES: NicheCategory[] = [
   },
   {
     id: "sous-vide",
-    title: "5. Sous-vide: Koken als een Sterrenchef",
+    title: "Sous-vide Expert Gids",
     image: "https://images.unsplash.com/photo-1581299894007-aaa50297cf16?auto=format&fit=crop&q=80&w=800",
     seoText: "Perfecte garing, elke keer weer. Wij kozen de 3 meest betrouwbare immersion circulators.",
     products: [
@@ -131,7 +131,7 @@ export const NICHE_GUIDES: NicheCategory[] = [
   },
   {
     id: "home-gym",
-    title: "6. Home Gym: Beste Verstelbare Dumbbells",
+    title: "Beste Home Gym Tools",
     image: "https://images.unsplash.com/photo-1540497077202-7c8a3999166f?auto=format&fit=crop&q=80&w=800",
     seoText: "Vervang 15 sets gewichten door één paar. De meest efficiënte oplossing voor je thuissport.",
     products: [
@@ -154,7 +154,7 @@ export const NICHE_GUIDES: NicheCategory[] = [
   },
   {
     id: "huisdier",
-    title: "7. Stofzuigers voor Huisdier-eigenaren",
+    title: "Specialist: Huisdier-tech",
     image: "https://images.unsplash.com/photo-1583337130417-3346a1be7dee?auto=format&fit=crop&q=80&w=800",
     seoText: "Haren en geurtjes effectief verwijderen. Deze 3 modellen winnen van elke labrador.",
     products: [
@@ -177,8 +177,8 @@ export const NICHE_GUIDES: NicheCategory[] = [
   },
   {
     id: "kabelmanagement",
-    title: "8. Clean Desk: De Beste Kabelmanagement Kits",
-    image: "https://images.unsplash.com/photo-1591485423007-765bde4139ef?auto=format&fit=crop&q=80&w=800",
+    title: "Clean Desk Solutions",
+    image: "https://images.unsplash.com/photo-1497215728101-856f4ea42174?auto=format&fit=crop&q=80&w=800",
     seoText: "Van kabelchaos naar een Zen-werkplek. De 3 beste oplossingen voor onder je bureau.",
     products: [
       {

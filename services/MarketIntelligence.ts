@@ -20,7 +20,6 @@ const finalizeUrl = (rawUrl: string, shop: string, message: string): string => {
   const looksLikeProductPage = url.includes('/p/') || url.includes('/dp/') || url.includes('/product/');
   
   // 2. Als de URL onbetrouwbaar lijkt, genereer een geverifieerde zoek-link
-  // Dit is cruciaal om 404's te voorkomen
   if (!looksLikeProductPage || url.length < 15) {
     const query = encodeURIComponent(message.split('-')[0].trim());
     if (shopLower === 'bol') url = `https://www.bol.com/nl/nl/s/?searchtext=${query}`;
@@ -49,37 +48,36 @@ const finalizeUrl = (rawUrl: string, shop: string, message: string): string => {
 
 export const fetchLiveMarketData = async (): Promise<{signals: MarketSignal[], sources: {uri: string, title: string}[]}> => {
   try {
-    // Initializing with the process.env.API_KEY directly as per guidelines.
     const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
     
+    // We gebruiken gemini-3-pro-preview omdat deze robuuster is met de googleSearch tool
+    // en complexe JSON output taken.
     const prompt = `
-      Zoek naar 5 ACTUELE en VERIFIEERBARE tech deals van VANDAAG UITSLUITEND op de NEDERLANDSE markt (.nl).
+      Zoek naar 5 ACTUELE en VERIFIEERBARE tech deals van VANDAAG (2025) UITSLUITEND op de NEDERLANDSE markt (.nl).
       Webshops: bol.com, Amazon.nl of Coolblue.nl. 
       
       STRIKTE REGELS: 
       - Prijzen in EURO.
       - Gebruik EXACTE URL's van de .NL domeinen. 
       - GEEN Amerikaanse of Duitse sites.
-      - Als de URL onzeker is, gebruik dan de zoekpagina URL (bijv: amazon.nl/s?k=productnaam).
       - Focus op bekende merken (Sony, Apple, Bose, Samsung, Philips).
+      - Antwoord UITSLUITEND in een valide JSON array.
       
-      Antwoord strikt in dit JSON formaat:
+      Output formaat:
       [
-        {"message": "Productnaam - Deal info in Euro", "type": "deal", "shop": "bol|amazon|coolblue", "url": "URL"}
+        {"message": "Productnaam - Prijs info", "type": "deal", "shop": "bol|amazon|coolblue", "url": "Directe URL naar product"}
       ]
     `;
 
-    // Using the recommended format for generateContent with text prompt.
     const response = await ai.models.generateContent({
-      model: "gemini-3-flash-preview",
+      model: "gemini-3-pro-preview",
       contents: prompt,
       config: {
         tools: [{ googleSearch: {} }],
-        temperature: 0, 
+        temperature: 0.1, 
       },
     });
 
-    // Accessing text property directly as it is not a method in the new SDK.
     const text = response.text || "[]";
     const jsonMatch = text.match(/\[.*\]/s);
     let signals: MarketSignal[] = [];
@@ -87,12 +85,12 @@ export const fetchLiveMarketData = async (): Promise<{signals: MarketSignal[], s
     if (jsonMatch) {
       try {
         const rawSignals = JSON.parse(jsonMatch[0]) as MarketSignal[];
-        signals = rawSignals.map(s => ({
+        signals = rawSignals.slice(0, 5).map(s => ({
           ...s,
           url: finalizeUrl(s.url, s.shop, s.message)
         }));
       } catch (e) {
-        console.error("JSON Parse Error in Market Data");
+        console.error("JSON Parse Error in Market Data:", e);
       }
     }
 

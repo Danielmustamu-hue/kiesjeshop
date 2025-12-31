@@ -6,27 +6,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0, viewport-fit=cover" />
     
     <!-- Brand Color UI -->
-    <meta name="theme-color" content="#0F172A" />
+    <meta name="theme-color" content="#FF3D77" />
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     
     <title>Kiesjeshop.nl | De Slimste Prijsvergelijker van bol, Amazon & Coolblue</title>
     
     <!-- SEO Meta Tags -->
-    <meta name="description" content="Kiesjeshop.nl: Vergelijk direct prijzen bij bol, Amazon en Coolblue. Gebruik onze AI Advisor voor onafhankelijk koopadvies. Bespaar tijd en geld met real-time market data." />
-    <meta name="keywords" content="prijsvergelijker, bol vs amazon, coolblue service, beste koop 2025, besparen op tech, lifestyle shopping gids" />
+    <meta name="description" content="Kiesjeshop.nl: Vergelijk direct prijzen bij bol, Amazon en Coolblue. Gebruik onze AI Advisor voor onafhankelijk koopadvies. Bespaar tijd en geld met luxe market data." />
     
-    <!-- Open Graph / Social -->
-    <meta property="og:title" content="Kiesjeshop.nl | Slimmer Vergelijken & Besparen" />
-    <meta property="og:description" content="Vind de laagste prijs bij de grootste webshops van Nederland. Onafhankelijk, snel en met hulp van AI." />
-    <meta property="og:type" content="website" />
-    <meta property="og:url" content="https://kiesjeshop.nl" />
-
-    <!-- Favicon & App Icons -->
-    <link rel="icon" type="image/svg+xml" href="/public/favicon.svg" />
-    <link rel="apple-touch-icon" href="/public/favicon.svg" />
-    <link rel="mask-icon" href="/public/favicon.svg" color="#EA580C" />
-
     <script type="importmap">
 {
   "imports": {
@@ -36,9 +24,9 @@
     "react-dom/client": "https://esm.sh/react-dom@18.2.0/client",
     "@google/genai": "https://esm.sh/@google/genai@1.33.0",
     "lucide-react": "https://esm.sh/lucide-react@0.344.0?external=react",
-    "react-dom/": "https://esm.sh/react-dom@^19.2.3/",
+    "@vitejs/plugin-react": "https://esm.sh/@vitejs/plugin-react@^5.1.2",
     "vite": "https://esm.sh/vite@^7.3.0",
-    "@vitejs/plugin-react": "https://esm.sh/@vitejs/plugin-react@^5.1.2"
+    "react-dom/": "https://esm.sh/react-dom@^19.2.3/"
   }
 }
 </script>
@@ -50,6 +38,7 @@
           extend: {
             colors: {
               brand: {
+                pink: '#FF3D77',
                 orange: '#EA580C',
                 navy: '#0F172A',
                 accent: '#F59E0B'
@@ -65,24 +54,27 @@
     </script>
     
     <style>
-      @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;700&display=swap');
+      @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap');
       body {
         margin: 0;
         font-family: 'Inter', sans-serif;
         -webkit-font-smoothing: antialiased;
-        background-color: #F8FAFC;
+        background-color: #FDFCFB;
         color: #0F172A;
         scroll-behavior: smooth;
       }
-      .text-intelligence {
-        background: linear-gradient(135deg, #0F172A 0%, #EA580C 100%);
+      .brand-gradient {
+        background: linear-gradient(135deg, #FF3D77 0%, #EA580C 100%);
+      }
+      .brand-text-gradient {
+        background: linear-gradient(135deg, #FF3D77 0%, #EA580C 100%);
         -webkit-background-clip: text;
         -webkit-text-fill-color: transparent;
       }
       .intelligence-card {
         background: white;
         border-radius: 2rem;
-        box-shadow: 0 25px 50px -12px rgba(15, 23, 42, 0.04);
+        box-shadow: 0 25px 50px -12px rgba(255, 61, 119, 0.08);
       }
       @media (min-width: 768px) {
         .intelligence-card { border-radius: 3.5rem; }
@@ -95,9 +87,37 @@
         0% { transform: translateX(100%); }
         100% { transform: translateX(-100%); }
       }
-      /* Hide scrollbar for mobile */
-      .scrollbar-hide::-webkit-scrollbar { display: none; }
-      .scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
+      .glass-morphism {
+        background: rgba(255, 255, 255, 0.7);
+        backdrop-filter: blur(20px);
+        -webkit-backdrop-filter: blur(20px);
+        border: 1px solid rgba(255, 255, 255, 0.4);
+      }
+      
+      /* AI Pulse Animation */
+      @keyframes ai-pulse {
+        0% { box-shadow: 0 0 0 0 rgba(255, 61, 119, 0.4); }
+        70% { box-shadow: 0 0 0 15px rgba(255, 61, 119, 0); }
+        100% { box-shadow: 0 0 0 0 rgba(255, 61, 119, 0); }
+      }
+      .ai-btn-pulse {
+        animation: ai-pulse 2s infinite;
+      }
+
+      /* Custom Scrollbar for Premium Feel */
+      ::-webkit-scrollbar {
+        width: 8px;
+      }
+      ::-webkit-scrollbar-track {
+        background: #f8fafc;
+      }
+      ::-webkit-scrollbar-thumb {
+        background: #e2e8f0;
+        border-radius: 10px;
+      }
+      ::-webkit-scrollbar-thumb:hover {
+        background: #cbd5e1;
+      }
     </style>
   </head>
   <body>
