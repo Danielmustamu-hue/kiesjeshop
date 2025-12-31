@@ -40,22 +40,22 @@ export const NICHE_GUIDES: NicheCategory[] = [
   {
     id: "ergonomie",
     title: "Ergonomisch Werken 2025",
-    image: "https://images.unsplash.com/photo-1591485423007-765bde4139ef?auto=format&fit=crop&q=80&w=800",
-    seoText: "Voorkom RSI en rugklachten. Deze 3 tools maken je werkdag direct comfortabeler.",
+    image: "https://images.unsplash.com/photo-1593062096033-9a26b09da705?auto=format&fit=crop&q=80&w=1600",
+    seoText: "Voorkom RSI en rugklachten. Deze 3 tools maken je werkdag direct comfortabeler en productiever.",
     products: [
       {
         name: "Logitech MX Vertical",
-        description: "De koning onder de verticale muizen. Voorkomt polsklachten direct.",
+        description: "De koning onder de verticale muizen. Voorkomt polsklachten door de natuurlijke handdrukpositie.",
         searchQuery: "Logitech MX Vertical"
       },
       {
         name: "Logitech Ergo K860",
-        description: "Het ultieme gesplitste toetsenbord voor een natuurlijke houding.",
+        description: "Het ultieme gesplitste toetsenbord voor een ontspannen houding van nek en schouders.",
         searchQuery: "Logitech Ergo K860"
       },
       {
         name: "VariDesk Pro Plus",
-        description: "Maak van elk bureau een zit-sta bureau zonder nieuwe meubels te kopen.",
+        description: "Maak van elk bureau een zit-sta bureau zonder nieuwe meubels te kopen. Robuust en stabiel.",
         searchQuery: "VariDesk Pro Plus 36"
       }
     ]
