@@ -30,8 +30,8 @@ import { ScrollToTop } from './components/ScrollToTop';
 // Services & Data
 import { fetchLiveMarketData, MarketSignal } from './services/MarketIntelligence';
 import { SHOPS, AFFILIATE_LINKS } from './constants';
-import { NicheCategory } from './data/niches';
-import { Article } from './data/articles';
+import { NICHE_GUIDES, NicheCategory } from './data/niches';
+import { ARTICLES, Article } from './data/articles';
 
 type View = 'home' | 'koopgidsen' | 'redactie' | 'niche-detail' | 'artikel-detail' | 'ai-advisor' | 'over-ons' | 'de-grote-drie';
 
@@ -51,13 +51,64 @@ const App: React.FC = () => {
   const [marketSignals, setMarketSignals] = useState<MarketSignal[]>([]);
   const [isMarketLoading, setIsMarketLoading] = useState(true);
 
+  const handleRouting = useCallback(() => {
+    const hash = window.location.hash || '#/';
+    const path = hash.replace(/^#/, '');
+    
+    if (path === '/' || path === '') {
+      setCurrentView('home');
+    } else if (path === '/de-grote-drie') {
+      setCurrentView('de-grote-drie');
+    } else if (path === '/koopgidsen') {
+      setCurrentView('koopgidsen');
+    } else if (path === '/redactie') {
+      setCurrentView('redactie');
+    } else if (path === '/over-ons') {
+      setCurrentView('over-ons');
+    } else if (path.startsWith('/koopgidsen/')) {
+      const id = path.split('/')[2];
+      const guide = NICHE_GUIDES.find(g => g.id === id);
+      if (guide) {
+        setSelectedGuide(guide);
+        setCurrentView('niche-detail');
+      } else {
+        setCurrentView('koopgidsen');
+      }
+    } else if (path.startsWith('/artikel/')) {
+      const id = parseInt(path.split('/')[2]);
+      const article = ARTICLES.find(a => a.id === id);
+      if (article) {
+        setSelectedArticle(article);
+        setCurrentView('artikel-detail');
+      } else {
+        setCurrentView('redactie');
+      }
+    } else {
+      setCurrentView('home');
+    }
+  }, []);
+
+  useEffect(() => {
+    handleRouting();
+    window.addEventListener('hashchange', handleRouting);
+    return () => window.removeEventListener('hashchange', handleRouting);
+  }, [handleRouting]);
+
   const navigateTo = (view: View, item?: any) => {
-    setCurrentView(view);
+    let path = '/';
+    switch (view) {
+      case 'home': path = '/'; break;
+      case 'de-grote-drie': path = '/de-grote-drie'; break;
+      case 'koopgidsen': path = '/koopgidsen'; break;
+      case 'redactie': path = '/redactie'; break;
+      case 'over-ons': path = '/over-ons'; break;
+      case 'niche-detail': if (item) path = `/koopgidsen/${item.id}`; break;
+      case 'artikel-detail': if (item) path = `/artikel/${item.id}`; break;
+    }
+
+    window.location.hash = path;
     setIsSearchOpen(false);
     setIsMobileMenuOpen(false);
-    if (view === 'niche-detail' && item) setSelectedGuide(item);
-    else if (view === 'artikel-detail' && item) setSelectedArticle(item);
-    else if (view === 'home') { setSelectedGuide(null); setSelectedArticle(null); }
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
@@ -100,7 +151,7 @@ const App: React.FC = () => {
         <div className="flex animate-scroll items-center gap-12 group-hover/ticker:[animation-play-state:paused]">
            <div className="flex items-center gap-2">
               <div className="w-1.5 h-1.5 bg-emerald-500 rounded-full animate-pulse"></div>
-              <span className="text-[9px] font-black text-slate-400 uppercase tracking-[0.3em]">LIVE MARKET SYNC 2025:</span>
+              <span className="text-[9px] font-black text-slate-400 uppercase tracking-[0.3em]">LIVE MARKT SYNC 2025:</span>
            </div>
            {marketSignals.length > 0 ? marketSignals.map((s, i) => (
              <a 
@@ -115,7 +166,7 @@ const App: React.FC = () => {
                 <ArrowUpRight className="w-3 h-3 text-slate-300" />
              </a>
            )) : (
-             <span className="text-[10px] font-bold text-slate-300 italic">Verbinden met bol, Amazon & Coolblue intelligence...</span>
+             <span className="text-[10px] font-bold text-slate-300 italic">Verbinden met winkelgegevens...</span>
            )}
         </div>
       </div>
@@ -123,13 +174,13 @@ const App: React.FC = () => {
       <header role="banner" className="bg-white/80 backdrop-blur-2xl sticky top-0 z-50 border-b border-slate-100 h-20">
         <nav role="navigation" className="max-w-7xl mx-auto px-4 md:px-6 h-full flex items-center justify-between">
           <div className="flex items-center gap-8 lg:gap-12">
-            <a href="/" onClick={(e) => { e.preventDefault(); navigateTo('home'); }} className="flex items-center gap-2 group">
+            <a href="#/" onClick={(e) => { e.preventDefault(); navigateTo('home'); }} className="flex items-center gap-2 group">
               <div className="brand-gradient p-2 rounded-xl group-hover:scale-110 transition-transform shadow-md shadow-brand-pink/20">
                 <ShoppingBag className="w-5 h-5 text-white" />
               </div>
               <div className="flex flex-col">
                 <span className="text-lg md:text-xl font-black text-slate-900 tracking-tighter leading-none uppercase">Kiesjeshop<span className="brand-text-gradient">.nl</span></span>
-                <span className="text-[8px] font-black uppercase tracking-[0.15em] text-slate-400">Expert Comparison</span>
+                <span className="text-[8px] font-black uppercase tracking-[0.15em] text-slate-400">Onafhankelijke Experts</span>
               </div>
             </a>
 
@@ -137,7 +188,7 @@ const App: React.FC = () => {
                {['De Grote 3', 'Koopgidsen', 'Redactie', 'Over Ons'].map((link) => (
                  <a 
                    key={link} 
-                   href={`/${link.toLowerCase().replace(' ', '-')}`} 
+                   href={`#/${link.toLowerCase().replace(/ /g, '-').replace('3', 'drie')}`} 
                    onClick={(e) => { e.preventDefault(); navigateTo(getLinkView(link)); }}
                    className={`px-1 py-2 text-[10px] font-black uppercase tracking-widest transition-all ${
                      currentView === getLinkView(link) ? 'text-brand-pink border-b-2 border-brand-pink' : 'text-slate-400 hover:text-slate-900'
@@ -153,7 +204,7 @@ const App: React.FC = () => {
             <button onClick={() => setIsSearchOpen(true)} className="p-2 text-slate-400 hover:text-brand-pink">
                <Search className="w-5 h-5" />
             </button>
-            <button onClick={() => setShowAiAdvisor(true)} className="bg-slate-900 text-white px-5 md:px-8 py-3 rounded-xl text-[10px] font-black uppercase tracking-widest shadow-lg hover:bg-brand-pink active:scale-95 transition-all">Advisor</button>
+            <button onClick={() => setShowAiAdvisor(true)} className="bg-slate-900 text-white px-5 md:px-8 py-3 rounded-xl text-[10px] font-black uppercase tracking-widest shadow-lg hover:bg-brand-pink active:scale-95 transition-all">Adviseur</button>
             <button onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)} className="lg:hidden p-2 text-slate-600">
               <Menu className="w-6 h-6" />
             </button>
@@ -178,15 +229,14 @@ const App: React.FC = () => {
       <main>
         {currentView === 'home' && (
           <div className="animate-in fade-in duration-700">
-            
-            {/* CLEAN CONVERSION HERO */}
+            {/* HERO & CONTENT */}
             <section className="max-w-7xl mx-auto px-4 md:px-6 pt-6 pb-12">
               <div className="grid grid-cols-1 md:grid-cols-12 gap-6 lg:gap-8">
                 <div className="md:col-span-12 lg:col-span-8 bg-slate-50 rounded-[2.5rem] md:rounded-[3.5rem] p-8 md:p-16 lg:p-24 relative overflow-hidden flex flex-col justify-center border border-slate-100 min-h-[500px] md:min-h-[600px] shadow-sm group">
                   <div className="absolute inset-0 z-0">
                     <img 
                       src="https://images.unsplash.com/photo-1491933382434-500287f9b54b?auto=format&fit=crop&q=80&w=1600" 
-                      alt="Premium Tech Selection" 
+                      alt="Premium Tech Selectie" 
                       className="w-full h-full object-cover opacity-50 mix-blend-multiply group-hover:scale-105 transition-transform duration-[8000ms]" 
                     />
                     <div className="absolute inset-0 bg-gradient-to-r from-white via-white/80 to-transparent"></div>
@@ -194,7 +244,7 @@ const App: React.FC = () => {
 
                   <div className="relative z-10 max-w-xl">
                     <div className="inline-flex items-center gap-2 bg-white/90 backdrop-blur-md px-4 py-2 rounded-full text-[9px] font-black uppercase tracking-[0.3em] mb-6 text-slate-900 border border-slate-200 shadow-sm">
-                      <Star className="w-3.5 h-3.5 fill-brand-pink text-brand-pink" /> Independent Advisor 2025
+                      <Star className="w-3.5 h-3.5 fill-brand-pink text-brand-pink" /> Onafhankelijk Advies 2025
                     </div>
                     
                     <h1 className="text-4xl md:text-7xl lg:text-8xl font-black text-slate-900 leading-[0.95] tracking-tighter mb-8">
@@ -223,8 +273,8 @@ const App: React.FC = () => {
                     <div className="bg-pink-50 p-4 rounded-2xl w-fit mb-4 border border-pink-100">
                       <Zap className="w-6 h-6 text-brand-pink" />
                     </div>
-                    <h2 className="text-2xl font-black text-slate-900 mb-2 tracking-tight">Market Pulse</h2>
-                    <p className="text-slate-500 text-sm font-medium mb-6 leading-relaxed">AI-gestuurde prijsdetectie bij de Big 3 retailers.</p>
+                    <h2 className="text-2xl font-black text-slate-900 mb-2 tracking-tight">Markt Polsslag</h2>
+                    <p className="text-slate-500 text-sm font-medium mb-6 leading-relaxed">Prijsdetectie bij de drie grootste retailers.</p>
                     <button onClick={() => { const el = document.getElementById('market-pulse'); if (el) el.scrollIntoView({ behavior: 'smooth' }); }} className="text-brand-pink text-[10px] font-black uppercase tracking-widest flex items-center gap-2 hover:translate-x-2 transition-transform">
                       Check Feed <ArrowRight className="w-4 h-4" />
                     </button>
@@ -234,19 +284,18 @@ const App: React.FC = () => {
                      <div className="bg-blue-50 p-4 rounded-2xl w-fit mb-4 border border-blue-100">
                         <Cpu className="w-6 h-6 text-blue-600" />
                      </div>
-                     <h3 className="text-2xl font-black text-slate-900 tracking-tight mb-2">Shopping Engine</h3>
+                     <h3 className="text-2xl font-black text-slate-900 tracking-tight mb-2">Winkelmodule</h3>
                      <p className="text-slate-500 font-medium text-sm mb-6">Objectief oordeel op basis van voorraad en service.</p>
-                     <button onClick={() => setShowAiAdvisor(true)} className="bg-slate-900 text-white w-full py-4 rounded-xl font-black text-[10px] uppercase tracking-widest shadow-lg hover:bg-brand-pink transition-all">Start Consult</button>
+                     <button onClick={() => setShowAiAdvisor(true)} className="bg-slate-900 text-white w-full py-4 rounded-xl font-black text-[10px] uppercase tracking-widest shadow-lg hover:bg-brand-pink transition-all">Start Advies</button>
                   </div>
                 </div>
               </div>
             </section>
 
-            {/* EXPERT TRUST GRID */}
             <section className="bg-white border-y border-slate-100 py-12 mb-12">
               <div className="max-w-7xl mx-auto px-6 grid grid-cols-2 md:grid-cols-4 gap-8 md:gap-12">
                 {[
-                  { icon: <ShieldCheck className="w-5 h-5 text-emerald-500" />, label: "Geverifieerd", desc: "Live retail API data." },
+                  { icon: <ShieldCheck className="w-5 h-5 text-emerald-500" />, label: "Geverifieerd", desc: "Live winkel API data." },
                   { icon: <PieChart className="w-5 h-5 text-blue-500" />, label: "Service Score", desc: "NPS weging inbegrepen." },
                   { icon: <Clock className="w-5 h-5 text-amber-500" />, label: "Update 2025", desc: "Elke 15 min. ververst." },
                   { icon: <BarChart3 className="w-5 h-5 text-purple-500" />, label: "Onafhankelijk", desc: "Geen gesponsorde deals." }
@@ -269,8 +318,8 @@ const App: React.FC = () => {
                <div className="max-w-7xl mx-auto px-6">
                  <div className="mb-12 flex flex-col md:flex-row md:items-end justify-between gap-6">
                     <div>
-                      <span className="brand-text-gradient font-black text-[10px] uppercase tracking-[0.4em] mb-2 block">Intelligence Data</span>
-                      <h2 className="text-3xl md:text-5xl font-black tracking-tighter text-slate-900">Market Intelligence Feed<span className="brand-text-gradient">.</span></h2>
+                      <span className="brand-text-gradient font-black text-[10px] uppercase tracking-[0.4em] mb-2 block">Marktgegevens</span>
+                      <h2 className="text-3xl md:text-5xl font-black tracking-tighter text-slate-900">Live Marktoverzicht<span className="brand-text-gradient">.</span></h2>
                     </div>
                     <button onClick={loadMarketData} className="flex items-center gap-3 px-6 py-4 bg-white border border-slate-200 rounded-2xl text-[10px] font-black uppercase tracking-widest text-slate-400 hover:text-brand-pink transition-all shadow-sm">
                       <RefreshCcw className={`w-4 h-4 ${isMarketLoading ? 'animate-spin' : ''}`} /> Update Data
@@ -344,7 +393,7 @@ const App: React.FC = () => {
                 <span className="text-2xl font-black tracking-tighter uppercase">Kiesjeshop<span className="text-slate-300">.nl</span></span>
               </div>
               <p className="text-slate-500 max-w-sm font-medium leading-relaxed text-lg mb-10 italic">
-                Onafhankelijk advies op basis van bol, Amazon en Coolblue service intelligence.
+                Onafhankelijk advies op basis van bol, Amazon en Coolblue servicegegevens.
               </p>
               <div className="p-8 bg-slate-50 rounded-3xl border border-slate-100 text-[10px] text-slate-400 font-bold uppercase tracking-widest leading-loose">
                 Affiliate Disclaimer: Kiesjeshop.nl ontvangt een commissie bij aankopen via onze links. Dit heeft geen invloed op uw prijs.

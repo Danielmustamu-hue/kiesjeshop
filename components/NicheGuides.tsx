@@ -17,7 +17,7 @@ export const NicheGuides: React.FC<NicheGuidesProps> = ({ onSelectGuide, limit }
         <div className="text-center mb-16">
           <div className="inline-flex items-center gap-2 bg-rose-100 text-rose-700 px-4 py-1.5 rounded-full text-[10px] font-black uppercase tracking-[0.2em] mb-4 border border-rose-200">
              <BookOpen className="w-4 h-4" />
-             <span>Expert Intelligence Report</span>
+             <span>Winkelrapportage 2025</span>
           </div>
           <h2 className="text-4xl sm:text-5xl font-black text-slate-900 tracking-tighter">Beste Koopgidsen 2025.</h2>
           <p className="text-slate-500 mt-4 text-lg max-w-2xl mx-auto font-medium leading-relaxed">
@@ -30,7 +30,7 @@ export const NicheGuides: React.FC<NicheGuidesProps> = ({ onSelectGuide, limit }
         {guidesToDisplay.map((guide) => (
           <a 
             key={guide.id} 
-            href={`/koopgidsen/${guide.id}`}
+            href={`#/koopgidsen/${guide.id}`}
             onClick={(e) => { e.preventDefault(); onSelectGuide(guide); }}
             className="group bg-white rounded-[2.5rem] shadow-sm border border-slate-100 hover:shadow-2xl transition-all duration-500 hover:-translate-y-2 flex flex-col h-full overflow-hidden"
           >
@@ -58,10 +58,10 @@ export const NicheGuides: React.FC<NicheGuidesProps> = ({ onSelectGuide, limit }
                 
                 <div className="mt-auto pt-6 border-t border-slate-50 flex items-center justify-between">
                     <span className="text-[9px] font-black text-slate-400 uppercase tracking-widest">
-                        Q1 2025 Intelligence
+                        Q1 2025 Analyse
                     </span>
                     <span className="inline-flex items-center gap-2 text-[10px] font-black text-orange-600 uppercase tracking-widest group-hover:gap-4 transition-all">
-                        Analyseren <ArrowRight className="w-4 h-4" />
+                        Bekijken <ArrowRight className="w-4 h-4" />
                     </span>
                 </div>
             </div>

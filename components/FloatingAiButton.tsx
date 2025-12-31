@@ -22,7 +22,7 @@ export const FloatingAiButton: React.FC<FloatingAiButtonProps> = ({ visible, onC
         border border-white/10 group ai-btn-pulse
         ${visible ? 'translate-y-0 opacity-100' : 'translate-y-20 opacity-0 pointer-events-none'}
       `}
-      aria-label="Vraag AI Consultant"
+      aria-label="Vraag AI Adviseur"
     >
       <div className="relative">
         <div className="bg-orange-500 p-2.5 rounded-2xl group-hover:bg-white transition-colors">
@@ -33,7 +33,7 @@ export const FloatingAiButton: React.FC<FloatingAiButtonProps> = ({ visible, onC
         </div>
       </div>
       <div className="flex flex-col items-start leading-tight">
-        <span className="text-[11px] font-black uppercase tracking-[0.2em]">Advisor</span>
+        <span className="text-[11px] font-black uppercase tracking-[0.2em]">Adviseur</span>
         <span className="text-[8px] font-bold text-slate-400 group-hover:text-white/80 uppercase tracking-widest mt-0.5">Vraag Direct Advies</span>
       </div>
     </button>

@@ -76,7 +76,7 @@ export const ArticleModal: React.FC<ArticleModalProps> = ({ article, onClose, on
                     {article.icon} <span>{article.category}</span>
                  </div>
                  <div className="bg-emerald-500/20 backdrop-blur-md border border-emerald-500/30 px-4 py-1.5 rounded-lg text-[10px] font-black uppercase tracking-widest flex items-center gap-2">
-                    <ShieldCheck className="w-3.5 h-3.5 text-emerald-400" /> Fact Checked
+                    <ShieldCheck className="w-3.5 h-3.5 text-emerald-400" /> Gecontroleerd
                  </div>
               </div>
               <h1 className="text-3xl sm:text-6xl font-black leading-[0.9] tracking-tighter mb-4">{article.title}</h1>
@@ -90,7 +90,7 @@ export const ArticleModal: React.FC<ArticleModalProps> = ({ article, onClose, on
       <div className={`p-8 sm:p-16 ${inline ? '' : 'overflow-y-auto overscroll-contain pb-40'}`}>
         
         <div className="mb-12 p-6 bg-slate-50 rounded-3xl border border-slate-100">
-           <span className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] block mb-4">Focus & Context (LSI)</span>
+           <span className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] block mb-4">Focus & Context</span>
            <div className="flex flex-wrap gap-2">
               {article.lsiKeywords.map((kw, i) => (
                 <span key={i} className="px-3 py-1.5 bg-white border border-slate-200 rounded-xl text-[10px] font-bold text-slate-500">#{kw}</span>
@@ -124,7 +124,7 @@ export const ArticleModal: React.FC<ArticleModalProps> = ({ article, onClose, on
               <CheckCircle2 className="w-32 h-32" />
            </div>
            <div className="relative z-10">
-              <span className="text-[10px] font-black text-orange-400 uppercase tracking-[0.4em] block mb-4">Experts Verdict</span>
+              <span className="text-[10px] font-black text-orange-400 uppercase tracking-[0.4em] block mb-4">Eindoordeel Experts</span>
               <h4 className="text-3xl font-black tracking-tighter mb-6">Onze Laatste Aanbeveling</h4>
               <p className="text-slate-400 text-lg font-medium leading-relaxed mb-10">
                  Kwaliteit wint altijd op de lange termijn. In 2025 zien we dat de service bij bol en Coolblue vaak het kleine prijsverschil met prijsvechters waard is voor deze categorie.

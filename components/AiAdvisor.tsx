@@ -85,11 +85,11 @@ export const AiAdvisor: React.FC = () => {
       <div className="relative z-10 w-full max-w-3xl mx-auto text-center py-8 md:py-0">
         <div className="inline-flex items-center gap-3 bg-slate-50 px-6 py-3 rounded-2xl text-[10px] font-black uppercase tracking-[0.4em] text-brand-pink mb-6 md:mb-10 border border-slate-100">
           <Cpu className="w-5 h-5" />
-          <span>Neural Expert System</span>
+          <span>Neuraal Expertsysteem</span>
         </div>
         
-        <h2 className="text-4xl md:text-7xl lg:text-8xl font-black mb-4 md:mb-6 tracking-tighter text-slate-900 leading-none">AI Advisor<span className="brand-text-gradient">.</span></h2>
-        <p className="text-slate-500 mb-8 md:mb-16 text-base md:text-xl lg:text-2xl font-medium max-w-xl mx-auto px-2 leading-relaxed">Objectief koopadvies op basis van bol, Amazon en Coolblue intelligence.</p>
+        <h2 className="text-4xl md:text-7xl lg:text-8xl font-black mb-4 md:mb-6 tracking-tighter text-slate-900 leading-none">AI Adviseur<span className="brand-text-gradient">.</span></h2>
+        <p className="text-slate-500 mb-8 md:mb-16 text-base md:text-xl lg:text-2xl font-medium max-w-xl mx-auto px-2 leading-relaxed">Objectief koopadvies op basis van bol, Amazon en Coolblue gegevens.</p>
 
         <form onSubmit={handleAskAi} className="relative group mb-12 md:mb-16 px-2 w-full max-w-2xl mx-auto">
           <input 

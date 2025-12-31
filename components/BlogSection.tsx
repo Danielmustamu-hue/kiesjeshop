@@ -31,7 +31,7 @@ export const BlogSection: React.FC<BlogSectionProps> = ({ onSelectArticle }) => 
         <div className="flex-1">
           <div className="inline-flex items-center gap-2 bg-orange-100 text-orange-700 px-4 py-1.5 rounded-full text-[10px] font-black uppercase tracking-[0.2em] mb-4 border border-orange-200">
             <BookOpen className="w-3.5 h-3.5" />
-            <span>Deep Content Redactie</span>
+            <span>Redactie Onderzoek</span>
           </div>
           <h2 className="text-4xl md:text-5xl font-black text-slate-900 tracking-tighter leading-tight">Expert Analyses & Koopadvies.</h2>
           <p className="text-slate-500 font-medium mt-2">Onafhankelijke tests van de redactie (bol, Amazon & Coolblue).</p>
@@ -56,7 +56,7 @@ export const BlogSection: React.FC<BlogSectionProps> = ({ onSelectArticle }) => 
 
       {heroArticle && (
         <a 
-          href={`/artikel/${heroArticle.id}`}
+          href={`#/artikel/${heroArticle.id}`}
           onClick={(e) => { e.preventDefault(); onSelectArticle(heroArticle); }}
           className="group relative block rounded-[3rem] overflow-hidden shadow-2xl border border-slate-200 cursor-pointer mb-12 h-[500px] md:h-[650px] bg-slate-800 transition-all hover:shadow-orange-500/10 hover:border-orange-500/30"
         >
@@ -65,7 +65,7 @@ export const BlogSection: React.FC<BlogSectionProps> = ({ onSelectArticle }) => 
           
           <div className="absolute top-8 right-8 flex items-center gap-3 bg-white/20 backdrop-blur-xl px-5 py-2.5 rounded-full border border-white/20 z-10">
              <ShieldCheck className="w-4 h-4 text-emerald-400" />
-             <span className="text-[9px] font-black text-white uppercase tracking-widest">Expert Fact Checked</span>
+             <span className="text-[9px] font-black text-white uppercase tracking-widest">Gecontroleerd door Experts</span>
           </div>
 
           <div className="absolute bottom-0 left-0 p-8 md:p-20 w-full md:w-3/4">
@@ -85,7 +85,7 @@ export const BlogSection: React.FC<BlogSectionProps> = ({ onSelectArticle }) => 
         {subArticles.map((article) => (
           <a 
             key={article.id} 
-            href={`/artikel/${article.id}`}
+            href={`#/artikel/${article.id}`}
             onClick={(e) => { e.preventDefault(); onSelectArticle(article); }}
             className="bg-white rounded-[2.5rem] shadow-sm border border-slate-100 hover:shadow-2xl transition-all hover:-translate-y-2 cursor-pointer group flex flex-col h-full overflow-hidden"
           >

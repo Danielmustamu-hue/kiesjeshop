@@ -33,9 +33,9 @@ export const MarketPulseDashboard: React.FC<MarketPulseDashboardProps> = ({ onRe
             <div className="bg-white/10 p-4 rounded-2xl text-brand-pink">
               <Zap className="w-6 h-6" />
             </div>
-            <span className="text-[10px] font-black text-brand-pink uppercase tracking-widest border border-brand-pink/30 px-4 py-1.5 rounded-full">Optimal</span>
+            <span className="text-[10px] font-black text-brand-pink uppercase tracking-widest border border-brand-pink/30 px-4 py-1.5 rounded-full">Optimaal</span>
           </div>
-          <h4 className="text-[11px] font-black text-white/40 uppercase tracking-[0.2em] mb-3 relative z-10">Sync Speed</h4>
+          <h4 className="text-[11px] font-black text-white/40 uppercase tracking-[0.2em] mb-3 relative z-10">Verwerkingssnelheid</h4>
           <p className="text-3xl font-black text-white tracking-tighter mb-5 relative z-10">98.9% <span className="text-white/30 text-sm font-medium">Uptime</span></p>
           <div className="flex gap-1.5 relative z-10">
             {[1,2,3,4,5,6,7,8,9,10].map(i => (
@@ -56,7 +56,7 @@ export const MarketPulseDashboard: React.FC<MarketPulseDashboardProps> = ({ onRe
               <div className="w-8 h-8 rounded-full bg-slate-900 border-2 border-white shadow-sm flex items-center justify-center text-[8px] font-black text-white">AZ</div>
             </div>
           </div>
-          <h4 className="text-[11px] font-black text-slate-400 uppercase tracking-[0.2em] mb-3">Service Trust</h4>
+          <h4 className="text-[11px] font-black text-slate-400 uppercase tracking-[0.2em] mb-3">Service Vertrouwen</h4>
           <p className="text-3xl font-black text-slate-950 tracking-tighter mb-2">9.2/10</p>
           <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest flex items-center gap-2">
             <Info className="w-3.5 h-3.5 text-brand-pink" /> 12.5k geverifieerde checks
@@ -73,12 +73,12 @@ export const MarketPulseDashboard: React.FC<MarketPulseDashboardProps> = ({ onRe
           {isLoading ? (
             <>
               <Loader2 className="w-5 h-5 animate-spin" />
-              Scanning Web...
+              Scannen...
             </>
           ) : (
             <>
               <RefreshCcw className="w-5 h-5 group-hover:rotate-180 transition-transform duration-700" />
-              Ververs Market Data
+              Ververs Marktgegevens
             </>
           )}
         </button>
