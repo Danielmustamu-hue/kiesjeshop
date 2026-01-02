@@ -5,13 +5,13 @@ import { GoogleGenAI } from '@google/genai';
 import { Sparkles, Loader2, Cpu, ExternalLink, Search, Info, AlertCircle, Zap, ShieldCheck, BrainCircuit } from 'lucide-react';
 import { SHOPS } from '../constants';
 
-// Fixed: Define AIStudio interface and use it in Window declaration to avoid type conflict with environment.
-// Added 'readonly' modifier to match expected global environment definitions which prevents modifier mismatch error.
+// Fixed: Define AIStudio interface for local reference.
 export interface AIStudio {
   hasSelectedApiKey: () => Promise<boolean>;
   openSelectKey: () => Promise<void>;
 }
 
+// Fixed: Added 'readonly' and used the AIStudio interface to ensure identical modifiers and type name as required by the environment.
 declare global {
   interface Window {
     readonly aistudio: AIStudio;
