@@ -28,28 +28,6 @@
     <meta property="og:url" content="https://www.kiesjeshop.nl/" />
     <meta property="og:site_name" content="Kiesjeshop.nl" />
 
-    <!-- Google AI Overview & Schema Optimization -->
-    <script type="application/ld+json">
-    {
-      "@context": "https://schema.org",
-      "@type": "Organization",
-      "name": "Kiesjeshop.nl",
-      "alternateName": "Kiesjeshop",
-      "url": "https://www.kiesjeshop.nl",
-      "logo": "https://www.kiesjeshop.nl/public/favicon.svg",
-      "contactPoint": {
-        "@type": "ContactPoint",
-        "email": "info@kiesjeshop.nl",
-        "contactType": "customer service"
-      },
-      "sameAs": [
-        "https://www.facebook.com/kiesjeshop",
-        "https://www.instagram.com/kiesjeshop"
-      ],
-      "description": "Kiesjeshop.nl is een onafhankelijk vergelijkingsplatform voor de Nederlandse e-commerce markt, gespecialiseerd in real-time data-analyse van bol, Amazon en Coolblue."
-    }
-    </script>
-
     <script type="importmap">
 {
   "imports": {
@@ -90,14 +68,41 @@
     
     <style>
       @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap');
+      
+      :root {
+        --bg-color: #F8F9FB;
+      }
+
       body {
         margin: 0;
         font-family: 'Inter', sans-serif;
         -webkit-font-smoothing: antialiased;
-        background-color: #FDFCFB;
+        background-color: var(--bg-color);
         color: #0F172A;
         scroll-behavior: smooth;
+        overflow-x: hidden;
       }
+
+      /* Subtle Background Texture */
+      .bg-pattern {
+        background-image: radial-gradient(#E2E8F0 0.8px, transparent 0.8px);
+        background-size: 24px 24px;
+      }
+
+      /* Decorative Background Blobs */
+      .bg-blob {
+        position: fixed;
+        width: 600px;
+        height: 600px;
+        border-radius: 50%;
+        filter: blur(120px);
+        z-index: -1;
+        opacity: 0.15;
+        pointer-events: none;
+      }
+      .blob-1 { top: -10%; left: -10%; background: #FF3D77; }
+      .blob-2 { bottom: -10%; right: -10%; background: #EA580C; }
+
       .brand-gradient {
         background: linear-gradient(135deg, #FF3D77 0%, #EA580C 100%);
       }
@@ -109,27 +114,26 @@
       .intelligence-card {
         background: white;
         border-radius: 2rem;
-        box-shadow: 0 25px 50px -12px rgba(255, 61, 119, 0.08);
+        box-shadow: 0 20px 40px -10px rgba(15, 23, 42, 0.05);
       }
       @media (min-width: 768px) {
         .intelligence-card { border-radius: 3.5rem; }
       }
       .animate-scroll {
         display: inline-block;
-        animation: scroll 40s linear infinite;
+        animation: scroll 50s linear infinite;
       }
       @keyframes scroll {
         0% { transform: translateX(100%); }
         100% { transform: translateX(-100%); }
       }
       .glass-morphism {
-        background: rgba(255, 255, 255, 0.7);
+        background: rgba(255, 255, 255, 0.85);
         backdrop-filter: blur(20px);
         -webkit-backdrop-filter: blur(20px);
-        border: 1px solid rgba(255, 255, 255, 0.4);
+        border: 1px solid rgba(255, 255, 255, 0.5);
       }
       
-      /* AI Pulse Animation */
       @keyframes ai-pulse {
         0% { box-shadow: 0 0 0 0 rgba(255, 61, 119, 0.4); }
         70% { box-shadow: 0 0 0 15px rgba(255, 61, 119, 0); }
@@ -139,23 +143,16 @@
         animation: ai-pulse 2s infinite;
       }
 
-      /* Custom Scrollbar */
-      ::-webkit-scrollbar {
-        width: 8px;
-      }
-      ::-webkit-scrollbar-track {
-        background: #f8fafc;
-      }
-      ::-webkit-scrollbar-thumb {
-        background: #e2e8f0;
-        border-radius: 10px;
-      }
-      ::-webkit-scrollbar-thumb:hover {
-        background: #cbd5e1;
-      }
+      ::-webkit-scrollbar { width: 8px; }
+      ::-webkit-scrollbar-track { background: #f1f5f9; }
+      ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
+      ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
     </style>
   </head>
   <body>
+    <div class="bg-pattern fixed inset-0 z-[-2] opacity-40 pointer-events-none"></div>
+    <div class="bg-blob blob-1"></div>
+    <div class="bg-blob blob-2"></div>
     <div id="root"></div>
     <script type="module" src="/index.tsx"></script>
   </body>

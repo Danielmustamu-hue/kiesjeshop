@@ -16,158 +16,88 @@ export const ArticleModal: React.FC<ArticleModalProps> = ({ article, onClose, on
   useEffect(() => {
     if (article) {
       if (!inline) document.body.style.overflow = 'hidden';
-      
-      // Inject Article Schema for SEO / AI Overviews - Updated for 2026
-      const articleSchema = {
-        "@context": "https://schema.org",
-        "@type": "TechArticle",
-        "headline": article.title.replace('2025', '2026'),
-        "description": article.excerpt.replace('2025', '2026'),
-        "image": article.image,
-        "author": {
-          "@type": "Organization",
-          "name": "Kiesjeshop Redactie"
-        },
-        "publisher": {
-          "@type": "Organization",
-          "name": "Kiesjeshop.nl",
-          "logo": {
-            "@type": "ImageObject",
-            "url": "https://www.kiesjeshop.nl/public/favicon.svg"
-          }
-        },
-        "datePublished": "2025-12-31",
-        "dateModified": "2026-01-01"
-      };
-
-      const script = document.createElement('script');
-      script.type = 'application/ld+json';
-      script.id = 'article-schema';
-      script.innerHTML = JSON.stringify(articleSchema);
-      document.head.appendChild(script);
-
-      if (article.faqs && article.faqs.length > 0) {
-        const faqSchema = {
-          "@context": "https://schema.org",
-          "@type": "FAQPage",
-          "mainEntity": article.faqs.map(faq => ({
-            "@type": "Question",
-            "name": faq.question.replace('2025', '2026'),
-            "acceptedAnswer": {
-              "@type": "Answer",
-              "text": faq.answer.replace('2025', '2026')
-            }
-          }))
-        };
-        const faqScript = document.createElement('script');
-        faqScript.type = 'application/ld+json';
-        faqScript.id = 'faq-schema';
-        faqScript.innerHTML = JSON.stringify(faqSchema);
-        document.head.appendChild(faqScript);
-      }
     }
-    return () => {
-      document.body.style.overflow = '';
-      const s1 = document.getElementById('article-schema');
-      const s2 = document.getElementById('faq-schema');
-      if (s1) s1.remove();
-      if (s2) s2.remove();
-    };
+    return () => { document.body.style.overflow = ''; };
   }, [article, inline]);
 
   if (!article) return null;
 
   const handleCtaClick = () => {
-    if (onNavigateToShops) {
-      onNavigateToShops();
-    } else {
-      onClose();
-    }
+    if (onNavigateToShops) onNavigateToShops();
+    else onClose();
   };
 
   const currentTitle = article.title.replace('2025', '2026');
   const currentDate = "31 dec 2025";
 
   const content = (
-    <div className={`bg-white rounded-2xl shadow-2xl w-full max-w-4xl flex flex-col overflow-hidden animate-in fade-in ${inline ? 'mx-auto relative' : 'max-h-[90vh] zoom-in-95 duration-200'}`}>
+    <div className={`bg-white rounded-[2.5rem] shadow-2xl w-full max-w-4xl flex flex-col overflow-hidden animate-in fade-in ${inline ? 'mx-auto relative' : 'max-h-[90vh] zoom-in-95 duration-200'}`}>
       
       {!inline && <ArticleStickyBar onNavigateToShops={handleCtaClick} />}
 
-      <div className="relative h-64 sm:h-[450px] shrink-0 overflow-hidden">
+      <div className="relative h-64 sm:h-[350px] shrink-0 overflow-hidden">
           <img src={article.image} alt={currentTitle} className="w-full h-full object-cover" />
-          <div className="absolute inset-0 bg-gradient-to-t from-slate-900 via-slate-900/40 to-transparent"></div>
+          <div className="absolute inset-0 bg-gradient-to-t from-slate-900 via-slate-900/20 to-transparent"></div>
           
           <button 
               onClick={onClose}
-              className="absolute top-6 left-6 p-3 bg-white/20 hover:bg-white/40 text-white rounded-full backdrop-blur-md transition-all border border-white/20 flex items-center gap-2 font-bold text-xs uppercase tracking-widest z-20"
+              className="absolute top-6 left-6 p-2 bg-white/20 hover:bg-white/40 text-white rounded-full backdrop-blur-md transition-all border border-white/20 flex items-center gap-2 font-bold text-[10px] uppercase tracking-widest z-20"
           >
               <ArrowLeft className="w-4 h-4" /> Terug
           </button>
 
-          <div className="absolute bottom-8 left-8 right-8 text-white z-10">
-              <div className="flex items-center gap-3 mb-4">
-                 <div className="bg-orange-600 px-4 py-1.5 rounded-lg text-[10px] font-black uppercase tracking-widest flex items-center gap-2">
+          <div className="absolute bottom-6 left-8 right-8 text-white z-10">
+              <div className="flex items-center gap-3 mb-3">
+                 <div className="bg-orange-600 px-3 py-1 rounded-lg text-[9px] font-black uppercase tracking-widest flex items-center gap-2">
                     {article.icon} <span>{article.category}</span>
                  </div>
-                 <div className="bg-emerald-500/20 backdrop-blur-md border border-emerald-500/30 px-4 py-1.5 rounded-lg text-[10px] font-black uppercase tracking-widest flex items-center gap-2">
-                    <ShieldCheck className="w-3.5 h-3.5 text-emerald-400" /> Winter Update 25/26
+                 <div className="bg-emerald-500/20 backdrop-blur-md border border-emerald-500/30 px-3 py-1 rounded-lg text-[9px] font-black uppercase tracking-widest">
+                    Update 25/26
                  </div>
               </div>
-              <h1 className="text-3xl sm:text-6xl font-black leading-[0.9] tracking-tighter mb-4">{currentTitle}</h1>
-              <div className="flex items-center gap-6 text-[10px] font-black uppercase tracking-widest text-white/60">
+              <h1 className="text-3xl sm:text-5xl font-black leading-[0.95] tracking-tighter mb-3">{currentTitle}</h1>
+              <div className="flex items-center gap-6 text-[9px] font-black uppercase tracking-widest text-white/60">
                 <span className="flex items-center gap-2"><Calendar className="w-4 h-4" /> {currentDate}</span>
                 <span className="flex items-center gap-2"><Clock className="w-4 h-4" /> {article.readTime}</span>
               </div>
           </div>
       </div>
 
-      <div className={`p-8 sm:p-16 ${inline ? '' : 'overflow-y-auto overscroll-contain pb-40'}`}>
+      <div className={`p-8 sm:p-12 ${inline ? '' : 'overflow-y-auto overscroll-contain pb-32'}`}>
         
-        <div className="mb-12 p-6 bg-slate-50 rounded-3xl border border-slate-100">
-           <span className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] block mb-4">Focus & Context</span>
-           <div className="flex flex-wrap gap-2">
-              {article.lsiKeywords.map((kw, i) => (
-                <span key={i} className="px-3 py-1.5 bg-white border border-slate-200 rounded-xl text-[10px] font-bold text-slate-500">#{kw.replace('2025', '2026')}</span>
-              ))}
-           </div>
+        <div className="mb-10 p-5 bg-slate-50 rounded-2xl border border-slate-100 flex flex-wrap gap-2">
+            {article.lsiKeywords.slice(0, 5).map((kw, i) => (
+              <span key={i} className="px-3 py-1 bg-white border border-slate-200 rounded-lg text-[9px] font-bold text-slate-500">#{kw.replace('2025', '2026')}</span>
+            ))}
         </div>
 
-        <article className="prose prose-slate prose-xl max-w-none prose-p:leading-relaxed prose-headings:tracking-tighter prose-headings:font-black prose-img:rounded-3xl prose-a:text-orange-600 prose-strong:text-slate-900">
+        <article className="prose prose-slate prose-lg max-w-none prose-p:leading-relaxed prose-headings:tracking-tighter prose-headings:font-black prose-img:rounded-2xl prose-a:text-orange-600">
           {article.content}
         </article>
 
         {article.faqs && article.faqs.length > 0 && (
-          <div className="mt-20 pt-20 border-t border-slate-100">
-             <div className="flex items-center gap-3 mb-10">
-                <div className="bg-orange-600 p-2.5 rounded-xl"><HelpCircle className="w-6 h-6 text-white" /></div>
-                <h3 className="text-3xl font-black tracking-tighter text-slate-950">Veelgestelde Vragen 2026</h3>
-             </div>
-             <div className="grid gap-6">
+          <div className="mt-16 pt-16 border-t border-slate-100">
+             <h3 className="text-2xl font-black tracking-tighter text-slate-950 mb-8">Veelgestelde Vragen</h3>
+             <div className="grid gap-4">
                 {article.faqs.map((faq, i) => (
-                  <div key={i} className="p-8 bg-slate-50 rounded-[2rem] border border-slate-100 hover:border-orange-200 transition-all">
-                     <h4 className="text-xl font-black text-slate-900 mb-4">{faq.question.replace('2025', '2026')}</h4>
-                     <p className="text-slate-600 leading-relaxed font-medium">{faq.answer.replace('2025', '2026')}</p>
+                  <div key={i} className="p-6 bg-slate-50 rounded-2xl border border-slate-100">
+                     <h4 className="text-base font-black text-slate-900 mb-2">{faq.question.replace('2025', '2026')}</h4>
+                     <p className="text-sm text-slate-600 leading-relaxed font-medium">{faq.answer.replace('2025', '2026')}</p>
                   </div>
                 ))}
              </div>
           </div>
         )}
 
-        <div className="mt-20 p-10 bg-slate-950 rounded-[3rem] text-white relative overflow-hidden">
-           <div className="absolute top-0 right-0 p-10 opacity-10">
-              <CheckCircle2 className="w-32 h-32" />
-           </div>
+        <div className="mt-16 p-8 bg-slate-950 rounded-[2rem] text-white relative overflow-hidden">
            <div className="relative z-10">
-              <span className="text-[10px] font-black text-orange-400 uppercase tracking-[0.4em] block mb-4">Eindoordeel Experts 2026</span>
-              <h4 className="text-3xl font-black tracking-tighter mb-6">Onze Laatste Aanbeveling</h4>
-              <p className="text-slate-400 text-lg font-medium leading-relaxed mb-10">
-                 Voor het komende jaar 2026 adviseren wij focus op duurzaamheid en garantie. Merken als Miele, Apple en Dyson blijven de markt domineren qua restwaarde.
+              <span className="text-[9px] font-black text-orange-400 uppercase tracking-[0.4em] block mb-3">Eindoordeel Experts</span>
+              <h4 className="text-2xl font-black tracking-tighter mb-4">Onze Aanbeveling</h4>
+              <p className="text-slate-400 text-base font-medium leading-relaxed mb-8 max-w-xl">
+                 Focus in 2026 op duurzaamheid en garantie. Merken als Miele en Apple blijven de markt domineren qua restwaarde.
               </p>
-              <button 
-                onClick={handleCtaClick}
-                className="flex items-center gap-4 bg-white text-slate-950 px-10 py-5 rounded-2xl font-black text-[11px] uppercase tracking-widest hover:bg-orange-600 hover:text-white transition-all shadow-2xl"
-              >
-                Start 2026 met de beste deal <ArrowRight className="w-5 h-5" />
+              <button onClick={handleCtaClick} className="flex items-center gap-3 bg-white text-slate-950 px-8 py-4 rounded-xl font-black text-[10px] uppercase tracking-widest hover:bg-orange-600 hover:text-white transition-all">
+                Check Deals <ArrowRight className="w-4 h-4" />
               </button>
            </div>
         </div>
@@ -175,11 +105,8 @@ export const ArticleModal: React.FC<ArticleModalProps> = ({ article, onClose, on
 
       {!inline && (
         <div className="absolute top-6 right-6 z-30">
-           <button 
-             onClick={onClose}
-             className="p-3 bg-white/10 hover:bg-white/20 text-white rounded-full backdrop-blur-md transition-all border border-white/20"
-           >
-             <X className="w-6 h-6" />
+           <button onClick={onClose} className="p-2 bg-white/10 hover:bg-white/20 text-white rounded-full backdrop-blur-md border border-white/20">
+             <X className="w-5 h-5" />
            </button>
         </div>
       )}
@@ -190,7 +117,7 @@ export const ArticleModal: React.FC<ArticleModalProps> = ({ article, onClose, on
 
   return (
     <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 sm:p-6" role="dialog" aria-modal="true">
-      <div className="absolute inset-0 bg-slate-900/90 backdrop-blur-md transition-opacity" onClick={onClose} />
+      <div className="absolute inset-0 bg-slate-900/90 backdrop-blur-md" onClick={onClose} />
       {content}
     </div>
   );

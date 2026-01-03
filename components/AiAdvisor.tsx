@@ -2,17 +2,16 @@
 import React, { useState, useEffect } from 'react';
 import { GoogleGenAI } from '@google/genai';
 // Fixed: Changed 'lucide-center' to 'lucide-react' as it's the correct library for these icons.
-import { Sparkles, Loader2, Cpu, ExternalLink, Search, Info, AlertCircle, Zap, ShieldCheck, BrainCircuit } from 'lucide-react';
+import { Sparkles, Loader2, Cpu, ExternalLink, Search, Info, AlertCircle, Zap, ShieldCheck, BrainCircuit, Globe } from 'lucide-react';
 import { SHOPS } from '../constants';
 
-// Fixed: Define AIStudio interface for local reference.
-export interface AIStudio {
-  hasSelectedApiKey: () => Promise<boolean>;
-  openSelectKey: () => Promise<void>;
-}
-
-// Fixed: Added 'readonly' and used the AIStudio interface to ensure identical modifiers and type name as required by the environment.
+// Fixed: Added 'readonly' modifier to resolve "identical modifiers" error with existing global declarations in the environment.
 declare global {
+  interface AIStudio {
+    hasSelectedApiKey: () => Promise<boolean>;
+    openSelectKey: () => Promise<void>;
+  }
+
   interface Window {
     readonly aistudio: AIStudio;
   }
@@ -22,6 +21,8 @@ export const AiAdvisor: React.FC = () => {
   const [query, setQuery] = useState('');
   const [advice, setAdvice] = useState<string | null>(null);
   const [searchLinks, setSearchLinks] = useState<{shopId: string, query: string}[]>([]);
+  // Added state for search grounding sources
+  const [sources, setSources] = useState<{uri: string, title: string}[]>([]);
   const [loading, setLoading] = useState(false);
   const [errorType, setErrorType] = useState<'none' | 'rate-limit' | 'general'>('none');
   const [hasOwnKey, setHasOwnKey] = useState(false);
@@ -66,6 +67,7 @@ export const AiAdvisor: React.FC = () => {
     setLoading(true);
     setAdvice(null);
     setSearchLinks([]);
+    setSources([]);
     setErrorType('none');
     setIsThinking(true);
 
@@ -90,7 +92,7 @@ export const AiAdvisor: React.FC = () => {
         model: 'gemini-3-pro-preview',
         contents: promptText, 
         config: { 
-          thinkingConfig: { thinkingBudget: 32768 }, // High budget for pro model reasoning
+          thinkingConfig: { thinkingBudget: 32768 }, // max budget for gemini-3-pro-preview
           temperature: 0.7,
           tools: [{ googleSearch: {} }]
         }
@@ -114,6 +116,15 @@ export const AiAdvisor: React.FC = () => {
         const foundQuery = actionMatch[2].trim();
         setSearchLinks([{ shopId: foundShopId, query: foundQuery }]);
       }
+      
+      // Fixed: Extracted grounding chunks to list URLs as required by Search Grounding rules.
+      const foundSources = response.candidates?.[0]?.groundingMetadata?.groundingChunks
+        ?.filter((c: any) => c.web)
+        ?.map((c: any) => ({
+          uri: c.web.uri,
+          title: c.web.title
+        })) || [];
+      setSources(foundSources);
       
       setAdvice(cleanAdvice);
     } catch (err: any) {
@@ -230,6 +241,28 @@ export const AiAdvisor: React.FC = () => {
                         </a>
                       );
                     })}
+                  </div>
+                )}
+
+                {/* Fixed: Added listing of URLs from grounding chunks as required for Search Grounding. */}
+                {sources.length > 0 && (
+                  <div className="mt-6 pt-6 border-t border-slate-200">
+                    <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-3 flex items-center gap-2">
+                      <Globe className="w-3.5 h-3.5" /> Geverifieerde Bronnen:
+                    </p>
+                    <div className="flex flex-wrap gap-3">
+                      {sources.map((source, i) => (
+                        <a 
+                          key={i} 
+                          href={source.uri} 
+                          target="_blank" 
+                          rel="nofollow" 
+                          className="text-[10px] font-bold text-brand-pink hover:underline flex items-center gap-1 bg-white px-3 py-1.5 rounded-lg border border-slate-100 shadow-sm transition-all"
+                        >
+                          {source.title.split('|')[0].trim()} <ExternalLink className="w-3 h-3" />
+                        </a>
+                      ))}
+                    </div>
                   </div>
                 )}
              </div>
