@@ -1,11 +1,10 @@
-
 import React, { useState, useEffect } from 'react';
 import { GoogleGenAI } from '@google/genai';
 // Fixed: Changed 'lucide-center' to 'lucide-react' as it's the correct library for these icons.
 import { Sparkles, Loader2, Cpu, ExternalLink, Search, Info, AlertCircle, Zap, ShieldCheck, BrainCircuit, Globe } from 'lucide-react';
 import { SHOPS } from '../constants';
 
-// Fixed: Added 'readonly' modifier to resolve "identical modifiers" error with existing global declarations in the environment.
+// Fixed: Added 'readonly' modifier to match environment declaration and resolve "identical modifiers" error for 'aistudio'.
 declare global {
   interface AIStudio {
     hasSelectedApiKey: () => Promise<boolean>;

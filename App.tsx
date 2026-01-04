@@ -1,6 +1,6 @@
 
 import React, { useState, useEffect, useCallback } from 'react';
-import { ShoppingBag, Sparkles, X, Cpu, Search, Menu, ArrowRight, Zap, ArrowUpRight, Clock, Star, TrendingUp, ChevronRight, Globe, ShieldCheck, BarChart3, PieChart, CheckCircle2, Shield, RefreshCcw, Info, LayoutGrid, ArrowLeftRight, MessageSquare } from 'lucide-react';
+import { ShoppingBag, Sparkles, X, Cpu, Search, Menu, ArrowRight, Zap, ArrowUpRight, Clock, Star, TrendingUp, ChevronRight, Globe, ShieldCheck, BarChart3, PieChart, CheckCircle2, Shield, RefreshCcw, Info, LayoutGrid, ArrowLeftRight, MessageSquare, BookOpen } from 'lucide-react';
 
 // Components
 import { AiAdvisor } from './components/AiAdvisor';
@@ -13,6 +13,7 @@ import { NicheDetail } from './components/NicheDetail';
 import { TermsModal } from './components/TermsModal';
 import { PrivacyModal } from './components/PrivacyModal';
 import { AboutModal } from './components/AboutModal';
+import { ContactModal } from './components/ContactModal';
 import { AffiliateModal } from './components/AffiliateModal';
 import { ArticleModal } from './components/ArticleModal';
 import { CookieBanner } from './components/CookieBanner';
@@ -47,6 +48,7 @@ const App: React.FC = () => {
   const [isTermsOpen, setIsTermsOpen] = useState(false);
   const [isPrivacyOpen, setIsPrivacyOpen] = useState(false);
   const [isAboutOpen, setIsAboutOpen] = useState(false);
+  const [isContactOpen, setIsContactOpen] = useState(false);
   const [isAffiliateOpen, setIsAffiliateOpen] = useState(false);
 
   const [marketSignals, setMarketSignals] = useState<MarketSignal[]>([]);
@@ -169,27 +171,27 @@ const App: React.FC = () => {
         </div>
       </div>
 
-      <header role="banner" className="bg-white/80 backdrop-blur-2xl sticky top-0 z-50 border-b border-slate-200 h-16">
+      <header role="banner" className="bg-white/80 backdrop-blur-2xl sticky top-0 z-50 border-b border-slate-200 h-20">
         <nav role="navigation" className="max-w-[1920px] mx-auto px-6 md:px-32 lg:px-48 h-full flex items-center">
           <div className="flex items-center gap-4">
-            <a href="#/" onClick={(e) => { e.preventDefault(); navigateTo('home'); }} className="flex items-center gap-2 group">
-              <div className="brand-gradient p-1.5 rounded-lg group-hover:scale-110 transition-transform shadow-md">
-                <ShoppingBag className="w-4 h-4 text-white" />
+            <a href="#/" onClick={(e) => { e.preventDefault(); navigateTo('home'); }} className="flex items-center gap-3 group">
+              <div className="brand-gradient p-2.5 rounded-xl group-hover:scale-110 transition-transform shadow-md">
+                <ShoppingBag className="w-5 h-5 text-white" />
               </div>
               <div className="flex flex-col">
-                <span className="text-base md:text-lg font-black text-slate-900 tracking-tighter leading-none uppercase">Kiesjeshop<span className="brand-text-gradient">.nl</span></span>
-                <span className="text-[7px] font-black uppercase tracking-[0.15em] text-slate-400">Onafhankelijke Experts</span>
+                <span className="text-xl md:text-2xl font-black text-slate-900 tracking-tighter leading-none uppercase">Kiesjeshop<span className="brand-text-gradient">.nl</span></span>
+                <span className="text-[8px] font-black uppercase tracking-[0.15em] text-slate-400 mt-1">Onafhankelijke Experts</span>
               </div>
             </a>
           </div>
 
-          <div className="hidden lg:flex items-center gap-8 ml-auto mr-12">
+          <div className="hidden lg:flex items-center gap-10 ml-auto mr-12">
              {['De Grote 3', 'Koopgidsen', 'Redactie', 'Over Ons'].map((link) => (
                <a 
                  key={link} 
                  href={`#/${link.toLowerCase().replace(/ /g, '-').replace('3', 'drie')}`} 
                  onClick={(e) => { e.preventDefault(); navigateTo(getLinkView(link)); }}
-                 className={`px-1 py-2 text-[11px] font-black uppercase tracking-widest transition-all ${
+                 className={`px-1 py-2 text-[13px] font-black uppercase tracking-widest transition-all ${
                    currentView === getLinkView(link) ? 'text-brand-pink border-b-2 border-brand-pink' : 'text-slate-400 hover:text-slate-900'
                  }`}
                >
@@ -198,13 +200,13 @@ const App: React.FC = () => {
              ))}
           </div>
 
-          <div className="flex items-center gap-4">
-            <button onClick={() => setIsSearchOpen(true)} className="p-2 text-slate-400 hover:text-brand-pink">
-               <Search className="w-4 h-4" />
+          <div className="flex items-center gap-6">
+            <button onClick={() => setIsSearchOpen(true)} className="p-2 text-slate-400 hover:text-brand-pink transition-colors">
+               <Search className="w-5 h-5" />
             </button>
-            <button onClick={() => setShowAiAdvisor(true)} className="bg-slate-900 text-white px-6 py-2.5 rounded-lg text-[10px] font-black uppercase tracking-widest shadow-lg hover:bg-brand-pink active:scale-95 transition-all">Adviseur</button>
+            <button onClick={() => setShowAiAdvisor(true)} className="bg-slate-900 text-white px-8 py-3.5 rounded-xl text-[11px] font-black uppercase tracking-widest shadow-lg hover:bg-brand-pink active:scale-95 transition-all">Adviseur</button>
             <button onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)} className="lg:hidden p-2 text-slate-600">
-              <Menu className="w-5 h-5" />
+              <Menu className="w-6 h-6" />
             </button>
           </div>
         </nav>
@@ -338,6 +340,14 @@ const App: React.FC = () => {
 
             <div id="gidsen" className="py-24 scroll-mt-20">
                <div className="max-w-[1920px] mx-auto px-6 md:px-32 lg:px-48">
+                 <div className="mb-16">
+                    <div className="inline-flex items-center gap-2 bg-orange-100 text-orange-700 px-3 py-1 rounded-full text-[9px] font-black uppercase tracking-[0.2em] mb-3 border border-orange-200">
+                      <BookOpen className="w-3 h-3" />
+                      <span>Elite Editie 2026</span>
+                    </div>
+                    <h2 className="text-3xl md:text-5xl font-black text-slate-900 tracking-tighter mb-3 uppercase">De Beste Koopgidsen<span className="brand-text-gradient">.</span></h2>
+                    <p className="text-slate-500 font-medium text-lg max-w-2xl leading-relaxed">Diepgaande analyses van de nieuwste productcategorieën voor het komende jaar.</p>
+                 </div>
                  <NicheGuides onSelectGuide={(g) => navigateTo('niche-detail', g)} limit={4} />
                  <div className="mt-16 text-center">
                     <button 
@@ -398,7 +408,7 @@ const App: React.FC = () => {
               <ul className="space-y-4 text-slate-400 font-bold text-xs uppercase tracking-widest">
                 <li><button onClick={() => navigateTo('over-ons')} className="hover:text-slate-900 transition-colors">Over ons</button></li>
                 <li><button onClick={() => setIsAffiliateOpen(true)} className="hover:text-slate-900 transition-colors">Partners</button></li>
-                <li><button onClick={() => setIsAboutOpen(true)} className="hover:text-slate-900 transition-colors">Contact</button></li>
+                <li><button onClick={() => setIsContactOpen(true)} className="hover:text-slate-900 transition-colors">Contact</button></li>
               </ul>
             </div>
             <div className="md:col-span-3">
@@ -439,6 +449,7 @@ const App: React.FC = () => {
       <TermsModal isOpen={isTermsOpen} onClose={() => setIsTermsOpen(false)} />
       <PrivacyModal isOpen={isPrivacyOpen} onClose={() => setIsPrivacyOpen(false)} />
       <AboutModal isOpen={isAboutOpen} onClose={() => setIsAboutOpen(false)} />
+      <ContactModal isOpen={isContactOpen} onClose={() => setIsContactOpen(false)} />
       <AffiliateModal isOpen={isAffiliateOpen} onClose={() => setIsAffiliateOpen(false)} />
       <CookieBanner />
     </div>
