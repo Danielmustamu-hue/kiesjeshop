@@ -6,11 +6,11 @@ export const SectionNav: React.FC = () => {
   const [activeSection, setActiveSection] = useState('');
 
   const links = [
-    { name: 'Pulse', icon: <Zap className="w-3.5 h-3.5" />, href: '#market-pulse' },
-    { name: 'Deals', icon: <LayoutGrid className="w-3.5 h-3.5" />, href: '#compare' },
-    { name: 'Duel', icon: <ArrowLeftRight className="w-3.5 h-3.5" />, href: '#duel' },
-    { name: 'Gidsen', icon: <BookOpen className="w-3.5 h-3.5" />, href: '#gidsen' },
-    { name: 'FAQ', icon: <MessageSquare className="w-3.5 h-3.5" />, href: '#faq' },
+    { name: 'PULSE', icon: <Zap className="w-3 h-3" />, href: '#market-pulse' },
+    { name: 'DEALS', icon: <LayoutGrid className="w-3 h-3" />, href: '#compare' },
+    { name: 'DUEL', icon: <ArrowLeftRight className="w-3 h-3" />, href: '#duel' },
+    { name: 'GIDSEN', icon: <BookOpen className="w-3 h-3" />, href: '#gidsen' },
+    { name: 'FAQ', icon: <MessageSquare className="w-3 h-3" />, href: '#faq' },
   ];
 
   useEffect(() => {
@@ -22,7 +22,7 @@ export const SectionNav: React.FC = () => {
           }
         });
       },
-      { threshold: 0.5, rootMargin: '-10% 0% -40% 0%' }
+      { threshold: 0.5 }
     );
 
     links.forEach((link) => {
@@ -37,12 +37,8 @@ export const SectionNav: React.FC = () => {
     e.preventDefault();
     const target = document.querySelector(href);
     if (target) {
-      const offset = 100;
-      const elementPosition = target.getBoundingClientRect().top + window.pageYOffset;
-      const offsetPosition = elementPosition - offset;
-
       window.scrollTo({
-        top: offsetPosition,
+        top: target.getBoundingClientRect().top + window.pageYOffset - 100,
         behavior: 'smooth'
       });
       setActiveSection(href);
@@ -50,26 +46,24 @@ export const SectionNav: React.FC = () => {
   };
 
   return (
-    <nav aria-label="Sectienavigatie" className="flex justify-center mb-16 md:mb-24 w-full overflow-hidden px-4">
-      <div className="flex items-center p-1.5 bg-slate-50 border border-slate-100 rounded-full flex-wrap justify-center shadow-sm">
-        {links.map((link) => (
-          <a
-            key={link.href}
-            href={link.href}
-            onClick={(e) => scrollToSection(e, link.href)}
-            className={`flex items-center gap-2 px-6 md:px-8 py-3.5 rounded-full text-[9px] md:text-[10px] font-black uppercase tracking-[0.2em] transition-all whitespace-nowrap group ${
-              activeSection === link.href 
-              ? 'bg-white text-brand-pink shadow-md border border-slate-100 scale-105' 
-              : 'text-slate-400 hover:text-slate-900'
-            }`}
-          >
-            <span className={activeSection === link.href ? 'text-brand-pink' : 'text-slate-300 group-hover:text-slate-500 transition-colors'}>
-              {link.icon}
-            </span>
-            {link.name}
-          </a>
-        ))}
-      </div>
+    <nav className="inline-flex items-center p-1.5 bg-white border border-slate-100 rounded-full shadow-sm">
+      {links.map((link) => (
+        <a
+          key={link.href}
+          href={link.href}
+          onClick={(e) => scrollToSection(e, link.href)}
+          className={`flex items-center gap-2.5 px-6 py-3 rounded-full text-[9px] font-black uppercase tracking-widest transition-all ${
+            activeSection === link.href 
+            ? 'bg-slate-50 text-brand-pink' 
+            : 'text-slate-400 hover:text-slate-600'
+          }`}
+        >
+          <span className={activeSection === link.href ? 'text-brand-pink' : 'text-slate-300'}>
+            {link.icon}
+          </span>
+          {link.name}
+        </a>
+      ))}
     </nav>
   );
 };

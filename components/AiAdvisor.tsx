@@ -1,68 +1,39 @@
-import React, { useState, useEffect } from 'react';
+
+import React, { useState, useEffect, useCallback } from 'react';
 import { GoogleGenAI } from '@google/genai';
-// Fixed: Changed 'lucide-center' to 'lucide-react' as it's the correct library for these icons.
 import { Sparkles, Loader2, Cpu, ExternalLink, Search, Info, AlertCircle, Zap, ShieldCheck, BrainCircuit, Globe } from 'lucide-react';
 import { SHOPS } from '../constants';
 
-// Fixed: Added 'readonly' modifier to match environment declaration and resolve "identical modifiers" error for 'aistudio'.
-declare global {
-  interface AIStudio {
-    hasSelectedApiKey: () => Promise<boolean>;
-    openSelectKey: () => Promise<void>;
-  }
-
-  interface Window {
-    readonly aistudio: AIStudio;
-  }
+interface AiAdvisorProps {
+  initialQuery?: string;
 }
 
-export const AiAdvisor: React.FC = () => {
-  const [query, setQuery] = useState('');
+export const AiAdvisor: React.FC<AiAdvisorProps> = ({ initialQuery = '' }) => {
+  const [query, setQuery] = useState(initialQuery);
   const [advice, setAdvice] = useState<string | null>(null);
   const [searchLinks, setSearchLinks] = useState<{shopId: string, query: string}[]>([]);
-  // Added state for search grounding sources
   const [sources, setSources] = useState<{uri: string, title: string}[]>([]);
   const [loading, setLoading] = useState(false);
   const [errorType, setErrorType] = useState<'none' | 'rate-limit' | 'general'>('none');
   const [hasOwnKey, setHasOwnKey] = useState(false);
   const [isThinking, setIsThinking] = useState(false);
 
-  useEffect(() => {
-    checkKeyStatus();
-  }, []);
-
-  const checkKeyStatus = async () => {
+  const checkKeyStatus = useCallback(async () => {
     try {
-      if (window.aistudio) {
-        const hasKey = await window.aistudio.hasSelectedApiKey();
+      const aistudio = (window as any).aistudio;
+      if (aistudio && typeof aistudio.hasSelectedApiKey === 'function') {
+        const hasKey = await aistudio.hasSelectedApiKey();
         setHasOwnKey(hasKey);
       }
     } catch (e) {
       console.debug("AI Studio context not available");
     }
-  };
+  }, []);
 
-  const handleUpgradeKey = async () => {
-    if (window.aistudio) {
-      await window.aistudio.openSelectKey();
-      // Assume the key selection was successful after triggering openSelectKey() to mitigate race condition.
-      setHasOwnKey(true);
-    }
-  };
-
-  const getSearchLink = (type: string, query: string) => {
-    const encoded = encodeURIComponent(query);
-    switch (type.toLowerCase()) {
-      case 'bol': return `https://partner.bol.com/click/click?p=2&t=url&s=1491898&f=TXL&url=https%3A%2F%2Fwww.bol.com%2Fnl%2Fnl%2Fs%2F${encoded}%2F&name=Advisor&subid=Algemeen-AI-Hulp`;
-      case 'coolblue': return `https://www.awin1.com/cread.php?awinmid=85161&awinaffid=2694054&ued=https%3A%2F%2Fwww.coolblue.nl%2Fzoeken%3Fquery%3D${encoded}`;
-      case 'amazon': return `https://www.amazon.nl/s?k=${encoded}&tag=kiesjeshop-21`; 
-      default: return '#';
-    }
-  };
-
-  const handleAskAi = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!query.trim()) return;
+  const handleAskAi = useCallback(async (searchQuery?: string) => {
+    const finalQuery = searchQuery || query;
+    if (!finalQuery.trim()) return;
+    
     setLoading(true);
     setAdvice(null);
     setSearchLinks([]);
@@ -71,12 +42,11 @@ export const AiAdvisor: React.FC = () => {
     setIsThinking(true);
 
     try {
-      // Create new instance right before making an API call to ensure it always uses the most up-to-date API key.
       const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
       
       const promptText = `
         Je bent de Lead Strategist van Kiesjeshop.nl. 
-        Geef een diepgaand strategisch koopadvies voor: "${query}".
+        Geef een diepgaand strategisch koopadvies voor: "${finalQuery}".
         
         GEBRUIK JE REASONING (THINKING) CAPACITEIT OM:
         1. De beste prijs-kwaliteit verhouding te bepalen tussen bol, amazon en coolblue.
@@ -91,7 +61,7 @@ export const AiAdvisor: React.FC = () => {
         model: 'gemini-3-pro-preview',
         contents: promptText, 
         config: { 
-          thinkingConfig: { thinkingBudget: 32768 }, // max budget for gemini-3-pro-preview
+          thinkingConfig: { thinkingBudget: 16000 },
           temperature: 0.7,
           tools: [{ googleSearch: {} }]
         }
@@ -116,7 +86,6 @@ export const AiAdvisor: React.FC = () => {
         setSearchLinks([{ shopId: foundShopId, query: foundQuery }]);
       }
       
-      // Fixed: Extracted grounding chunks to list URLs as required by Search Grounding rules.
       const foundSources = response.candidates?.[0]?.groundingMetadata?.groundingChunks
         ?.filter((c: any) => c.web)
         ?.map((c: any) => ({
@@ -132,12 +101,11 @@ export const AiAdvisor: React.FC = () => {
         setErrorType('rate-limit');
         setAdvice("Capaciteit bereikt! Gebruik je eigen Tier 1 key voor onbeperkt advies, of gebruik de knoppen hieronder:");
         setSearchLinks([
-          { shopId: 'bol', query: query },
-          { shopId: 'amazon', query: query },
-          { shopId: 'coolblue', query: query }
+          { shopId: 'bol', query: finalQuery },
+          { shopId: 'amazon', query: finalQuery },
+          { shopId: 'coolblue', query: finalQuery }
         ]);
       } else if (err?.message?.includes("Requested entity was not found.")) {
-        // If the request fails due to key selection issues, reset key selection state
         setHasOwnKey(false);
         setErrorType('general');
         setAdvice("API Sleutel fout. Selecteer a.u.b. een geldige Tier 1 sleutel via de knop hierboven.");
@@ -148,12 +116,36 @@ export const AiAdvisor: React.FC = () => {
     } finally {
       setLoading(false);
     }
+  }, [query]);
+
+  useEffect(() => {
+    checkKeyStatus();
+    if (initialQuery) {
+      setQuery(initialQuery);
+      handleAskAi(initialQuery);
+    }
+  }, [initialQuery, checkKeyStatus, handleAskAi]);
+
+  const handleUpgradeKey = async () => {
+    const aistudio = (window as any).aistudio;
+    if (aistudio && typeof aistudio.openSelectKey === 'function') {
+      await aistudio.openSelectKey();
+      setHasOwnKey(true);
+    }
+  };
+
+  const getSearchLink = (type: string, sQuery: string) => {
+    const encoded = encodeURIComponent(sQuery);
+    switch (type.toLowerCase()) {
+      case 'bol': return `https://partner.bol.com/click/click?p=2&t=url&s=1491898&f=TXL&url=https%3A%2F%2Fwww.bol.com%2Fnl%2Fnl%2Fs%2F${encoded}%2F&name=Advisor&subid=Algemeen-AI-Hulp`;
+      case 'coolblue': return `https://www.awin1.com/cread.php?awinmid=85161&awinaffid=2694054&ued=https%3A%2F%2Fwww.coolblue.nl%2Fzoeken%3Fquery%3D${encoded}`;
+      case 'amazon': return `https://www.amazon.nl/s?k=${encoded}&tag=kiesjeshop-21`; 
+      default: return '#';
+    }
   };
 
   return (
     <div className="bg-white text-slate-900 h-full p-6 md:p-12 lg:p-24 relative flex flex-col items-center justify-center overflow-y-auto scrollbar-hide">
-      
-      {/* Premium Badge */}
       <div className="absolute top-12 left-1/2 -translate-x-1/2 flex items-center gap-2">
          {hasOwnKey ? (
            <div className="bg-emerald-500/10 text-emerald-600 px-4 py-1.5 rounded-full border border-emerald-200 text-[9px] font-black uppercase tracking-widest flex items-center gap-2 animate-pulse">
@@ -178,7 +170,7 @@ export const AiAdvisor: React.FC = () => {
         <h2 className="text-4xl md:text-7xl font-black mb-4 tracking-tighter text-slate-900 leading-none">AI Adviseur<span className="brand-text-gradient">.</span></h2>
         <p className="text-slate-400 font-bold text-xs uppercase tracking-widest mb-10">Real-time vergelijking op basis van Tier 1 Data</p>
         
-        <form onSubmit={handleAskAi} className="relative mb-12 w-full max-w-2xl mx-auto">
+        <form onSubmit={(e) => { e.preventDefault(); handleAskAi(); }} className="relative mb-12 w-full max-w-2xl mx-auto">
           <input 
             type="text" 
             value={query}
@@ -243,7 +235,6 @@ export const AiAdvisor: React.FC = () => {
                   </div>
                 )}
 
-                {/* Fixed: Added listing of URLs from grounding chunks as required for Search Grounding. */}
                 {sources.length > 0 && (
                   <div className="mt-6 pt-6 border-t border-slate-200">
                     <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-3 flex items-center gap-2">
@@ -268,8 +259,6 @@ export const AiAdvisor: React.FC = () => {
           </div>
         )}
       </div>
-      
-      {/* Billing Documentation Link */}
       <div className="mt-12 text-center">
          <a 
            href="https://ai.google.dev/gemini-api/docs/billing" 
