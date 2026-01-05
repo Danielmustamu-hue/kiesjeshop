@@ -1,54 +1,64 @@
-
 import React from 'react';
 import { Check, X, Minus } from 'lucide-react';
 
 export const ComparisonTable: React.FC = () => {
   return (
-    <div className="mb-32">
-      <div className="text-center mb-16">
-        <h2 className="text-5xl font-black text-slate-950 tracking-tighter mb-4">Benchmarks<span className="brand-text-gradient">.</span></h2>
-        <p className="text-slate-400 font-bold text-xs uppercase tracking-[0.2em]">Technische specificaties van de Big 3.</p>
+    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-24">
+      <div className="text-center mb-10">
+        <h2 className="text-3xl font-bold text-slate-900">Snel Overzicht</h2>
+        <p className="text-slate-600">De feiten op een rij.</p>
       </div>
 
-      <div className="intelligence-card p-10 overflow-hidden border border-slate-100/50">
-        <div className="overflow-x-auto scrollbar-hide">
-          <table className="w-full text-left border-collapse">
-            <thead className="text-[10px] font-black uppercase tracking-[0.3em] text-slate-400 border-b border-slate-50">
-              <tr>
-                <th className="px-8 py-8 w-1/3">Feature</th>
-                <th className="px-4 py-8 text-center text-blue-500">bol</th>
-                <th className="px-4 py-8 text-center text-brand-orange">Coolblue</th>
-                <th className="px-4 py-8 text-center text-yellow-600">Amazon</th>
-              </tr>
-            </thead>
-            <tbody className="text-sm font-bold text-slate-700">
-              <tr className="border-b border-slate-50">
-                <td className="px-8 py-8">Gratis Verzending</td>
-                <td className="px-4 py-8 text-center">v.a. €20</td>
-                <td className="px-4 py-8 text-center text-emerald-500">ALTIJD</td>
-                <td className="px-4 py-8 text-center">Prime / v.a. €25</td>
-              </tr>
-              <tr className="border-b border-slate-50">
-                <td className="px-8 py-8">Abonnement Model</td>
-                <td className="px-4 py-8 text-center"><span className="px-4 py-1.5 bg-blue-50 text-blue-600 rounded-full text-[9px] font-black tracking-widest uppercase">Select</span></td>
-                <td className="px-4 py-8 text-center"><Minus className="w-4 h-4 mx-auto text-slate-200" /></td>
-                <td className="px-4 py-8 text-center"><span className="px-4 py-1.5 bg-yellow-50 text-yellow-700 rounded-full text-[9px] font-black tracking-widest uppercase">Prime</span></td>
-              </tr>
-              <tr className="border-b border-slate-50">
-                <td className="px-8 py-8">Service Focus</td>
-                <td className="px-4 py-8 text-center">Allround</td>
-                <td className="px-4 py-8 text-center text-brand-pink uppercase tracking-widest text-[10px]">Premium Expert</td>
-                <td className="px-4 py-8 text-center">Prijs-vechter</td>
-              </tr>
-              <tr>
-                <td className="px-8 py-8">Zondag Levering</td>
-                <td className="px-4 py-8 text-center"><Check className="w-5 h-5 mx-auto text-emerald-500" /></td>
-                <td className="px-4 py-8 text-center"><Check className="w-5 h-5 mx-auto text-emerald-500" /></td>
-                <td className="px-4 py-8 text-center"><X className="w-5 h-5 mx-auto text-slate-200" /></td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
+      <div className="overflow-x-auto bg-white rounded-2xl shadow-lg border border-slate-100">
+        <table className="w-full text-sm text-left text-slate-600">
+          <caption className="sr-only">Vergelijking tussen bol, Coolblue en Amazon</caption>
+          <thead className="text-xs text-slate-700 uppercase bg-slate-50 border-b border-slate-200">
+            <tr>
+              <th scope="col" className="px-6 py-4 font-extrabold">Functie</th>
+              <th scope="col" className="px-6 py-4 text-blue-700 font-bold">bol</th>
+              <th scope="col" className="px-6 py-4 text-orange-600 font-bold">Coolblue</th>
+              <th scope="col" className="px-6 py-4 text-slate-800 font-bold">Amazon.nl</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr className="border-b border-slate-100 hover:bg-slate-50/50">
+              <th scope="row" className="px-6 py-4 font-medium text-slate-900 whitespace-nowrap">Retourtermijn</th>
+              <td className="px-6 py-4">30 dagen</td>
+              <td className="px-6 py-4 font-semibold text-green-600">30 dagen</td>
+              <td className="px-6 py-4">30 dagen</td>
+            </tr>
+            <tr className="border-b border-slate-100 hover:bg-slate-50/50">
+              <th scope="row" className="px-6 py-4 font-medium text-slate-900 whitespace-nowrap">Gratis verzending vanaf</th>
+              <td className="px-6 py-4">€20,-</td>
+              <td className="px-6 py-4 font-semibold text-green-600">Gratis (meeste producten)</td>
+              <td className="px-6 py-4">€20,- (of Prime)</td>
+            </tr>
+            <tr className="border-b border-slate-100 hover:bg-slate-50/50">
+              <th scope="row" className="px-6 py-4 font-medium text-slate-900 whitespace-nowrap">Abonnement</th>
+              <td className="px-6 py-4">Select (ca. €12/jaar)</td>
+              <td className="px-6 py-4"><Minus className="w-4 h-4 text-slate-400" /></td>
+              <td className="px-6 py-4 font-semibold text-green-600">Prime (ca. €4,99/mnd + Video)</td>
+            </tr>
+            <tr className="border-b border-slate-100 hover:bg-slate-50/50">
+              <th scope="row" className="px-6 py-4 font-medium text-slate-900 whitespace-nowrap">Klantenservice</th>
+              <td className="px-6 py-4">Goed (Chatbot + Mens)</td>
+              <td className="px-6 py-4 font-semibold text-green-600">Uitstekend (Winnaar)</td>
+              <td className="px-6 py-4">Redelijk (Automated)</td>
+            </tr>
+            <tr className="border-b border-slate-100 hover:bg-slate-50/50">
+              <th scope="row" className="px-6 py-4 font-medium text-slate-900 whitespace-nowrap">Eigen bezorgdienst</th>
+              <td className="px-6 py-4"><X className="w-4 h-4 text-red-400" /> (PostNL/DHL)</td>
+              <td className="px-6 py-4"><Check className="w-4 h-4 text-green-500" /> (CoolblueFietst/Bus)</td>
+              <td className="px-6 py-4"><X className="w-4 h-4 text-red-400" /> (DHL/Partners)</td>
+            </tr>
+             <tr className="hover:bg-slate-50/50">
+              <th scope="row" className="px-6 py-4 font-medium text-slate-900 whitespace-nowrap">Fysieke winkels</th>
+              <td className="px-6 py-4"><X className="w-4 h-4 text-red-400" /></td>
+              <td className="px-6 py-4"><Check className="w-4 h-4 text-green-500" /> (Ja, meerdere)</td>
+              <td className="px-6 py-4"><X className="w-4 h-4 text-red-400" /></td>
+            </tr>
+          </tbody>
+        </table>
       </div>
     </div>
   );

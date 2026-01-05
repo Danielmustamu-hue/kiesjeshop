@@ -1,18 +1,5 @@
 {
   "name": "Kiesjeshop.nl",
-  "short_name": "Kiesjeshop",
-  "description": "Vergelijk bol, Amazon en Coolblue real-time. Vergelijk, Kies & Bespaar.",
-  "start_url": "/",
-  "display": "standalone",
-  "background_color": "#F8FAFC",
-  "theme_color": "#0F172A",
-  "icons": [
-    {
-      "src": "/public/favicon.svg",
-      "sizes": "any",
-      "type": "image/svg+xml",
-      "purpose": "any maskable"
-    }
-  ],
+  "description": "Een vergelijkingsplatform voor de grootste webshops van Nederland: bol, Amazon.nl en Coolblue.",
   "requestFramePermissions": []
 }

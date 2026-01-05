@@ -1,65 +1,61 @@
-
 <!DOCTYPE html>
 <html lang="nl">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0, viewport-fit=cover" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#FFF3E0" />
+    <meta name="description" content="Vergelijk bol, Coolblue en Amazon.nl. Kies de beste webshop op basis van prijs, service en levertijd." />
     
-    <!-- Brand Color UI -->
-    <meta name="theme-color" content="#FF3D77" />
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    
-    <!-- App Icons -->
-    <link rel="icon" type="image/svg+xml" href="/public/favicon.svg" />
-    <link rel="apple-touch-icon" href="/public/favicon.svg">
-    <link rel="mask-icon" href="/public/favicon.svg" color="#FF3D77">
-    
-    <title>Kiesjeshop.nl | De Slimste Prijsvergelijker van bol, Amazon & Coolblue</title>
-    
-    <!-- SEO Meta Tags -->
-    <meta name="description" content="Kiesjeshop.nl: Vergelijk direct prijzen bij bol, Amazon en Coolblue. Gebruik onze AI Adviseur voor onafhankelijk koopadvies en bespaar op je volgende aankoop." />
+    <!-- SEO & Indexing Fix -->
+    <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
     <link rel="canonical" href="https://www.kiesjeshop.nl/" />
-    
-    <!-- Open Graph / Social Media -->
-    <meta property="og:type" content="website" />
-    <meta property="og:title" content="Kiesjeshop.nl | Onafhankelijke Retail Intelligence" />
-    <meta property="og:description" content="Vergelijk bol, Amazon en Coolblue real-time. Ontdek waar de service het beste is en de prijs het laagst." />
-    <meta property="og:url" content="https://www.kiesjeshop.nl/" />
-    <meta property="og:site_name" content="Kiesjeshop.nl" />
+
+    <!-- Favicon settings voor Google Search -->
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="apple-touch-icon" href="/favicon.svg" />
 
     <script type="importmap">
-{
-  "imports": {
-    "react": "https://esm.sh/react@18.2.0",
-    "react/": "https://esm.sh/react@18.2.0/",
-    "react-dom": "https://esm.sh/react-dom@18.2.0",
-    "react-dom/client": "https://esm.sh/react-dom@18.2.0/client",
-    "@google/genai": "https://esm.sh/@google/genai@1.33.0",
-    "lucide-react": "https://esm.sh/lucide-react@0.344.0?external=react",
-    "@vitejs/plugin-react": "https://esm.sh/@vitejs/plugin-react@^5.1.2",
-    "vite": "https://esm.sh/vite@^7.3.0",
-    "react-dom/": "https://esm.sh/react-dom@^19.2.3/"
-  }
-}
-</script>
+    {
+      "imports": {
+        "react-dom/": "https://esm.sh/react-dom@^19.2.3/",
+        "@vitejs/plugin-react": "https://esm.sh/@vitejs/plugin-react@^5.1.2",
+        "@google/genai": "https://esm.sh/@google/genai@^1.33.0",
+        "lucide-react": "https://esm.sh/lucide-react@^0.561.0",
+        "react/": "https://esm.sh/react@^19.2.3/",
+        "react": "https://esm.sh/react@^19.2.3",
+        "vite": "https://esm.sh/vite@^7.3.0"
+      }
+    }
+    </script>
+    
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-L2T8T5EJ5C"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
 
+      gtag('config', 'G-L2T8T5EJ5C');
+    </script>
+
+    <!-- Cookiebot CMP -->
+    <script id="Cookiebot" src="https://consent.cookiebot.com/uc.js" data-cbid="86e185d1-c3fe-4c1f-bb5d-8db1ba0a68dd" data-blockingmode="auto" type="text/javascript"></script>
+
+    <!-- Anti-Cache Meta Tags -->
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+    <meta http-equiv="Pragma" content="no-cache" />
+    <meta http-equiv="Expires" content="0" />
+
+    <!-- Tailwind CSS CDN (Safety fallback) -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
       tailwind.config = {
         theme: {
           extend: {
             colors: {
-              brand: {
-                pink: '#FF3D77',
-                orange: '#EA580C',
-                navy: '#0F172A',
-                accent: '#F59E0B'
-              }
-            },
-            borderRadius: {
-              '4xl': '2rem',
-              '5xl': '3.5rem'
+              slate: { 50: '#f8fafc', 100: '#f1f5f9', 200: '#e2e8f0', 300: '#cbd5e1', 400: '#94a3b8', 500: '#64748b', 600: '#475569', 700: '#334155', 800: '#1e293b', 900: '#0f172a', 950: '#020617' },
+              indigo: { 50: '#eef2ff', 100: '#e0e7ff', 200: '#c7d2fe', 300: '#a5b4fc', 400: '#818cf8', 500: '#6366f1', 600: '#4f46e5', 700: '#4338ca', 800: '#3730a3', 900: '#312e81', 950: '#1e1b4b' },
+              orange: { 50: '#fff7ed', 100: '#ffedd5', 200: '#fed7aa', 300: '#fdba74', 400: '#fb923c', 500: '#f97316', 600: '#ea580c', 700: '#c2410c', 800: '#9a3412', 900: '#7c2d12', 950: '#431407' },
             }
           }
         }
@@ -67,92 +63,18 @@
     </script>
     
     <style>
-      @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap');
-      
-      :root {
-        --bg-color: #F8F9FB;
-      }
-
       body {
         margin: 0;
-        font-family: 'Inter', sans-serif;
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+          'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+          sans-serif;
         -webkit-font-smoothing: antialiased;
-        background-color: var(--bg-color);
-        color: #0F172A;
-        scroll-behavior: smooth;
-        overflow-x: hidden;
+        -moz-osx-font-smoothing: grayscale;
+        background-color: #FFF3E0;
       }
-
-      /* Subtle Background Texture */
-      .bg-pattern {
-        background-image: radial-gradient(#E2E8F0 0.8px, transparent 0.8px);
-        background-size: 24px 24px;
-      }
-
-      /* Decorative Background Blobs */
-      .bg-blob {
-        position: fixed;
-        width: 600px;
-        height: 600px;
-        border-radius: 50%;
-        filter: blur(120px);
-        z-index: -1;
-        opacity: 0.15;
-        pointer-events: none;
-      }
-      .blob-1 { top: -10%; left: -10%; background: #FF3D77; }
-      .blob-2 { bottom: -10%; right: -10%; background: #EA580C; }
-
-      .brand-gradient {
-        background: linear-gradient(135deg, #FF3D77 0%, #EA580C 100%);
-      }
-      .brand-text-gradient {
-        background: linear-gradient(135deg, #FF3D77 0%, #EA580C 100%);
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
-      }
-      .intelligence-card {
-        background: white;
-        border-radius: 2rem;
-        box-shadow: 0 20px 40px -10px rgba(15, 23, 42, 0.05);
-      }
-      @media (min-width: 768px) {
-        .intelligence-card { border-radius: 3.5rem; }
-      }
-      .animate-scroll {
-        display: inline-block;
-        animation: scroll 50s linear infinite;
-      }
-      @keyframes scroll {
-        0% { transform: translateX(100%); }
-        100% { transform: translateX(-100%); }
-      }
-      .glass-morphism {
-        background: rgba(255, 255, 255, 0.85);
-        backdrop-filter: blur(20px);
-        -webkit-backdrop-filter: blur(20px);
-        border: 1px solid rgba(255, 255, 255, 0.5);
-      }
-      
-      @keyframes ai-pulse {
-        0% { box-shadow: 0 0 0 0 rgba(255, 61, 119, 0.4); }
-        70% { box-shadow: 0 0 0 15px rgba(255, 61, 119, 0); }
-        100% { box-shadow: 0 0 0 0 rgba(255, 61, 119, 0); }
-      }
-      .ai-btn-pulse {
-        animation: ai-pulse 2s infinite;
-      }
-
-      ::-webkit-scrollbar { width: 8px; }
-      ::-webkit-scrollbar-track { background: #f1f5f9; }
-      ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
-      ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
     </style>
   </head>
   <body>
-    <div class="bg-pattern fixed inset-0 z-[-2] opacity-40 pointer-events-none"></div>
-    <div class="bg-blob blob-1"></div>
-    <div class="bg-blob blob-2"></div>
     <div id="root"></div>
     <script type="module" src="/index.tsx"></script>
   </body>

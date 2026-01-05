@@ -1,12 +1,12 @@
 # Kiesjeshop.nl
 
-Kiesjeshop is een moderne vergelijkingswebsite gebouwd met React, Vite en Tailwind CSS. Het helpt consumenten kiezen tussen bol, Coolblue en Amazon door middel van een slim overzicht en een AI-shopping assistent.
+Kiesjeshop is een moderne vergelijkingswebsite gebouwd met React, Vite en Tailwind CSS. Het helpt consumenten kiezen tussen Bol.com, Coolblue en Amazon.nl door middel van een slim overzicht en een AI-shopping assistent.
 
 ## 🚀 Functies
 
 - **Vergelijking:** Duidelijk overzicht van USP's, levertijden en service.
 - **AI Adviseur:** Geïntegreerde Google Gemini AI die persoonlijk koopadvies geeft.
-- **Redactie:** Diepgaande reviews en onafhankelijk advies.
+- **Reviews:** (Mockup) sectie voor klantervaringen.
 - **Responsief:** Werkt perfect op mobiel, tablet en desktop.
 
 ## 🛠️ Installatie
@@ -59,4 +59,4 @@ npm run build
 
 ## 📄 Licentie
 
-© 2025 Kiesjeshop.nl - Alle rechten voorbehouden.
+Dit project is gemaakt voor educatieve doeleinden en eigen gebruik.

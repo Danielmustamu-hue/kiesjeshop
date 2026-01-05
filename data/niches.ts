@@ -1,4 +1,3 @@
-
 export interface NicheProduct {
   name: string;
   description: string;
@@ -6,7 +5,7 @@ export interface NicheProduct {
 }
 
 export interface NicheCategory {
-  id: string;
+  id: string; // Added ID for routing/key purposes
   title: string;
   image: string;
   seoText: string;
@@ -16,184 +15,184 @@ export interface NicheCategory {
 export const NICHE_GUIDES: NicheCategory[] = [
   {
     id: "co2-meter",
-    title: "Beste CO2-meters 2026",
+    title: "1. Gezond Binnenklimaat & CO₂",
     image: "https://images.unsplash.com/photo-1598257006458-087169a1f08d?auto=format&fit=crop&q=80&w=800",
-    seoText: "Luchtkwaliteit verbetert concentratie met 40%. Wij vonden de 3 meest nauwkeurige meters voor 2026.",
+    seoText: "Een goede luchtkwaliteit verbetert concentratie en gezondheid. Vergelijk de beste CO2-meters.",
     products: [
       {
-        name: "Aranet4 Home (2026 Edition)",
-        description: "Blijft de absolute nummer 1. Professionele NDIR-sensor voor de meest nauwkeurige meting in het nieuwe jaar.",
+        name: "Aranet4 Home",
+        description: "De absolute nummer 1. E-ink scherm, super nauwkeurig en lange batterijduur.",
         searchQuery: "Aranet4 Home"
       },
       {
         name: "Netatmo Home Coach",
-        description: "Beste slimme keuze. Werkt perfect met Apple HomeKit en Google Home voor een gezond 2026.",
+        description: "De slimste keuze. Koppel aan je telefoon voor historie van lucht, geluid en vocht.",
         searchQuery: "Netatmo Healthy Home Coach"
       },
       {
         name: "Tellur Smart Monitor",
-        description: "Beste budget optie. Betrouwbare meting voor een fractie van de prijs.",
+        description: "Betaalbare instapper die de basis CO2-waarden prima weergeeft.",
         searchQuery: "Tellur Luchtkwaliteit"
       }
     ]
   },
   {
     id: "ergonomie",
-    title: "Ergonomisch Werken 2026",
-    image: "https://images.unsplash.com/photo-1593062096033-9a26b09da705?auto=format&fit=crop&q=80&w=1600",
-    seoText: "Start 2026 zonder RSI of rugklachten. Deze 3 tools maken je werkdag direct comfortabeler en productiever.",
+    title: "2. Ergonomie & Thuiswerken",
+    image: "https://images.unsplash.com/photo-1497215728101-856f4ea42174?auto=format&fit=crop&q=80&w=800",
+    seoText: "Voorkom RSI en nekklachten met de juiste ergonomische muis en accessoires.",
     products: [
       {
         name: "Logitech MX Vertical",
-        description: "De koning onder de verticale muizen. Voorkomt polsklachten door de natuurlijke handdrukpositie.",
+        description: "De favoriet van fysiotherapeuten. Unieke 57° hoek voor neutrale polsstand.",
         searchQuery: "Logitech MX Vertical"
       },
       {
-        name: "Logitech Ergo K860",
-        description: "Het ultieme gesplitste toetsenbord voor een ontspannen houding van nek en schouders.",
-        searchQuery: "Logitech Ergo K860"
+        name: "Trust Verto",
+        description: "Wil je ergonomie proberen zonder veel uit te geven? Dit is de beste instapper.",
+        searchQuery: "Trust Verto Ergonomisch"
       },
       {
-        name: "VariDesk Pro Plus",
-        description: "Upgrade je thuiswerkplek in 2026. Maak van elk bureau een zit-sta bureau zonder nieuwe meubels.",
-        searchQuery: "VariDesk Pro Plus 36"
+        name: "Logitech Ergo K860",
+        description: "Het ultieme gespleten toetsenbord voor blinde typers die comfort zoeken.",
+        searchQuery: "Logitech Ergo K860"
       }
     ]
   },
   {
     id: "hifi-audio",
-    title: "High-End Audio Gids 2026",
-    image: "https://images.unsplash.com/photo-1618366712010-f4ae9c647dcb?auto=format&fit=crop&q=80&w=800",
-    seoText: "Voor de audiofiel in 2026. Wij vergeleken de nieuwste Planar Magnetic en Open-back specialisten.",
+    title: "3. Specialistische Audio (HiFi)",
+    image: "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?auto=format&fit=crop&q=80&w=800",
+    seoText: "Voor de audiofiel die meer wil dan standaard geluid. Planar en Open-back koptelefoons.",
     products: [
       {
         name: "Sennheiser HD 660S2",
-        description: "De legende in detail. Onze topaanbeveling voor de winter van 2025/2026.",
+        description: "Legendarisch open geluid. Je hoort details in muziek die je nog nooit hoorde.",
         searchQuery: "Sennheiser HD 660S2"
       },
       {
         name: "HiFiMAN Sundara",
-        description: "Betaalbare Planar Magnetic drivers voor ongekend strak geluid in het nieuwe jaar.",
+        description: "Planar Magnetic drivers voor een ongekend snelle en strakke basweergave.",
         searchQuery: "HiFiMAN Sundara"
       },
       {
         name: "FiiO K5 Pro ESS",
-        description: "Essentiële versterker om het maximale uit je setup te halen in 2026.",
+        description: "De versterker (DAC) die je nodig hebt om deze koptelefoons tot leven te wekken.",
         searchQuery: "FiiO K5 Pro"
       }
     ]
   },
   {
     id: "power-stations",
-    title: "Power Stations Gids 2026",
-    image: "https://images.unsplash.com/photo-1621905251189-08b45d6a269e?auto=format&fit=crop&q=80&w=800",
-    seoText: "Van winterkamperen tot noodstroom: dit zijn de 3 beste powerstations van EcoFlow en Bluetti voor 2026.",
+    title: "4. Noodstroom & Power Stations",
+    image: "https://images.unsplash.com/photo-1478131143081-80f7f84ca84d?auto=format&fit=crop&q=80&w=800",
+    seoText: "Altijd stroom, ook tijdens een blackout of op de camping. Vergelijk de beste accu's.",
     products: [
       {
-        name: "EcoFlow River 2 Pro",
-        description: "Snelste laadtijd op de markt. Ideaal voor outdoor avonturen in 2026.",
-        searchQuery: "EcoFlow River 2 Pro"
+        name: "EcoFlow Delta 2",
+        description: "Laadt op van 0 naar 80% in 50 minuten. Kan koelkasten en TV's van stroom voorzien.",
+        searchQuery: "EcoFlow Delta 2"
       },
       {
         name: "Bluetti EB3A",
-        description: "Compacte krachtpatser met LiFePO4 batterij voor een extra lang 2026.",
+        description: "Compacte krachtpatser. Ideaal voor laptops en telefoons tijdens het kamperen.",
         searchQuery: "Bluetti EB3A"
       },
       {
-        name: "EcoFlow Delta 2",
-        description: "De standaard voor thuis-back-up. Onmisbaar bij stroomonzekerheid.",
-        searchQuery: "EcoFlow Delta 2"
+        name: "Xtorm 27.000 mAh",
+        description: "De grootste powerbank die je nog mee mag nemen in het vliegtuig.",
+        searchQuery: "Xtorm Powerbank 27000"
       }
     ]
   },
   {
     id: "sous-vide",
-    title: "Sous-vide Expert Gids 2026",
-    image: "https://images.unsplash.com/photo-1581299894007-aaa50297cf16?auto=format&fit=crop&q=80&w=800",
-    seoText: "Kook als een chef in 2026. Wij kozen de 3 meest betrouwbare immersion circulators van dit moment.",
+    title: "5. Sous-vide & Culinair",
+    image: "https://images.unsplash.com/photo-1604908176997-125f25cc6f3d?auto=format&fit=crop&q=80&w=800",
+    seoText: "Kook als een sterrenchef. Perfect gegaarde steaks en groenten met precisie-apparatuur.",
     products: [
       {
-        name: "Anova Precision Cooker",
-        description: "De meest verkochte sous-vide stick ter wereld. Super nauwkeurig voor je nieuwjaarsdiner.",
-        searchQuery: "Anova Precision Cooker"
+        name: "Anova Precision Nano",
+        description: "De populairste sous-vide stick ter wereld. Compact en zeer betrouwbaar.",
+        searchQuery: "Anova Precision Cooker Nano"
       },
       {
-        name: "Inkbird ISV-200W",
-        description: "Beste prijs-kwaliteit met handige app-bediening voor de moderne keuken.",
-        searchQuery: "Inkbird Sous Vide"
+        name: "Caso Vacuümsealer",
+        description: "Essentieel voor sous-vide: houd je eten luchtdicht verpakt en langer vers.",
+        searchQuery: "Caso Vacuümsealer"
       },
       {
-        name: "Wartmann Sous-vide",
-        description: "Nederlands design, krachtig en zeer stil in gebruik.",
+        name: "Wartmann Sous-Vide Bak",
+        description: "Isoleert beter dan een pan, waardoor je minder energie verbruikt tijdens het garen.",
         searchQuery: "Wartmann Sous Vide"
       }
     ]
   },
   {
     id: "home-gym",
-    title: "Beste Home Gym Tools 2026",
-    image: "https://images.unsplash.com/photo-1540497077202-7c8a3999166f?auto=format&fit=crop&q=80&w=800",
-    seoText: "Goede voornemens voor 2026? Vervang 15 sets gewichten door één paar. De meest efficiënte oplossing.",
+    title: "6. Home Gym Essentials",
+    image: "https://images.unsplash.com/photo-1517836357463-d25dfeac3438?auto=format&fit=crop&q=80&w=800",
+    seoText: "Bouw een sportschool op zolder zonder ruimteverlies. Slimme gewichten en herstel.",
     products: [
       {
-        name: "Bowflex SelectTech 552i",
-        description: "De gouden standaard voor thuissporters. Wissel van 2 naar 24 kg in één draai.",
-        searchQuery: "Bowflex 552i"
+        name: "Bowflex SelectTech 552",
+        description: "Vervangt 15 paar dumbbells. Draai aan de knop en kies je gewicht.",
+        searchQuery: "Bowflex SelectTech 552"
       },
       {
-        name: "Northwall Verstelbaar",
-        description: "Stevig Nederlands alternatief voor een scherpe prijs in januari.",
-        searchQuery: "Northwall Dumbbell"
+        name: "Tunturi Kettlebell",
+        description: "Onverwoestbaar gietijzer. Perfect voor full-body workouts en vetverbranding.",
+        searchQuery: "Tunturi Kettlebell"
       },
       {
-        name: "Tunturi Selector",
-        description: "Zeer compact en duurzaam design voor intensieve training in 2026.",
-        searchQuery: "Tunturi Selector Dumbbell"
+        name: "TriggerPoint Grid Roller",
+        description: "De beste foam roller voor spierherstel en het losmaken van knopen.",
+        searchQuery: "TriggerPoint Grid"
       }
     ]
   },
   {
     id: "huisdier",
-    title: "Huisdier-tech Gids 2026",
-    image: "https://images.unsplash.com/photo-1583337130417-3346a1be7dee?auto=format&fit=crop&q=80&w=800",
-    seoText: "Een schoon huis met huisdieren in 2026. Deze 3 modellen winnen van elke labrador.",
+    title: "7. Slimme Huisdier Gadgets",
+    image: "https://images.unsplash.com/photo-1543466835-00a7907e9de1?auto=format&fit=crop&q=80&w=800",
+    seoText: "Technologie voor je hond of kat. Van automatische voerbakken tot GPS trackers.",
     products: [
       {
-        name: "Dyson V15 Detect Animal",
-        description: "Laser-technologie en anti-klit borstels. Onze favoriet voor het nieuwe jaar.",
-        searchQuery: "Dyson V15 Detect Animal"
+        name: "PetSafe Voerautomaat",
+        description: "Programmeer precies wanneer en hoeveel je huisdier eet. Nooit meer te laat.",
+        searchQuery: "PetSafe Voerautomaat"
       },
       {
-        name: "Miele Complete C3 Cat & Dog",
-        description: "Traditionele kracht met actief koolfilter tegen wintergeurtjes.",
-        searchQuery: "Miele C3 Cat Dog"
+        name: "Tractive GPS Tracker",
+        description: "Volg je kat of hond live via je telefoon. Waterdicht en past op elke halsband.",
+        searchQuery: "Tractive GPS"
       },
       {
-        name: "Bissell Pet Hair Eraser",
-        description: "Beste budget handheld voor de bank en de auto.",
-        searchQuery: "Bissell Pet Hair Eraser"
+        name: "Petkit Pura X",
+        description: "De zelfreinigende kattenbak die geurtjes elimineert en grit automatisch zeeft.",
+        searchQuery: "Petkit Pura X"
       }
     ]
   },
   {
     id: "kabelmanagement",
-    title: "Clean Desk Solutions 2026",
-    image: "https://images.unsplash.com/photo-1497215728101-856f4ea42174?auto=format&fit=crop&q=80&w=800",
-    seoText: "Start 2026 met een Zen-werkplek. De 3 beste oplossingen voor kabelchaos onder je bureau.",
+    title: "8. Kabelmanagement",
+    image: "https://images.unsplash.com/photo-1497366811353-6870744d04b2?auto=format&fit=crop&q=80&w=800",
+    seoText: "Een opgeruimd bureau zorgt voor een opgeruimd hoofd. Werk alle snoeren weg.",
     products: [
       {
-        name: "D-Line Kabelbox XXL",
-        description: "Verberg je stekkerdoos en alle kabels in één strakke box.",
+        name: "D-Line Kabelbox",
+        description: "Verstop die lelijke stekkerdoos veilig onder je bureau of achter de TV.",
         searchQuery: "D-Line Kabelbox"
       },
       {
-        name: "PureMounts Kabelgoot",
-        description: "Robuuste goot voor onder je bureau die nooit gaat hangen.",
-        searchQuery: "PureMounts Kabelgoot"
+        name: "BlueLounge CableDrops",
+        description: "Plak ze op je bureau zodat je oplaadkabel nooit meer op de grond valt.",
+        searchQuery: "CableDrops"
       },
       {
         name: "Velcro Kabelbinders",
-        description: "Simpel maar effectief: de beste manier om kabels te bundelen in 2026.",
+        description: "De simpele oplossing om bossen kabels bij elkaar te binden. Herbruikbaar.",
         searchQuery: "Velcro Kabelbinders"
       }
     ]

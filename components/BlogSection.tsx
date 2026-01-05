@@ -1,23 +1,24 @@
-
 import React, { useState, useMemo } from 'react';
-import { BookOpen, ChevronDown, ArrowRight, ShieldCheck, Clock } from 'lucide-react';
+import { BookOpen, ChevronDown, Star, ArrowRight } from 'lucide-react';
 import { ARTICLES, Article } from '../data/articles';
+import { ArticleModal } from './ArticleModal';
 
-interface BlogSectionProps {
-  onSelectArticle: (article: Article) => void;
-}
-
-export const BlogSection: React.FC<BlogSectionProps> = ({ onSelectArticle }) => {
+export const BlogSection: React.FC = () => {
+  const [selectedArticle, setSelectedArticle] = useState<Article | null>(null);
   const [selectedCategory, setSelectedCategory] = useState<string>('Alles');
-  const [visibleCount, setVisibleCount] = useState(10);
+  const [visibleCount, setVisibleCount] = useState(5); // Start met 1 Hero + 4 kleintjes
 
+  // Unieke categorieën ophalen
   const categories = useMemo(() => {
     const allCats = ARTICLES.map(article => article.category);
     return ['Alles', ...new Set(allCats)];
   }, []);
 
+  // Filteren
   const filteredArticles = useMemo(() => {
-    if (selectedCategory === 'Alles') return ARTICLES;
+    if (selectedCategory === 'Alles') {
+      return ARTICLES;
+    }
     return ARTICLES.filter(article => article.category === selectedCategory);
   }, [selectedCategory]);
 
@@ -25,90 +26,147 @@ export const BlogSection: React.FC<BlogSectionProps> = ({ onSelectArticle }) => 
   const subArticles = filteredArticles.slice(1, visibleCount);
   const allLoaded = visibleCount >= filteredArticles.length;
 
+  const handleLoadMore = () => {
+    setVisibleCount((prev) => Math.min(prev + 3, filteredArticles.length));
+  };
+
+  const handleCategoryChange = (category: string) => {
+    setSelectedCategory(category);
+    setVisibleCount(5);
+  };
+
   return (
-    <div className="max-w-[1400px] mx-auto px-6 mb-20 animate-in fade-in duration-700">
-      <div className="flex flex-col md:flex-row md:items-end justify-between mb-10 gap-6">
-        <div className="flex-1">
-          <div className="inline-flex items-center gap-2 bg-orange-100 text-orange-700 px-3 py-1 rounded-full text-[9px] font-black uppercase tracking-[0.2em] mb-3 border border-orange-200">
-            <BookOpen className="w-3 h-3" />
-            <span>Redactie Onderzoek</span>
+    <>
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-24">
+        <div className="flex flex-col md:flex-row md:items-end justify-between mb-8 gap-4">
+          <div>
+            <div className="inline-flex items-center gap-2 bg-purple-100 text-purple-800 px-4 py-1.5 rounded-full text-sm font-semibold mb-4 border border-purple-200">
+              <BookOpen className="w-4 h-4" />
+              <span>Diepgang & Advies</span>
+            </div>
+            <h2 className="text-3xl font-bold text-slate-900">Redactie Keuze & Koopgidsen</h2>
+            <p className="text-slate-600 mt-2 max-w-xl">
+                Wij duiken de diepte in zodat jij dat niet hoeft te doen. Eerlijke reviews en achtergrondverhalen bij onze niches.
+            </p>
           </div>
-          <h2 className="text-4xl md:text-5xl font-black text-slate-900 tracking-tighter leading-tight">Expert Analyses.</h2>
-          <p className="text-slate-500 font-medium text-base mt-1">Onafhankelijke tests van de redactie (bol, Amazon & Coolblue).</p>
+          
+          {/* Category Filters */}
+          <div className="flex gap-2 overflow-x-auto pb-2 scrollbar-hide -mx-4 px-4 md:mx-0 md:px-0 max-w-full md:max-w-xl">
+            {categories.map((category) => (
+                <button
+                key={category}
+                onClick={() => handleCategoryChange(category)}
+                className={`whitespace-nowrap px-4 py-2 rounded-full text-sm font-bold transition-all border ${
+                    selectedCategory === category
+                    ? 'bg-slate-900 text-white border-slate-900 shadow-md'
+                    : 'bg-white text-slate-600 border-slate-200 hover:border-slate-300 hover:bg-slate-50'
+                }`}
+                >
+                {category}
+                </button>
+            ))}
+          </div>
+        </div>
+
+        {/* HERO ARTICLE (Featured) */}
+        {heroArticle && (
+            <div 
+                onClick={() => setSelectedArticle(heroArticle)}
+                className="group relative rounded-3xl overflow-hidden shadow-xl border border-slate-200 cursor-pointer mb-8 h-[400px] md:h-[500px] bg-slate-800"
+            >
+                <img 
+                    src={heroArticle.image} 
+                    alt={heroArticle.title}
+                    className="absolute inset-0 w-full h-full object-cover transition-transform duration-1000 group-hover:scale-105"
+                    onError={(e) => { (e.target as HTMLImageElement).style.display = 'none'; }}
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-slate-900 via-slate-900/40 to-transparent opacity-90 group-hover:opacity-80 transition-opacity"></div>
+                
+                <div className="absolute bottom-0 left-0 p-6 md:p-10 w-full md:w-2/3">
+                    <div className="flex items-center gap-3 mb-4">
+                        <span className="bg-purple-600 text-white px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider flex items-center gap-1">
+                            <Star className="w-3 h-3 fill-current" /> Redactie Tip
+                        </span>
+                        <span className="text-slate-300 text-sm font-medium flex items-center gap-2">
+                             {heroArticle.icon} {heroArticle.category}
+                        </span>
+                    </div>
+                    <h3 className="text-3xl md:text-5xl font-extrabold text-white mb-4 leading-tight group-hover:text-purple-200 transition-colors">
+                        {heroArticle.title}
+                    </h3>
+                    <p className="text-slate-200 text-lg mb-6 line-clamp-2 leading-relaxed max-w-xl">
+                        {heroArticle.excerpt}
+                    </p>
+                    <div className="flex items-center gap-2 text-white font-bold text-sm uppercase tracking-widest group-hover:gap-4 transition-all">
+                        Lees volledig artikel <ArrowRight className="w-4 h-4" />
+                    </div>
+                </div>
+            </div>
+        )}
+
+        {/* SUB GRID */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+          {subArticles.length > 0 ? (
+            subArticles.map((article) => (
+              <article 
+                key={article.id} 
+                onClick={() => setSelectedArticle(article)}
+                className="bg-white rounded-2xl shadow-sm border border-slate-100 hover:shadow-xl transition-all hover:-translate-y-1 cursor-pointer group flex flex-col h-full overflow-hidden"
+              >
+                <div className="h-48 overflow-hidden relative bg-slate-100">
+                  <div className="absolute inset-0 bg-slate-900/0 group-hover:bg-slate-900/10 transition-colors z-10" />
+                  <img 
+                      src={article.image} 
+                      alt={article.title}
+                      loading="lazy"
+                      className="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-700 ease-out"
+                      onError={(e) => { (e.target as HTMLImageElement).style.display = 'none'; }}
+                  />
+                  <div className="absolute top-3 left-3 z-20 bg-white/95 backdrop-blur-sm px-2.5 py-1 rounded-lg text-[10px] font-bold text-slate-800 border border-white/20 shadow-sm flex items-center gap-1.5 uppercase tracking-wide">
+                      {article.icon}
+                      {article.category}
+                  </div>
+                </div>
+
+                <div className="p-5 flex flex-col flex-grow">
+                  <h3 className="text-lg font-bold text-slate-900 mb-2 group-hover:text-purple-700 transition-colors leading-snug line-clamp-2">
+                      {article.title}
+                  </h3>
+                  
+                  <p className="text-slate-500 mb-4 text-xs leading-relaxed flex-grow line-clamp-3">
+                      {article.excerpt}
+                  </p>
+
+                  <div className="flex items-center justify-between pt-4 border-t border-slate-50 text-[10px] text-slate-400 font-medium uppercase tracking-wider mt-auto">
+                      <span>{article.date}</span>
+                      <span>{article.readTime}</span>
+                  </div>
+                </div>
+              </article>
+            ))
+          ) : (
+             null
+          )}
         </div>
         
-        <div className="flex flex-wrap gap-2 justify-start md:justify-end">
-          {categories.map((category) => (
-            <button
-              key={category}
-              onClick={() => setSelectedCategory(category)}
-              className={`px-4 py-2 rounded-xl text-[9px] font-black uppercase tracking-widest transition-all border ${
-                  selectedCategory === category
-                  ? 'bg-slate-900 text-white border-slate-900 shadow-md'
-                  : 'bg-white text-slate-500 border-slate-200 hover:border-orange-400'
-              }`}
+        {!allLoaded && subArticles.length > 0 && (
+          <div className="mt-12 text-center">
+            <button 
+                onClick={handleLoadMore}
+                className="inline-flex items-center gap-2 px-8 py-3 bg-white border border-slate-200 text-slate-700 font-bold rounded-xl hover:bg-slate-50 hover:border-slate-300 transition-all shadow-sm active:scale-95"
             >
-              {category}
+                Laad meer artikelen <ChevronDown className="w-4 h-4" />
             </button>
-          ))}
-        </div>
-      </div>
-
-      {heroArticle && (
-        <a 
-          href={`#/artikel/${heroArticle.id}`}
-          onClick={(e) => { e.preventDefault(); onSelectArticle(heroArticle); }}
-          className="group relative block rounded-[2.5rem] overflow-hidden shadow-xl border border-slate-200 cursor-pointer mb-10 h-[400px] md:h-[500px] bg-slate-800 transition-all hover:shadow-orange-500/10 hover:border-orange-500/30"
-        >
-          <img src={heroArticle.image} alt={heroArticle.title} className="absolute inset-0 w-full h-full object-cover transition-transform duration-1000 group-hover:scale-105" />
-          <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/40 to-transparent"></div>
-          
-          <div className="absolute bottom-0 left-0 p-8 md:p-16 w-full md:w-3/4">
-              <div className="flex items-center gap-4 mb-4">
-                <span className="bg-orange-600 text-white px-3 py-1 rounded-lg text-[9px] font-black uppercase tracking-widest">{heroArticle.category}</span>
-                <span className="flex items-center gap-2 text-white/60 text-[9px] font-black uppercase tracking-widest"><Clock className="w-4 h-4" /> {heroArticle.readTime}</span>
-              </div>
-              <h3 className="text-3xl md:text-5xl font-black text-white mb-6 tracking-tighter group-hover:text-orange-400 transition-colors leading-[0.95]">{heroArticle.title}</h3>
-              <div className="flex items-center gap-3 text-white font-black text-[10px] uppercase tracking-[0.4em] group-hover:gap-5 transition-all group-hover:text-orange-400">
-                  Lees analyse <ArrowRight className="w-5 h-5" />
-              </div>
           </div>
-        </a>
-      )}
-
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-        {subArticles.map((article) => (
-          <a 
-            key={article.id} 
-            href={`#/artikel/${article.id}`}
-            onClick={(e) => { e.preventDefault(); onSelectArticle(article); }}
-            className="bg-white rounded-[2rem] shadow-sm border border-slate-100 hover:shadow-xl transition-all hover:-translate-y-1 cursor-pointer group flex flex-col h-full overflow-hidden"
-          >
-            <div className="h-56 overflow-hidden relative bg-slate-100">
-              <img src={article.image} alt={article.title} className="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-700" />
-              <div className="absolute top-4 left-4 z-20 bg-white/95 px-3 py-1.5 rounded-xl text-[8px] font-black text-slate-800 uppercase tracking-widest border border-slate-100 shadow-sm">{article.category}</div>
-            </div>
-            <div className="p-8 flex flex-col flex-grow">
-              <h3 className="text-xl font-black text-slate-900 mb-4 group-hover:text-orange-600 transition-colors leading-tight tracking-tight">{article.title}</h3>
-              <p className="text-slate-500 mb-6 text-sm line-clamp-2 font-medium leading-relaxed">{article.excerpt}</p>
-              <div className="flex items-center justify-between pt-6 border-t border-slate-50 text-[9px] text-slate-400 font-black uppercase tracking-widest mt-auto">
-                  <span className="flex items-center gap-2"><ShieldCheck className="w-4 h-4 text-emerald-500/50" /> {article.date}</span>
-                  <div className="bg-slate-50 p-2 rounded-lg group-hover:bg-orange-600 group-hover:text-white transition-all">
-                    <ArrowRight className="w-4 h-4" />
-                  </div>
-              </div>
-            </div>
-          </a>
-        ))}
+        )}
       </div>
-      
-      {!allLoaded && (
-        <div className="mt-16 text-center">
-          <button onClick={() => setVisibleCount(v => v + 6)} className="inline-flex items-center gap-4 px-12 py-5 bg-slate-900 text-white font-black text-[10px] uppercase tracking-[0.3em] rounded-2xl hover:bg-orange-600 transition-all shadow-lg active:scale-95">
-              Meer Artikelen <ChevronDown className="w-4 h-4" />
-          </button>
-        </div>
+
+      {selectedArticle && (
+        <ArticleModal 
+            article={selectedArticle} 
+            onClose={() => setSelectedArticle(null)} 
+        />
       )}
-    </div>
+    </>
   );
 };

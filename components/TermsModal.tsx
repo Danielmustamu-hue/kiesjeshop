@@ -51,7 +51,7 @@ export const TermsModal: React.FC<TermsModalProps> = ({ isOpen, onClose }) => {
             
             <h3 className="text-slate-900 font-bold mt-6 text-base">1. Rol van de Website en Contact</h3>
             <p>
-              Deze website, kiesjeshop.nl, wordt beheerd door de directie van Kiesjeshop.nl, gevestigd te Amstelveen (hierna: "de Beheerder"). 
+              Deze website, kiesjeshop.nl, wordt beheerd door Daniel Mustamu, gevestigd te Amstelveen (hierna: "de Beheerder"). 
               De Beheerder fungeert uitsluitend als onafhankelijke vergelijker en affiliate doorverwijzer naar de externe webshops Coolblue, bol en Amazon. 
               Wij zijn géén verkoper, leverancier of contractpartij bij de aankoop.
             </p>

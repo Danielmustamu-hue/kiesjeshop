@@ -1,272 +1,198 @@
-
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState } from 'react';
 import { GoogleGenAI } from '@google/genai';
-import { Sparkles, Loader2, Cpu, ExternalLink, Search, Info, AlertCircle, Zap, ShieldCheck, BrainCircuit, Globe } from 'lucide-react';
+import { Sparkles, Send, Loader2, Info, AlertTriangle, Cpu, ExternalLink, Search } from 'lucide-react';
 import { SHOPS } from '../constants';
 
-interface AiAdvisorProps {
-  initialQuery?: string;
-}
-
-export const AiAdvisor: React.FC<AiAdvisorProps> = ({ initialQuery = '' }) => {
-  const [query, setQuery] = useState(initialQuery);
+export const AiAdvisor: React.FC = () => {
+  const [query, setQuery] = useState('');
   const [advice, setAdvice] = useState<string | null>(null);
   const [searchLinks, setSearchLinks] = useState<{shopId: string, query: string}[]>([]);
-  const [sources, setSources] = useState<{uri: string, title: string}[]>([]);
   const [loading, setLoading] = useState(false);
-  const [errorType, setErrorType] = useState<'none' | 'rate-limit' | 'general'>('none');
-  const [hasOwnKey, setHasOwnKey] = useState(false);
-  const [isThinking, setIsThinking] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
-  const checkKeyStatus = useCallback(async () => {
-    try {
-      const aistudio = (window as any).aistudio;
-      if (aistudio && typeof aistudio.hasSelectedApiKey === 'function') {
-        const hasKey = await aistudio.hasSelectedApiKey();
-        setHasOwnKey(hasKey);
-      }
-    } catch (e) {
-      console.debug("AI Studio context not available");
+  const getSearchLink = (type: string, query: string) => {
+    const encoded = encodeURIComponent(query);
+    switch (type.toLowerCase()) {
+      case 'bol': return `https://partner.bol.com/click/click?p=2&t=url&s=1491898&f=TXL&url=https%3A%2F%2Fwww.bol.com%2Fnl%2Fnl%2Fs%2F${encoded}%2F&name=${encoded}`;
+      case 'coolblue': return `https://www.coolblue.nl/zoeken?query=${encoded}`;
+      case 'amazon': return `https://www.amazon.nl/s?k=${encoded}&tag=kiesjeshop-21`;
+      default: return '#';
     }
-  }, []);
+  };
 
-  const handleAskAi = useCallback(async (searchQuery?: string) => {
-    const finalQuery = searchQuery || query;
-    if (!finalQuery.trim()) return;
-    
+  const handleAskAi = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!query.trim()) return;
+
     setLoading(true);
+    setError(null);
     setAdvice(null);
     setSearchLinks([]);
-    setSources([]);
-    setErrorType('none');
-    setIsThinking(true);
 
     try {
       const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
       
       const promptText = `
-        Je bent de Lead Strategist van Kiesjeshop.nl. 
-        Geef een diepgaand strategisch koopadvies voor: "${finalQuery}".
+        Jij bent de shopping expert van Kiesjeshop.nl. Je geeft "insider tips" die eerlijk, onafhankelijk en direct zijn.
+        Stuur antwoorden altijd terug als pure tekst (string).
+        Een bezoeker stelt de volgende vraag: "${query}"
         
-        GEBRUIK JE REASONING (THINKING) CAPACITEIT OM:
-        1. De beste prijs-kwaliteit verhouding te bepalen tussen bol, amazon en coolblue.
-        2. Service-voordelen (zoals installatie of retourgemak) mee te wegen.
-        3. Een concreet eindoordeel te geven voor 2026.
+        DOEL: Help de gebruiker direct beslissen tussen de drie grootste winkels: bol, Coolblue en Amazon.
         
-        ANTWOORD IN MAX 4 ZINNEN.
-        Eindig ALTIJD met de trigger: SEARCH_ACTION: [ShopId]|[Zoekterm]
+        STAP 1: Geef een kort, krachtig advies (max 2-3 zinnen). Noem expliciet een specifiek voordeel van minimaal twee verschillende winkels voor dit product of de service.
+        Hanteer een behulpzame, deskundige toon (de 'expert-vriend').
+        
+        STAP 2: Gebruik ALTIJD de naam 'bol', NOOIT 'bol.com'.
+        
+        STAP 3: Eindig je antwoord ALTIJD met een nieuwe regel in dit exacte formaat (voor de zoekknop):
+        SEARCH_ACTION: [ShopNaam]|[Zoekterm]
+        
+        Voorbeeld: "SEARCH_ACTION: bol|draadloze oortjes" of "SEARCH_ACTION: Coolblue|wasmachine"
+        
+        Algemene Shop Kennis:
+        - Coolblue: Beste voor elektronica service, installatie van witgoed en deskundig advies.
+        - Amazon: Meestal de laagste prijs, groot internationaal aanbod, Prime voordelen.
+        - bol: Het grootste assortiment van Nederland, snelle levering (ook op zondag), simpel retourproces.
       `;
-      
+
       const response = await ai.models.generateContent({
-        model: 'gemini-3-pro-preview',
-        contents: promptText, 
-        config: { 
-          thinkingConfig: { thinkingBudget: 16000 },
-          temperature: 0.7,
-          tools: [{ googleSearch: {} }]
-        }
+        model: 'gemini-3-flash-preview',
+        contents: [{ parts: [{ text: promptText }] }], 
       });
       
-      setIsThinking(false);
       const fullText = response.text || "";
+      
+      // Parse de SEARCH_ACTION
+      const actionMatch = fullText.match(/SEARCH_ACTION:\s*(bol|coolblue|amazon)\s*\|\s*(.*)/i);
       let cleanAdvice = fullText;
-      const markerKeywords = ['SEARCH_ACTION', 'SEARCH_ACTION:'];
-      for (const keyword of markerKeywords) {
-        const index = fullText.toUpperCase().indexOf(keyword);
-        if (index !== -1) {
-          cleanAdvice = fullText.substring(0, index).trim();
-          break;
-        }
+      let links: {shopId: string, query: string}[] = [];
+
+      if (actionMatch) {
+        cleanAdvice = fullText.replace(/SEARCH_ACTION: .*/i, '').trim();
+        links.push({
+          shopId: actionMatch[1].toLowerCase(),
+          query: actionMatch[2].trim()
+        });
       }
 
-      const actionMatch = fullText.match(/SEARCH_ACTION\s*:\s*([^|]+)\s*\|\s*(.*)/i);
-      if (actionMatch) {
-        const foundShopId = actionMatch[1].trim().toLowerCase();
-        const foundQuery = actionMatch[2].trim();
-        setSearchLinks([{ shopId: foundShopId, query: foundQuery }]);
-      }
-      
-      const foundSources = response.candidates?.[0]?.groundingMetadata?.groundingChunks
-        ?.filter((c: any) => c.web)
-        ?.map((c: any) => ({
-          uri: c.web.uri,
-          title: c.web.title
-        })) || [];
-      setSources(foundSources);
-      
       setAdvice(cleanAdvice);
+      setSearchLinks(links);
+
     } catch (err: any) {
-      setIsThinking(false);
-      if (err?.message?.includes('429') || err?.status === 429) {
-        setErrorType('rate-limit');
-        setAdvice("Capaciteit bereikt! Gebruik je eigen Tier 1 key voor onbeperkt advies, of gebruik de knoppen hieronder:");
-        setSearchLinks([
-          { shopId: 'bol', query: finalQuery },
-          { shopId: 'amazon', query: finalQuery },
-          { shopId: 'coolblue', query: finalQuery }
-        ]);
-      } else if (err?.message?.includes("Requested entity was not found.")) {
-        setHasOwnKey(false);
-        setErrorType('general');
-        setAdvice("API Sleutel fout. Selecteer a.u.b. een geldige Tier 1 sleutel via de knop hierboven.");
-      } else {
-        setErrorType('general');
-        setAdvice("Er is een technische storing opgetreden. Onze excuses.");
-      }
+      console.error("AI Error:", err);
+      setError("Er ging iets mis bij het ophalen van het advies. Probeer het opnieuw.");
     } finally {
       setLoading(false);
     }
-  }, [query]);
-
-  useEffect(() => {
-    checkKeyStatus();
-    if (initialQuery) {
-      setQuery(initialQuery);
-      handleAskAi(initialQuery);
-    }
-  }, [initialQuery, checkKeyStatus, handleAskAi]);
-
-  const handleUpgradeKey = async () => {
-    const aistudio = (window as any).aistudio;
-    if (aistudio && typeof aistudio.openSelectKey === 'function') {
-      await aistudio.openSelectKey();
-      setHasOwnKey(true);
-    }
   };
 
-  const getSearchLink = (type: string, sQuery: string) => {
-    const encoded = encodeURIComponent(sQuery);
-    switch (type.toLowerCase()) {
-      case 'bol': return `https://partner.bol.com/click/click?p=2&t=url&s=1491898&f=TXL&url=https%3A%2F%2Fwww.bol.com%2Fnl%2Fnl%2Fs%2F${encoded}%2F&name=Advisor&subid=Algemeen-AI-Hulp`;
-      case 'coolblue': return `https://www.awin1.com/cread.php?awinmid=85161&awinaffid=2694054&ued=https%3A%2F%2Fwww.coolblue.nl%2Fzoeken%3Fquery%3D${encoded}`;
-      case 'amazon': return `https://www.amazon.nl/s?k=${encoded}&tag=kiesjeshop-21`; 
-      default: return '#';
-    }
+  const renderAdviceWithLinks = (text: string) => {
+    const regex = /(bol|Coolblue|Amazon)/gi;
+    const parts = text.split(regex);
+
+    return parts.map((part, index) => {
+      const lowerPart = part.toLowerCase();
+      const shop = SHOPS.find(s => s.id === (lowerPart === 'bol' ? 'bol' : lowerPart === 'coolblue' ? 'coolblue' : 'amazon'));
+
+      if (shop) {
+        return (
+          <a 
+            key={index}
+            href={shop.ctaLink}
+            target="_blank"
+            rel="nofollow noopener noreferrer"
+            className={`font-bold hover:underline underline-offset-2 ${shop.color}`}
+          >
+            {part}
+          </a>
+        );
+      }
+      return <span key={index}>{part}</span>;
+    });
   };
 
   return (
-    <div className="bg-white text-slate-900 h-full p-6 md:p-12 lg:p-24 relative flex flex-col items-center justify-center overflow-y-auto scrollbar-hide">
-      <div className="absolute top-12 left-1/2 -translate-x-1/2 flex items-center gap-2">
-         {hasOwnKey ? (
-           <div className="bg-emerald-500/10 text-emerald-600 px-4 py-1.5 rounded-full border border-emerald-200 text-[9px] font-black uppercase tracking-widest flex items-center gap-2 animate-pulse">
-              <ShieldCheck className="w-3.5 h-3.5" /> Premium Intelligence (Tier 1) Active
-           </div>
-         ) : (
-           <button 
-             onClick={handleUpgradeKey}
-             className="bg-slate-50 text-slate-400 hover:text-brand-pink px-4 py-1.5 rounded-full border border-slate-200 text-[9px] font-black uppercase tracking-widest flex items-center gap-2 transition-all"
-           >
-              <Zap className="w-3.5 h-3.5" /> Unlock Pro Thinking Mode
-           </button>
-         )}
-      </div>
-
-      <div className="relative z-10 w-full max-w-3xl mx-auto text-center py-8">
-        <div className="inline-flex items-center gap-3 bg-slate-50 px-6 py-3 rounded-2xl text-[10px] font-black uppercase tracking-[0.4em] text-brand-pink mb-6 border border-slate-100">
-          <BrainCircuit className={`w-5 h-5 ${loading ? 'animate-spin' : ''}`} />
-          <span>Shopping Strategist 2026</span>
+    <div className="bg-indigo-900 text-white rounded-3xl p-6 md:p-10 shadow-2xl overflow-hidden relative border border-indigo-500/20">
+      <div className="absolute top-0 right-0 -mt-10 -mr-10 w-64 h-64 bg-indigo-700 rounded-full blur-3xl opacity-50 pointer-events-none"></div>
+      
+      <div className="relative z-10 max-w-2xl mx-auto text-center">
+        <div className="inline-flex items-center gap-2 bg-indigo-800/50 px-4 py-1.5 rounded-full text-sm font-medium text-indigo-200 mb-4 border border-indigo-700">
+          <Sparkles className="w-4 h-4" />
+          <span>Persoonlijk AI Advies</span>
         </div>
         
-        <h2 className="text-4xl md:text-7xl font-black mb-4 tracking-tighter text-slate-900 leading-none">AI Adviseur<span className="brand-text-gradient">.</span></h2>
-        <p className="text-slate-400 font-bold text-xs uppercase tracking-widest mb-10">Real-time vergelijking op basis van Tier 1 Data</p>
-        
-        <form onSubmit={(e) => { e.preventDefault(); handleAskAi(); }} className="relative mb-12 w-full max-w-2xl mx-auto">
+        <h2 className="text-2xl md:text-3xl font-bold mb-4">Hulp nodig bij je keuze?</h2>
+        <p className="text-indigo-200 mb-8 text-lg">Welk product zoek je? Ik vergelijk direct 3 winkels voor je.</p>
+
+        <form onSubmit={handleAskAi} className="relative max-w-lg mx-auto group">
           <input 
             type="text" 
             value={query}
             onChange={(e) => setQuery(e.target.value)}
-            placeholder="Wat zoek je? (bijv. iPhone 16 Pro)" 
-            className="w-full px-6 py-6 md:py-8 pr-4 rounded-2xl md:rounded-[3rem] bg-slate-50 border border-slate-200 text-slate-900 text-lg md:text-2xl font-bold shadow-xl focus:bg-white focus:border-brand-pink/30 outline-none transition-all"
+            placeholder="Bijv: Welke oortjes hebben de beste bas?" 
+            className="w-full pl-6 pr-14 py-4 rounded-full bg-white/10 border border-white/20 text-white placeholder-indigo-300 focus:outline-none focus:ring-2 focus:ring-indigo-400 focus:bg-white/20 backdrop-blur-sm transition-all shadow-inner"
           />
           <button 
             type="submit" 
             disabled={loading || !query.trim()}
-            className="mt-4 md:mt-0 md:absolute md:right-4 md:top-4 w-full md:w-auto px-10 h-16 md:h-[calc(100%-2rem)] bg-slate-900 text-white rounded-xl md:rounded-[2.5rem] font-black text-[10px] uppercase tracking-widest hover:bg-brand-pink transition-all active:scale-95 disabled:opacity-30"
+            className="absolute right-2 top-2 p-2 bg-white text-indigo-900 rounded-full hover:bg-indigo-50 disabled:opacity-50 disabled:cursor-not-allowed transition-all active:scale-90"
           >
-            {loading ? <Loader2 className="w-6 h-6 animate-spin" /> : 'Start Analyse'}
+            {loading ? <Loader2 className="w-5 h-5 animate-spin" /> : <Send className="w-5 h-5" />}
           </button>
         </form>
 
-        {isThinking && (
-          <div className="flex items-center justify-center gap-4 mb-8 animate-pulse">
-             <div className="flex gap-1">
-                <div className="w-1.5 h-1.5 bg-brand-pink rounded-full animate-bounce" style={{animationDelay: '0ms'}}></div>
-                <div className="w-1.5 h-1.5 bg-brand-pink rounded-full animate-bounce" style={{animationDelay: '200ms'}}></div>
-                <div className="w-1.5 h-1.5 bg-brand-pink rounded-full animate-bounce" style={{animationDelay: '400ms'}}></div>
-             </div>
-             <span className="text-[10px] font-black uppercase tracking-[0.3em] text-slate-400">Strategisch onderzoek bezig...</span>
-          </div>
+        <div className="mt-4 flex items-center justify-center gap-1.5 opacity-40">
+            <Cpu className="w-3 h-3" />
+            <span className="text-[10px] uppercase tracking-widest font-semibold">Gemini 3 Flash Real-time Analysis</span>
+        </div>
+
+        {error && (
+            <div className="mt-4 flex items-center justify-center gap-2 text-sm text-red-200 bg-red-900/50 py-2 px-4 rounded-lg border border-red-500/30">
+                <AlertTriangle className="w-4 h-4" />
+                <span>{error}</span>
+            </div>
         )}
 
         {advice && (
-          <div className="bg-slate-50 border border-slate-200 rounded-[2rem] p-8 md:p-12 text-left animate-in fade-in zoom-in-95 duration-500 shadow-2xl relative">
-             <div className="absolute -top-4 -right-4 bg-brand-pink text-white p-2.5 rounded-xl shadow-lg">
-                <Sparkles className="w-5 h-5" />
-             </div>
-             
-             <div className="flex flex-col gap-6">
-                {errorType === 'rate-limit' && (
-                  <div className="flex items-center gap-2 text-rose-600 font-black text-[10px] uppercase tracking-widest mb-2">
-                    <AlertCircle className="w-4 h-4" /> Systeemcapaciteit Bereikt (Tier 1 Aanbevolen)
-                  </div>
-                )}
-                
-                <div className="text-lg md:text-2xl font-bold text-slate-900 leading-relaxed tracking-tight">
-                  {advice}
+          <div className="mt-8 bg-white/10 border border-white/20 rounded-xl p-6 text-left animate-in fade-in slide-in-from-bottom-4 duration-500 shadow-lg backdrop-blur-sm">
+             <div className="flex items-start gap-4">
+                <div className="bg-indigo-600 p-2 rounded-lg shrink-0">
+                    <Info className="w-5 h-5 text-white" />
                 </div>
-
-                {searchLinks.length > 0 && (
-                  <div className="pt-8 border-t border-slate-200 grid grid-cols-1 sm:grid-cols-2 gap-4">
-                    {searchLinks.map((link, i) => {
-                      const shop = SHOPS.find(s => s.id === link.shopId);
-                      if (!shop) return null;
-                      return (
-                        <a
-                          key={i}
-                          href={getSearchLink(link.shopId, link.query)}
-                          target="_blank"
-                          rel="nofollow"
-                          className={`flex items-center justify-center gap-4 px-6 py-4 rounded-2xl font-black text-[10px] uppercase tracking-widest transition-all shadow-md active:scale-95 ${shop.buttonColor}`}
-                        >
-                          <Search className="w-4 h-4" /> {errorType === 'rate-limit' ? `Zoek op ${shop.name}` : `Bekijk bij ${shop.name}`} <ExternalLink className="w-4 h-4" />
-                        </a>
-                      );
-                    })}
-                  </div>
-                )}
-
-                {sources.length > 0 && (
-                  <div className="mt-6 pt-6 border-t border-slate-200">
-                    <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-3 flex items-center gap-2">
-                      <Globe className="w-3.5 h-3.5" /> Geverifieerde Bronnen:
+                <div className="w-full">
+                    <h3 className="font-bold text-lg mb-2 text-white">Mijn insider-tip:</h3>
+                    <p className="text-indigo-50 leading-relaxed text-lg mb-6">
+                      {renderAdviceWithLinks(advice)}
                     </p>
-                    <div className="flex flex-wrap gap-3">
-                      {sources.map((source, i) => (
-                        <a 
-                          key={i} 
-                          href={source.uri} 
-                          target="_blank" 
-                          rel="nofollow" 
-                          className="text-[10px] font-bold text-brand-pink hover:underline flex items-center gap-1 bg-white px-3 py-1.5 rounded-lg border border-slate-100 shadow-sm transition-all"
-                        >
-                          {source.title.split('|')[0].trim()} <ExternalLink className="w-3 h-3" />
-                        </a>
-                      ))}
-                    </div>
-                  </div>
-                )}
+
+                    {searchLinks.length > 0 && (
+                      <div className="pt-4 border-t border-white/10">
+                        <p className="text-xs font-bold text-indigo-300 uppercase tracking-wider mb-4">Ga direct naar de beste resultaten:</p>
+                        <div className="flex flex-wrap gap-3">
+                          {searchLinks.map((link, i) => {
+                            const shop = SHOPS.find(s => s.id === link.shopId);
+                            if (!shop) return null;
+                            return (
+                              <a
+                                key={i}
+                                href={getSearchLink(link.shopId, link.query)}
+                                target="_blank"
+                                rel="nofollow noopener noreferrer"
+                                className={`flex items-center gap-2 px-5 py-3 rounded-xl font-bold transition-all active:scale-95 shadow-md hover:shadow-lg group/btn ${shop.buttonColor}`}
+                              >
+                                <Search className="w-4 h-4" />
+                                Bekijk '{link.query}' bij {shop.name}
+                                <ExternalLink className="w-4 h-4 opacity-50 group-hover/btn:translate-x-1 transition-transform" />
+                              </a>
+                            );
+                          })}
+                        </div>
+                      </div>
+                    )}
+                </div>
              </div>
           </div>
         )}
-      </div>
-      <div className="mt-12 text-center">
-         <a 
-           href="https://ai.google.dev/gemini-api/docs/billing" 
-           target="_blank" 
-           className="text-[9px] font-black text-slate-300 hover:text-slate-900 uppercase tracking-widest transition-all"
-         >
-           Hoe werkt Tier 1 Billing? Lees de doc.
-         </a>
       </div>
     </div>
   );
